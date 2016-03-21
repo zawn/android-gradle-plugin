@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.android.tools.build'
-version = '2.0.0-beta5'
+version = '2.0.0-beta6'
 
 description = """com.android.tools.build.builder"""
 
@@ -16,13 +16,13 @@ repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    runtime group: 'com.android.tools.build', name: 'builder-model', version:'2.0.0-beta5'
-    runtime group: 'com.android.tools.build', name: 'builder-test-api', version:'2.0.0-beta5'
-    runtime group: 'com.android.tools', name: 'sdklib', version:'25.0.0-beta5'
-    runtime group: 'com.android.tools', name: 'sdk-common', version:'25.0.0-beta5'
-    runtime group: 'com.android.tools', name: 'common', version:'25.0.0-beta5'
-    runtime group: 'com.android.tools.build', name: 'manifest-merger', version:'25.0.0-beta5'
-    runtime group: 'com.android.tools.ddms', name: 'ddmlib', version:'25.0.0-beta5'
+    runtime group: 'com.android.tools.build', name: 'builder-model', version:'2.0.0-beta6'
+    runtime group: 'com.android.tools.build', name: 'builder-test-api', version:'2.0.0-beta6'
+    runtime group: 'com.android.tools', name: 'sdklib', version:'25.0.0-beta6'
+    runtime group: 'com.android.tools', name: 'sdk-common', version:'25.0.0-beta6'
+    runtime group: 'com.android.tools', name: 'common', version:'25.0.0-beta6'
+    runtime group: 'com.android.tools.build', name: 'manifest-merger', version:'25.0.0-beta6'
+    runtime group: 'com.android.tools.ddms', name: 'ddmlib', version:'25.0.0-beta6'
     runtime group: 'com.android.tools.jack', name: 'jack-api', version:'0.9.0'
     runtime group: 'com.android.tools.jill', name: 'jill-api', version:'0.9.0'
     runtime group: 'com.squareup', name: 'javawriter', version:'2.5.0'

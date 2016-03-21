@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.android.tools.build'
-version = '2.0.0-beta5'
+version = '2.0.0-beta6'
 
 description = """com.android.tools.build.builder-model"""
 
@@ -16,5 +16,5 @@ repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    runtime group: 'com.android.tools', name: 'annotations', version:'25.0.0-beta5'
+    runtime group: 'com.android.tools', name: 'annotations', version:'25.0.0-beta6'
 }

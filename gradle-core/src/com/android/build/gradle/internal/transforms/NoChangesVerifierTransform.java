@@ -17,53 +17,58 @@
 package com.android.build.gradle.internal.transforms;
 
 import com.android.annotations.NonNull;
+import com.android.build.api.transform.DirectoryInput;
+import com.android.build.api.transform.JarInput;
 import com.android.build.api.transform.QualifiedContent.ContentType;
 import com.android.build.api.transform.QualifiedContent.Scope;
+import com.android.build.api.transform.Status;
 import com.android.build.api.transform.Transform;
 import com.android.build.api.transform.TransformException;
+import com.android.build.api.transform.TransformInput;
 import com.android.build.api.transform.TransformInvocation;
 import com.android.build.gradle.internal.incremental.InstantRunVerifierStatus;
 import com.android.build.gradle.internal.scope.VariantScope;
 import com.google.common.collect.ImmutableSet;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 
 /**
  * No-op transform that verifies if any Java resources changed.
  */
-public class JavaResourceVerifierTransform extends Transform {
+public class NoChangesVerifierTransform extends Transform {
 
-    @NonNull
-    private final String name;
     @NonNull
     private final VariantScope variantScope;
     @NonNull
+    private final Set<ContentType> inputTypes;
+    @NonNull
     private final Set<Scope> mergeScopes;
     @NonNull
-    private final Set<ContentType> mergedType;
+    private final InstantRunVerifierStatus failureStatus;
 
-    public JavaResourceVerifierTransform(
-            @NonNull String name,
+    public NoChangesVerifierTransform(
             @NonNull VariantScope variantScope,
+            @NonNull Set<ContentType> inputTypes,
             @NonNull Set<Scope> mergeScopes,
-            @NonNull ContentType mergedType) {
-        this.name = name;
+            @NonNull InstantRunVerifierStatus failureStatus) {
         this.variantScope = variantScope;
+        this.inputTypes = inputTypes;
         this.mergeScopes = mergeScopes;
-        this.mergedType = ImmutableSet.of(mergedType);
+        this.failureStatus = failureStatus;
     }
 
     @NonNull
     @Override
     public String getName() {
-        return name;
+        return "javaResourcesVerifier";
     }
 
     @NonNull
     @Override
     public Set<ContentType> getInputTypes() {
-        return mergedType;
+        return inputTypes;
     }
 
     @NonNull
@@ -86,11 +91,27 @@ public class JavaResourceVerifierTransform extends Transform {
     @Override
     public void transform(@NonNull TransformInvocation transformInvocation)
             throws TransformException, InterruptedException, IOException {
-        if (!transformInvocation.getReferencedInputs().isEmpty()) {
-            // This task will not be invoked on the assemble build.  getReferenceInputs will be
-            // empty on subsequent instant run build if none of the native libray has changed.
-            variantScope.getInstantRunBuildContext().setVerifierResult(
-                    InstantRunVerifierStatus.JAVA_RESOURCES_CHANGED);
+        // This task will not be invoked on the initial assemble build.  For subsequent instant run
+        // build, we want to fail the verifier if any Java resource changed.  (Native libraries are
+        // treated as Java resources in the plugin)
+        if (hasChangedInputs(transformInvocation.getReferencedInputs())) {
+            variantScope.getInstantRunBuildContext().setVerifierResult(failureStatus);
         }
+    }
+
+    private static boolean hasChangedInputs(Collection<TransformInput> inputs) {
+        for (TransformInput input : inputs) {
+            for (DirectoryInput directoryInput : input.getDirectoryInputs()) {
+                if (!directoryInput.getChangedFiles().isEmpty()) {
+                    return true;
+                }
+            }
+            for (JarInput jarInput : input.getJarInputs()) {
+                if (jarInput.getStatus() != Status.NOTCHANGED) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

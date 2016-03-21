@@ -54,6 +54,7 @@ import com.android.build.gradle.internal.incremental.BuildInfoLoaderTask;
 import com.android.build.gradle.internal.incremental.InstantRunAnchorTask;
 import com.android.build.gradle.internal.incremental.InstantRunBuildContext;
 import com.android.build.gradle.internal.incremental.InstantRunPatchingPolicy;
+import com.android.build.gradle.internal.incremental.InstantRunVerifierStatus;
 import com.android.build.gradle.internal.incremental.InstantRunWrapperTask;
 import com.android.build.gradle.internal.pipeline.ExtendedContentType;
 import com.android.build.gradle.internal.pipeline.OriginalStream;
@@ -97,7 +98,7 @@ import com.android.build.gradle.internal.transforms.InstantRunTransform;
 import com.android.build.gradle.internal.transforms.InstantRunVerifierTransform;
 import com.android.build.gradle.internal.transforms.JacocoTransform;
 import com.android.build.gradle.internal.transforms.JarMergingTransform;
-import com.android.build.gradle.internal.transforms.JavaResourceVerifierTransform;
+import com.android.build.gradle.internal.transforms.NoChangesVerifierTransform;
 import com.android.build.gradle.internal.transforms.MergeJavaResourcesTransform;
 import com.android.build.gradle.internal.transforms.MultiDexTransform;
 import com.android.build.gradle.internal.transforms.NewShrinkerTransform;
@@ -162,6 +163,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
@@ -479,7 +481,7 @@ public abstract class TaskManager {
                 .setJars(new Supplier<Collection<File>>() {
                     @Override
                     public Collection<File> get() {
-                        Set<File> files = config.getExternalPackagedJarsWithoutAars();
+                        Set<File> files = config.getExternalPackagedJniJars();
                         Set<File> additions = variantScope.getGlobalScope().getAndroidBuilder()
                                 .getAdditionalPackagedJars(config);
 
@@ -494,7 +496,7 @@ public abstract class TaskManager {
                 .setFolders(new Supplier<Collection<File>>() {
                     @Override
                     public Collection<File> get() {
-                        return config.getExternalAarJniLibraries();
+                        return config.getExternalAarJniLibFolders();
                     }
                 })
                 .setDependencies(dependencies)
@@ -535,9 +537,14 @@ public abstract class TaskManager {
                 .setFolders(new Supplier<Collection<File>>() {
                     @Override
                     public Collection<File> get() {
-                        return config.getSubProjectJniLibraries();
+                        return config.getSubProjectJniLibFolders();
                     }
-
+                })
+                .setJars(new Supplier<Collection<File>>() {
+                    @Override
+                    public Collection<File> get() {
+                        return config.getSubProjectPackagedJniJars();
+                    }
                 })
                 .setDependencies(dependencies)
                 .build());
@@ -1909,8 +1916,9 @@ public abstract class TaskManager {
         TransformManager transformManager = variantScope.getTransformManager();
 
         // ---- Code Coverage first -----
-        boolean isTestCoverageEnabled = config.getBuildType().isTestCoverageEnabled() && !config
-                .getType().isForTesting();
+        boolean isTestCoverageEnabled = config.getBuildType().isTestCoverageEnabled() &&
+                !config.getType().isForTesting() &&
+                getIncrementalMode(variantScope.getVariantConfiguration()) == IncrementalMode.NONE;
         if (isTestCoverageEnabled) {
             createJacocoTransform(tasks, variantScope);
         }
@@ -2077,11 +2085,10 @@ public abstract class TaskManager {
         verifierTask.dependsOn(tasks, extractJarsTask);
         variantScope.setInstantRunVerifierTask(verifierTask);
 
-        JavaResourceVerifierTransform jniLibsVerifierTransform = new JavaResourceVerifierTransform(
-                "jniLibsVerifier",
+        NoChangesVerifierTransform jniLibsVerifierTransform = new NoChangesVerifierTransform(
                 variantScope,
-                getResMergingScopes(variantScope),
-                ExtendedContentType.NATIVE_LIBS);
+                ImmutableSet.<ContentType>of(DefaultContentType.RESOURCES, ExtendedContentType.NATIVE_LIBS),
+                getResMergingScopes(variantScope), InstantRunVerifierStatus.JAVA_RESOURCES_CHANGED);
         AndroidTask<TransformTask> jniLibsVerifierTask =
                 variantScope.getTransformManager().addTransform(
                         tasks,
@@ -2089,10 +2096,28 @@ public abstract class TaskManager {
                         jniLibsVerifierTransform);
         jniLibsVerifierTask.dependsOn(tasks, verifierTask);
 
+        NoChangesVerifierTransform dependenciesVerifierTransform =
+                new NoChangesVerifierTransform(
+                        variantScope,
+                        ImmutableSet.<ContentType>of(DefaultContentType.CLASSES),
+                        Sets.immutableEnumSet(
+                                Scope.PROJECT_LOCAL_DEPS,
+                                Scope.SUB_PROJECTS_LOCAL_DEPS,
+                                Scope.EXTERNAL_LIBRARIES),
+                        InstantRunVerifierStatus.DEPENDENCY_CHANGED);
+        AndroidTask<TransformTask> dependenciesVerifierTask =
+                variantScope.getTransformManager().addTransform(
+                        tasks,
+                        variantScope,
+                        dependenciesVerifierTransform);
+        dependenciesVerifierTask.dependsOn(tasks, verifierTask);
+
+
         InstantRunTransform instantRunTransform = new InstantRunTransform(variantScope);
         AndroidTask<TransformTask> instantRunTask = transformManager
                 .addTransform(tasks, variantScope, instantRunTransform);
-        instantRunTask.dependsOn(tasks, buildInfoLoaderTask, verifierTask, jniLibsVerifierTask);
+        instantRunTask.dependsOn(tasks, buildInfoLoaderTask, verifierTask, jniLibsVerifierTask,
+                dependenciesVerifierTask);
 
         AndroidTask<FastDeployRuntimeExtractorTask> extractorTask = getAndroidTasks().create(
                 tasks, new FastDeployRuntimeExtractorTask.ConfigAction(variantScope));
@@ -2236,6 +2261,7 @@ public abstract class TaskManager {
         // For library project, since we cannot use the local jars of the library,
         // we add it as well.
         boolean isTestCoverageEnabled = config.getBuildType().isTestCoverageEnabled() &&
+                getIncrementalMode(variantScope.getVariantConfiguration()) == IncrementalMode.NONE &&
                 (!config.getType().isForTesting() ||
                         (config.getTestedConfig() != null &&
                                 config.getTestedConfig().getType() == VariantType.LIBRARY));
@@ -2346,6 +2372,7 @@ public abstract class TaskManager {
 
         boolean multiOutput = variantData.getOutputs().size() > 1;
 
+        GradleVariantConfiguration variantConfiguration = variantScope.getVariantConfiguration();
         /**
          * PrePackaging step class that will look if the packaging of the main APK split is
          * necessary when running in InstantRun mode. In InstantRun mode targeting an api 23 or
@@ -2357,8 +2384,8 @@ public abstract class TaskManager {
          */
         AndroidTask<PrePackageApplication> prePackageApp = androidTasks.create(tasks,
                 new PrePackageApplication.ConfigAction("prePackageMarkerFor", variantScope));
-        if (getIncrementalMode(variantScope.getVariantConfiguration())
-                != IncrementalMode.NONE) {
+        IncrementalMode incrementalMode = getIncrementalMode(variantConfiguration);
+        if (incrementalMode != IncrementalMode.NONE) {
             prePackageApp.dependsOn(tasks, variantScope.getInstantRunAnchorTask());
         }
 
@@ -2371,16 +2398,16 @@ public abstract class TaskManager {
             InstantRunPatchingPolicy instantRunPatchingPolicy =
                     variantScope.getInstantRunBuildContext().getPatchingPolicy();
 
-            // when building for instant run with targeting API 23 or above, do not put the
-            // dex files in the main APK, they will be packaged as pure splits
-            boolean addDexFilesToApk =
-                    instantRunPatchingPolicy == InstantRunPatchingPolicy.PRE_LOLLIPOP ||
-                    instantRunPatchingPolicy == InstantRunPatchingPolicy.MULTI_DEX ||
-                    getIncrementalMode(variantScope.getVariantConfiguration())
-                            == IncrementalMode.NONE;
+            // when building for instant run, never puts the user's code in the APK directly.
+            PackageApplication.DexPackagingPolicy dexPackagingPolicy =
+                     incrementalMode == IncrementalMode.NONE
+                            || variantScope.getInstantRunBuildContext().getPatchingPolicy()
+                                    == InstantRunPatchingPolicy.PRE_LOLLIPOP
+                            ? PackageApplication.DexPackagingPolicy.STANDARD
+                            : PackageApplication.DexPackagingPolicy.INSTANT_RUN;
 
-            AndroidTask<PackageApplication> packageApp = androidTasks.create(
-                    tasks, new PackageApplication.ConfigAction(variantOutputScope, addDexFilesToApk));
+            AndroidTask<PackageApplication> packageApp = androidTasks.create(tasks,
+                    new PackageApplication.ConfigAction(variantOutputScope, dexPackagingPolicy));
 
             packageApp.dependsOn(tasks, prePackageApp, variantOutputScope.getProcessResourcesTask());
 
@@ -2396,12 +2423,10 @@ public abstract class TaskManager {
 
             TransformManager transformManager = variantScope.getTransformManager();
 
-            if (addDexFilesToApk) {
-                for (TransformStream stream : transformManager
-                        .getStreams(PackageApplication.sDexFilter)) {
-                    // TODO Optimize to avoid creating too many actions
-                    packageApp.dependsOn(tasks, stream.getDependencies());
-                }
+            for (TransformStream stream : transformManager
+                    .getStreams(PackageApplication.sDexFilter)) {
+                // TODO Optimize to avoid creating too many actions
+                packageApp.dependsOn(tasks, stream.getDependencies());
             }
 
             for (TransformStream stream : transformManager.getStreams(
@@ -2440,7 +2465,8 @@ public abstract class TaskManager {
             // when dealing with 23 and above, we should make sure the packaging task is running
             // as part of the incremental build in case resources have changed and need to be
             // repackaged in the main APK.
-            if (!addDexFilesToApk) {
+            if (dexPackagingPolicy == PackageApplication.DexPackagingPolicy.INSTANT_RUN
+                    && instantRunPatchingPolicy == InstantRunPatchingPolicy.MULTI_APK) {
                 variantScope.getInstantRunIncrementalTask().dependsOn(tasks, appTask);
             }
 
@@ -2584,7 +2610,7 @@ public abstract class TaskManager {
         }
 
         if (getExtension().getLintOptions().isCheckReleaseBuilds()
-                && getIncrementalMode(variantScope.getVariantConfiguration()) == IncrementalMode.NONE) {
+                && incrementalMode == IncrementalMode.NONE) {
             createLintVitalTask(variantData);
         }
 
@@ -2697,6 +2723,12 @@ public abstract class TaskManager {
             @Nullable Configuration mappingConfiguration,
             boolean createJarFile) {
         if (variantScope.getVariantData().getVariantConfiguration().getBuildType().isUseProguard()) {
+            if (getIncrementalMode(variantScope.getVariantConfiguration()) != IncrementalMode.NONE) {
+                logger.warn("Instant Run: Proguard is not compatible with instant run. "
+                        + "It has been disabled for {}",
+                        variantScope.getVariantConfiguration().getFullName());
+                return;
+            }
             createProguardTransform(taskFactory, variantScope, mappingConfiguration, createJarFile);
             createShrinkResourcesTransform(taskFactory, variantScope);
         } else {
@@ -2802,6 +2834,13 @@ public abstract class TaskManager {
             @NonNull TaskFactory taskFactory,
             @NonNull VariantScope scope) {
         if (!scope.getVariantConfiguration().getBuildType().isShrinkResources()) {
+            return;
+        }
+
+        if (getIncrementalMode(scope.getVariantConfiguration()) != IncrementalMode.NONE) {
+            logger.warn("Instant Run: Resource shrinker automatically disabled for {}",
+                    scope.getVariantConfiguration().getFullName());
+            // Disabled for instant run, as shrinking is automatically disabled.
             return;
         }
 
