@@ -16,7 +16,6 @@
 
 package com.android.build.gradle.internal.transforms;
 
-import static com.android.build.api.transform.QualifiedContent.ContentType;
 import static com.android.build.api.transform.QualifiedContent.DefaultContentType;
 import static com.android.build.api.transform.QualifiedContent.Scope;
 
@@ -40,10 +39,8 @@ import com.android.build.gradle.internal.incremental.IncrementalVisitor;
 import com.android.build.gradle.internal.incremental.InstantRunBuildContext;
 import com.android.build.gradle.internal.pipeline.ExtendedContentType;
 import com.android.build.gradle.internal.pipeline.TransformManager;
-import com.android.build.gradle.internal.scope.GlobalScope;
 import com.android.build.gradle.internal.scope.VariantScope;
 import com.android.build.api.transform.QualifiedContent.ContentType;
-import com.android.builder.model.InstantRun;
 import com.android.utils.FileUtils;
 import com.android.utils.ILogger;
 import com.google.common.base.Charsets;
@@ -113,7 +110,7 @@ public class InstantRunTransform extends Transform {
     @NonNull
     @Override
     public Set<QualifiedContent.Scope> getScopes() {
-        return Sets.immutableEnumSet(Scope.PROJECT);
+        return Sets.immutableEnumSet(Scope.PROJECT, Scope.SUB_PROJECTS);
     }
 
     @NonNull
@@ -121,8 +118,7 @@ public class InstantRunTransform extends Transform {
     public Set<Scope> getReferencedScopes() {
         return Sets.immutableEnumSet(Scope.EXTERNAL_LIBRARIES,
                 Scope.PROJECT_LOCAL_DEPS,
-                Scope.SUB_PROJECTS_LOCAL_DEPS,
-                Scope.SUB_PROJECTS);
+                Scope.SUB_PROJECTS_LOCAL_DEPS);
     }
 
     @Override
@@ -171,10 +167,10 @@ public class InstantRunTransform extends Transform {
                     getScopes(), Format.DIRECTORY);
 
             for (TransformInput input : inputs) {
-                for (DirectoryInput DirectoryInput : input.getDirectoryInputs()) {
-                    File inputDir = DirectoryInput.getFile();
+                for (DirectoryInput directoryInput : input.getDirectoryInputs()) {
+                    File inputDir = directoryInput.getFile();
                     if (isIncremental) {
-                        for (Map.Entry<File, Status> fileEntry : DirectoryInput.getChangedFiles()
+                        for (Map.Entry<File, Status> fileEntry : directoryInput.getChangedFiles()
                                 .entrySet()) {
 
                             File inputFile = fileEntry.getKey();
@@ -219,7 +215,6 @@ public class InstantRunTransform extends Transform {
                     } else {
                         // non incremental mode, we need to traverse the TransformInput#getFiles() folder}
                         for (File file : Files.fileTreeTraverser().breadthFirstTraversal(inputDir)) {
-
                             if (file.isDirectory()) {
                                 continue;
                             }
@@ -314,8 +309,8 @@ public class InstantRunTransform extends Transform {
     private static void addAllClassLocations(TransformInput transformInput, List<URL> into)
             throws MalformedURLException {
 
-        for (DirectoryInput DirectoryInput : transformInput.getDirectoryInputs()) {
-            into.add(DirectoryInput.getFile().toURI().toURL());
+        for (DirectoryInput directoryInput : transformInput.getDirectoryInputs()) {
+            into.add(directoryInput.getFile().toURI().toURL());
         }
         for (JarInput jarInput : transformInput.getJarInputs()) {
             into.add(new URL("jar:" + jarInput.getFile().toURI().toURL() + "!/"));
@@ -411,15 +406,15 @@ public class InstantRunTransform extends Transform {
         MethodVisitor mv;
 
         cw.visit(Opcodes.V1_6, Opcodes.ACC_PUBLIC + Opcodes.ACC_SUPER,
-                "com/android/build/gradle/internal/incremental/AppPatchesLoaderImpl", null,
-                "com/android/build/gradle/internal/incremental/AbstractPatchesLoaderImpl", null);
+                IncrementalVisitor.APP_PATCHES_LOADER_IMPL, null,
+                IncrementalVisitor.ABSTRACT_PATCHES_LOADER_IMPL, null);
 
         {
             mv = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
             mv.visitCode();
             mv.visitVarInsn(Opcodes.ALOAD, 0);
             mv.visitMethodInsn(Opcodes.INVOKESPECIAL,
-                    "com/android/build/gradle/internal/incremental/AbstractPatchesLoaderImpl",
+                    IncrementalVisitor.ABSTRACT_PATCHES_LOADER_IMPL,
                     "<init>", "()V", false);
             mv.visitInsn(Opcodes.RETURN);
             mv.visitMaxs(1, 1);
@@ -444,9 +439,7 @@ public class InstantRunTransform extends Transform {
         cw.visitEnd();
 
         byte[] classBytes = cw.toByteArray();
-        File outputFile = new File(
-                new File(outputDir, "com/android/build/gradle/internal/incremental/"),
-                "AppPatchesLoaderImpl.class");
+        File outputFile = new File(outputDir, IncrementalVisitor.APP_PATCHES_LOADER_IMPL + ".class");
         try {
             Files.createParentDirs(outputFile);
             Files.write(classBytes, outputFile);

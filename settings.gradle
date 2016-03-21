@@ -4,4 +4,3 @@ include 'builder-test-api'
 include 'gradle'
 include 'gradle-core'
 include 'transform-api'
-

@@ -20,11 +20,13 @@ dependencies {
     compile project(':builder')
     compile project(':transform-api')
     compile group: 'com.android.tools.lint', name: 'lint', version: "$BUILD_TOOLS_VERSION"
-    compile group: 'com.android.databinding', name: 'compilerCommon', version: '1.0'
+    compile group: 'com.android.databinding', name: 'compilerCommon', version: '1.1'
     compile group: 'net.sf.proguard', name: 'proguard-gradle', version: '5.2.1'
     compile group: 'org.jacoco', name: 'org.jacoco.core', version: '0.7.4.201502262128'
     compile group: 'org.ow2.asm', name: 'asm', version:'5.0.3'
     compile group: 'org.ow2.asm', name: 'asm-commons', version:'5.0.3'
+    compile group: 'org.antlr', name: 'antlr-runtime', version:'3.5.2'
+    compile group: 'org.antlr', name: 'antlr', version:'3.5.2'
     compile gradleApi()
     compile localGroovy()
 //    providedCompile files(home.toString() + 'lib/plugins/core-3.1.1.jar');

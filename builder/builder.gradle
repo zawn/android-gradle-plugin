@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.android.tools.build'
-version = '2.0.0-alpha2'
+version = '2.0.0-alpha3'
 
 description = """com.android.tools.build.builder"""
 
@@ -16,14 +16,14 @@ repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    runtime group: 'com.android.tools.build', name: 'builder-model', version:'2.0.0-alpha2'
-    runtime group: 'com.android.tools.build', name: 'builder-test-api', version:'2.0.0-alpha2'
-    runtime group: 'com.android.tools.build', name: 'transform-api', version:'2.0.0-alpha2'
-    runtime group: 'com.android.tools', name: 'sdklib', version:'25.0.0-alpha2'
-    runtime group: 'com.android.tools', name: 'sdk-common', version:'25.0.0-alpha2'
-    runtime group: 'com.android.tools', name: 'common', version:'25.0.0-alpha2'
-    runtime group: 'com.android.tools.build', name: 'manifest-merger', version:'25.0.0-alpha2'
-    runtime group: 'com.android.tools.ddms', name: 'ddmlib', version:'25.0.0-alpha2'
+    runtime group: 'com.android.tools.build', name: 'builder-model', version:'2.0.0-alpha3'
+    runtime group: 'com.android.tools.build', name: 'builder-test-api', version:'2.0.0-alpha3'
+    runtime group: 'com.android.tools.build', name: 'transform-api', version:'2.0.0-alpha3'
+    runtime group: 'com.android.tools', name: 'sdklib', version:'25.0.0-alpha3'
+    runtime group: 'com.android.tools', name: 'sdk-common', version:'25.0.0-alpha3'
+    runtime group: 'com.android.tools', name: 'common', version:'25.0.0-alpha3'
+    runtime group: 'com.android.tools.build', name: 'manifest-merger', version:'25.0.0-alpha3'
+    runtime group: 'com.android.tools.ddms', name: 'ddmlib', version:'25.0.0-alpha3'
     runtime group: 'com.android.tools.jack', name: 'jack-api', version:'0.9.0'
     runtime group: 'com.android.tools.jill', name: 'jill-api', version:'0.9.0'
     runtime group: 'com.squareup', name: 'javawriter', version:'2.5.0'
@@ -31,6 +31,4 @@ dependencies {
     runtime group: 'org.bouncycastle', name: 'bcprov-jdk15on', version:'1.48'
     runtime group: 'org.ow2.asm', name: 'asm', version:'5.0.3'
     runtime group: 'org.ow2.asm', name: 'asm-tree', version:'5.0.3'
-    runtime group: 'org.antlr', name: 'antlr-runtime', version:'3.5.2'
-    runtime group: 'org.antlr', name: 'antlr', version:'3.5.2'
 }
