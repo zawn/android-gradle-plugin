@@ -103,9 +103,11 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
@@ -124,7 +126,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -152,6 +153,7 @@ import java.util.zip.ZipFile;
 public class AndroidBuilder {
 
     private static final Revision MIN_BUILD_TOOLS_REV = new Revision(19, 1, 0);
+
     private static final DependencyFileProcessor sNoOpDependencyFileProcessor = new DependencyFileProcessor() {
         @Override
         public DependencyData processFile(@NonNull File dependencyFile) {
@@ -1364,7 +1366,7 @@ public class AndroidBuilder {
 
         Revision buildToolsVersion = mTargetInfo.getBuildTools().getRevision();
 
-        if (shouldDexInProcess(dexOptions, buildToolsVersion, instantRunMode, getLogger())) {
+        if (shouldDexInProcess(builder, dexOptions, buildToolsVersion, instantRunMode, getLogger())) {
             getLogger().info("Dexing in process");
             File dxJar = new File(
                     mTargetInfo.getBuildTools().getPath(BuildToolInfo.PathId.DX_JAR));
@@ -1385,61 +1387,62 @@ public class AndroidBuilder {
         }
     }
 
+    /**
+     * Determine whether to dex in process.
+     *
+     * If dexOptions.dexInProcess is true then throw RuntimeExceptions if conditions are not met.
+     *
+     * Otherwise if instantRunMode is enabled, quietly try to check if only a small number of
+     * files will be dexed.
+     *
+     */
     @VisibleForTesting
     static boolean shouldDexInProcess(
+            @NonNull DexProcessBuilder builder,
             @NonNull DexOptions dexOptions,
             @NonNull Revision buildToolsVersion,
             boolean instantRunMode,
             @NonNull ILogger logger) {
+
         if (!Boolean.TRUE.equals(dexOptions.getDexInProcess())) {
             return false;
         }
 
         // Version that supports all flags that we know about, including numThreads.
-        Revision minimumBuildTools = DexProcessBuilder.FIXED_DX_MERGER;;
+        Revision minimumBuildTools = DexProcessBuilder.FIXED_DX_MERGER;
+
+        if (buildToolsVersion.compareTo(minimumBuildTools) < 0) {
+            throw new RuntimeException("Running dex in-process requires build tools "
+                    + minimumBuildTools.toShortString());
+        }
+
+        if (!DexWrapper.noMainDexOnClasspath()) {
+            logger.warning("dx.jar is on Android Gradle plugin classpath, which will cause issues "
+                    + "with dexing in process, reverted to out of process.");
+            return false;
+        }
 
         // Requested memory for dex
         long requestedHeapSize = parseHeapSize(dexOptions.getJavaMaxHeapSize());
         long maxMemory = Runtime.getRuntime().maxMemory();
         //TODO: Is this the right heuristic?
 
-        if (buildToolsVersion.compareTo(minimumBuildTools) < 0) {
-            // In instant run mode, where we set the dexInProcess to true for the user, just
-            // display a warning.
-            if (instantRunMode) {
-                logger.warning("Running dex in-process requires build tools %1$s.\n"
-                        + "For faster builds update this project to use the latest build tools.",
-                                minimumBuildTools.toShortString());
-                return false;
-            } else {
-                throw new RuntimeException("Running dex in-process requires build tools "
-                        + minimumBuildTools.toShortString());
-            }
-        }
-
-        if (!DexWrapper.noMainDexOnClasspath()) {
-            logger.warning("dx.jar is on Android Gradle plugin classpath, "
-                    + "reverted to out of process dexing. This will make builds slower.");
-            return false;
-        }
-
         if (requestedHeapSize > maxMemory) {
             String dslRequest = dexOptions.getJavaMaxHeapSize();
-            logger.warning("To run dex in process, the Gradle daemon needs a larger heap. "
-                    + "It currently has %1$d MB.\n"
-                    + "For faster builds, increase the maximum heap size for the Gradle daemon "
-                    + "to more than %2$s.\n"
-                    + "To do this, set org.gradle.jvmargs=-Xmx%2$s in the "
-                    + "project gradle.properties.\n"
-                    + "For more information see "
-                    + "https://docs.gradle.org/current/userguide/build_environment.html\n",
+            logger.warning(String.format(
+                    "To run dex in process, the Gradle daemon needs a larger heap. "
+                            + "It currently has %1$d MB.\n"
+                            + "For faster builds, increase the maximum heap size for the "
+                            + "Gradle daemon to more than %2$s.\n"
+                            + "To do this, set org.gradle.jvmargs=-Xmx%2$s in the "
+                            + "project gradle.properties.\n"
+                            + "For more information see "
+                            + "https://docs.gradle.org/current/userguide/build_environment.html\n",
                     maxMemory / (1024 * 1024),
                     (dslRequest == null) ? "1G" :
-                            dslRequest + " " + "as specified in dexOptions.javaMaxHeapSize");
-
+                            dslRequest + " " + "as specified in dexOptions.javaMaxHeapSize"));
             return false;
         }
-
         return true;
     }
 
