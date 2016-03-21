@@ -17,18 +17,25 @@
 package com.android.build.gradle.internal;
 
 import com.android.annotations.NonNull;
+import com.android.build.api.transform.QualifiedContent.Scope;
 import com.android.build.gradle.AndroidConfig;
+import com.android.build.gradle.internal.pipeline.OriginalStream;
 import com.android.build.gradle.internal.pipeline.TransformManager;
+import com.android.build.gradle.internal.pipeline.TransformTask;
 import com.android.build.gradle.internal.scope.AndroidTask;
 import com.android.build.gradle.internal.scope.VariantScope;
+import com.android.build.gradle.internal.transforms.InstantRunTransform;
+import com.android.build.gradle.internal.transforms.InstantRunVerifierTransform;
 import com.android.build.gradle.internal.variant.ApplicationVariantData;
 import com.android.build.gradle.internal.variant.BaseVariantData;
 import com.android.build.gradle.internal.variant.BaseVariantOutputData;
-import com.android.build.api.transform.QualifiedContent.Scope;
+import com.android.build.gradle.tasks.fd.FastDeployRuntimeExtractorTask;
+import com.android.build.gradle.tasks.fd.GenerateInstantRunAppInfoTask;
 import com.android.builder.core.AndroidBuilder;
 import com.android.builder.profile.ExecutionType;
 import com.android.builder.profile.Recorder;
 import com.android.builder.profile.ThreadRecorder;
+import com.google.common.collect.Iterators;
 
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
@@ -140,7 +147,7 @@ public class ApplicationTaskManager extends TaskManager {
                     @Override
                     public Void call() {
                         // Add a task to process the Android Resources and generate source files
-                        createProcessResTask(tasks, variantScope, true /*generateResourcePackage*/);
+                        createApkProcessResTask(tasks, variantScope);
 
                         // Add a task to process the java resources
                         createProcessJavaResTasks(tasks, variantScope);
@@ -162,13 +169,14 @@ public class ApplicationTaskManager extends TaskManager {
                 new Recorder.Block<Void>() {
                     @Override
                     public Void call() {
-                        AndroidTask<JavaCompile> javacTask = createJavacTask(tasks, variantScope);
+                        AndroidTask<? extends JavaCompile> javacTask =
+                                createJavacTask(tasks, variantScope);
 
                         if (variantData.getVariantConfiguration().getUseJack()) {
                             createJackTask(tasks, variantScope);
                         } else {
                             setJavaCompilerTask(javacTask, tasks, variantScope);
-                            createJarTask(tasks, variantScope);
+                            createJarTasks(tasks, variantScope);
                             createPostCompilationTasks(tasks, variantScope);
                         }
                         return null;
@@ -219,8 +227,7 @@ public class ApplicationTaskManager extends TaskManager {
                     new Recorder.Block<Void>() {
                         @Override
                         public Void call() {
-                            createSplitResourcesTasks(variantScope);
-                            createSplitAbiTasks(variantScope);
+                            createSplitTasks(tasks, variantScope);
                             return null;
                         }
                     });
@@ -244,6 +251,65 @@ public class ApplicationTaskManager extends TaskManager {
                         return null;
                     }
                 });
+    }
+
+
+    /**
+     * Create InstantRun related tasks that should be ran right after the java compilation task.
+     */
+    @Override
+    protected void createIncrementalSupportTasks(TaskFactory tasks, VariantScope variantScope) {
+
+        if (getIncrementalMode(variantScope.getVariantConfiguration()) != IncrementalMode.NONE) {
+
+            TransformManager transformManager = variantScope.getTransformManager();
+
+            // always run the verifier first, since if it detects incompatible changes, we
+            // should skip bytecode enhancements of the changed classes.
+            InstantRunVerifierTransform verifierTransform =
+                    new InstantRunVerifierTransform(variantScope);
+            AndroidTask<TransformTask> verifierTask = transformManager
+                    .addTransform(tasks, variantScope, verifierTransform);
+
+            InstantRunTransform instantRunTransform = new InstantRunTransform(variantScope);
+            AndroidTask<TransformTask> instantRunTask = transformManager
+                    .addTransform(tasks, variantScope, instantRunTransform);
+            instantRunTask.dependsOn(tasks, verifierTask);
+
+            AndroidTask<FastDeployRuntimeExtractorTask> extractorTask = getAndroidTasks().create(
+                    tasks, new FastDeployRuntimeExtractorTask.ConfigAction(variantScope));
+
+            // also add a new stream for the extractor task output.
+            variantScope.getTransformManager().addStream(OriginalStream.builder()
+                    .addContentTypes(TransformManager.CONTENT_CLASS)
+                    .addScope(Scope.EXTERNAL_LIBRARIES)
+                    .setJar(variantScope.getIncrementalRuntimeSupportJar())
+                    .setDependency(extractorTask.get(tasks))
+                    .build());
+
+            AndroidTask<GenerateInstantRunAppInfoTask> generateAppInfoAndroidTask
+                    = getAndroidTasks()
+                    .create(tasks, new GenerateInstantRunAppInfoTask.ConfigAction(
+                            variantScope));
+
+            // create the AppInfo.class for this variant.
+            GenerateInstantRunAppInfoTask generateInstantRunAppInfoTask
+                    = generateAppInfoAndroidTask.get(tasks);
+
+            // make the task that generates the AppInfo dependent on the first merge manifest task
+            // so we can get its output file.
+            BaseVariantOutputData outputData = Iterators
+                    .get(variantScope.getVariantData().getOutputs().iterator(), 0);
+            generateAppInfoAndroidTask.dependsOn(tasks, outputData.manifestProcessorTask);
+
+            // also add a new stream for the injector task output.
+            variantScope.getTransformManager().addStream(OriginalStream.builder()
+                    .addContentTypes(TransformManager.CONTENT_CLASS)
+                    .addScope(Scope.EXTERNAL_LIBRARIES)
+                    .setJar(generateInstantRunAppInfoTask.getOutputFile())
+                    .setDependency(generateInstantRunAppInfoTask)
+                    .build());
+        }
     }
 
     @NonNull

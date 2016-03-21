@@ -22,8 +22,13 @@ import com.android.builder.model.AndroidProject;
 import com.google.common.collect.Maps;
 
 import org.gradle.api.Project;
+import org.gradle.api.internal.tasks.options.Option;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Determines if various options, triggered from the command line or environment, are set.
@@ -37,6 +42,11 @@ public class AndroidGradleOptions {
     private static final String PROPERTY_THREAD_POOL_SIZE_OLD = "com.android.build.threadPoolSize";
 
     private static final String PROPERTY_NEW_SHRINKER = "android.newShrinker";
+
+    private static final String PROPERTY_NEW_SHRINKER_INCREMENTAL = "android.newShrinker.incremental";
+
+    public static final String USE_DEPRECATED_NDK = "android.useDeprecatedNdk";
+
     private static final String PROPERTY_DISABLE_RESOURCE_VALIDATION =
             "android.disableResourceValidation";
 
@@ -86,8 +96,17 @@ public class AndroidGradleOptions {
         return getString(project, AndroidProject.PROPERTY_APK_LOCATION);
     }
 
+    @Nullable
+    public static String getBuildTargetDensity(@NonNull Project project) {
+        return getString(project, AndroidProject.PROPERTY_BUILD_DENSITY);
+    }
+
     public static boolean isIntegrationTest() {
         return Boolean.parseBoolean(System.getenv("INTEGRATION_TEST"));
+    }
+
+    public static boolean useDeprecatedNdk(@NonNull Project project) {
+        return getBoolean(project, USE_DEPRECATED_NDK);
     }
 
     @Nullable
@@ -129,12 +148,33 @@ public class AndroidGradleOptions {
         return null;
     }
 
+    @NonNull
+    public static EnumSet<OptionalCompilationStep> getOptionalCompilationSteps(
+            @NonNull Project project) {
+
+        String values = getString(project, AndroidProject.OPTIONAL_COMPILATION_STEPS);
+        if (values != null) {
+            List<OptionalCompilationStep> optionalCompilationSteps =
+                    new ArrayList<OptionalCompilationStep>();
+            StringTokenizer st = new StringTokenizer(values, ",");
+            while(st.hasMoreElements()) {
+                optionalCompilationSteps.add(OptionalCompilationStep.valueOf(st.nextToken()));
+            }
+            return EnumSet.copyOf(optionalCompilationSteps);
+        }
+        return EnumSet.noneOf(OptionalCompilationStep.class);
+    }
+
     public static boolean useNewShrinker(@NonNull Project project) {
         return getBoolean(project, PROPERTY_NEW_SHRINKER);
     }
 
     public static boolean isResourceValidationEnabled(@NonNull Project project) {
         return !getBoolean(project, PROPERTY_DISABLE_RESOURCE_VALIDATION);
+    }
+
+    public static boolean newShrinkerIncremental(@NonNull Project project) {
+        return getBoolean(project, PROPERTY_NEW_SHRINKER_INCREMENTAL);
     }
 
     @Nullable
@@ -167,6 +207,11 @@ public class AndroidGradleOptions {
             }
         }
 
+        return false;
+    }
+
+    public static boolean useDexerPool() {
+        // TODO: Implement.
         return false;
     }
 

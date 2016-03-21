@@ -22,8 +22,10 @@ import com.android.build.gradle.internal.variant.BaseVariantData;
 import com.android.build.api.transform.QualifiedContent;
 import com.android.build.api.transform.QualifiedContent.ContentType;
 import com.android.build.api.transform.QualifiedContent.Scope;
+import com.android.builder.model.ApiVersion;
 import com.android.builder.packaging.DuplicateFileException;
 import com.android.utils.StringHelper;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -39,6 +41,7 @@ import org.gradle.api.tasks.ParallelizableTask;
 import org.gradle.tooling.BuildException;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -141,6 +144,8 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
 
     private PackagingOptions packagingOptions;
 
+    private ApiVersion minSdkVersion;
+
     @Input
     public boolean getJniDebugBuild() {
         return jniDebugBuild;
@@ -173,6 +178,15 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
         this.packagingOptions = packagingOptions;
     }
 
+    @Input
+    public int getMinSdkVersion() {
+        return this.minSdkVersion.getApiLevel();
+    }
+
+    public void setMinSdkVersion(ApiVersion version) {
+        this.minSdkVersion = version;
+    }
+
     @Override
     protected void doFullTaskAction() {
         try {
@@ -185,7 +199,8 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
                     getAbiFilters(),
                     getJniDebugBuild(),
                     getSigningConfig(),
-                    getOutputFile().getAbsolutePath());
+                    getOutputFile().getAbsolutePath(),
+                    getMinSdkVersion());
         } catch (DuplicateFileException e) {
             Logger logger = getLogger();
             logger.error("Error: duplicate files during packaging of APK " + getOutputFile()
@@ -203,6 +218,13 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
             logger.error("\t}");
             throw new BuildException(e.getMessage(), e);
         } catch (Exception e) {
+            //noinspection ThrowableResultOfMethodCallIgnored
+            Throwable rootCause = Throwables.getRootCause(e);
+            if (rootCause instanceof NoSuchAlgorithmException) {
+                throw new BuildException(
+                        rootCause.getMessage() + ": try using a newer JVM to build your application.",
+                        rootCause);
+            }
             throw new BuildException(e.getMessage(), e);
         }
     }
@@ -224,7 +246,7 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
 
     public static class ConfigAction implements TaskConfigAction<PackageApplication> {
 
-        private VariantOutputScope scope;
+        private final VariantOutputScope scope;
 
         public ConfigAction(VariantOutputScope scope) {
             this.scope = scope;
@@ -254,6 +276,7 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
             packageApp.setAndroidBuilder(scope.getGlobalScope().getAndroidBuilder());
             packageApp.setVariantName(
                     variantScope.getVariantConfiguration().getFullName());
+            packageApp.setMinSdkVersion(config.getMinSdkVersion());
 
             if (config.isMinifyEnabled() && config.getBuildType().isShrinkResources() && !config
                     .getUseJack()) {

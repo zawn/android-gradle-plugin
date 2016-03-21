@@ -38,16 +38,19 @@ import com.android.build.api.transform.TransformOutputProvider;
 import com.android.builder.core.AndroidBuilder;
 import com.android.builder.core.DexOptions;
 import com.android.builder.sdk.TargetInfo;
+import com.android.ide.common.blame.ParsingProcessOutputHandler;
+import com.android.ide.common.blame.parser.DexStderrParser;
+import com.android.ide.common.blame.parser.DexStdoutParser;
+import com.android.ide.common.blame.parser.PatternAwareOutputParser;
+import com.android.ide.common.blame.parser.ToolOutputParser;
 import com.android.ide.common.internal.LoggedErrorException;
 import com.android.ide.common.internal.WaitableExecutor;
-import com.android.ide.common.process.LoggedProcessOutputHandler;
 import com.android.ide.common.process.ProcessException;
 import com.android.ide.common.process.ProcessOutputHandler;
 import com.android.sdklib.BuildToolInfo;
 import com.android.utils.FileUtils;
 import com.android.utils.ILogger;
 import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -74,8 +77,8 @@ import java.util.concurrent.Callable;
 /**
  * Dexing as a transform.
  *
- * This consumes all the available {@link ContentType#CLASSES} streams and create a dex file
- * (or more in the case of multi-dex)
+ * This consumes all the available classes streams and creates a dex file (or more in the case of
+ * multi-dex)
  *
  * This handles pre-dexing as well. If there are more than one stream, then only streams with
  * changed files will be re-dexed before a single merge phase is done at the end.
@@ -211,6 +214,11 @@ public class DexTransform extends Transform {
             directoryInputs.addAll(input.getDirectoryInputs());
         }
 
+        ProcessOutputHandler outputHandler = new ParsingProcessOutputHandler(
+                new ToolOutputParser(new DexStdoutParser(), logger),
+                new ToolOutputParser(new DexStderrParser(), logger),
+                androidBuilder.getErrorReporter());
+
         try {
             // if only one scope or no per-scope dexing, just do a single pass that
             // runs dx on everything.
@@ -243,7 +251,8 @@ public class DexTransform extends Transform {
                         null,
                         false,
                         true,
-                        new LoggedProcessOutputHandler(logger));
+                        outputHandler,
+                        false /* instantRunMode */);
             } else {
                 // Figure out if we need to do a dx merge.
                 // The ony case we don't need it is in native multi-dex mode when doing debug
@@ -325,7 +334,6 @@ public class DexTransform extends Transform {
                 }
 
                 WaitableExecutor<Void> executor = new WaitableExecutor<Void>();
-                ProcessOutputHandler outputHandler = new LoggedProcessOutputHandler(logger);
 
                 for (Map.Entry<File, File> entry : inputFiles.entrySet()) {
                     Callable<Void> action = new PreDexTask(
@@ -397,7 +405,8 @@ public class DexTransform extends Transform {
                             null,
                             false,
                             true,
-                            new LoggedProcessOutputHandler(logger));
+                            outputHandler,
+                            false /* instantRunMode */);
                 }
             }
         } catch (LoggedErrorException e) {
@@ -514,27 +523,11 @@ public class DexTransform extends Transform {
 
     @NonNull
     private String getFilename(@NonNull File inputFile) {
-        String name = Files.getNameWithoutExtension(inputFile.getName());
-
-        // add a hash of the original file path.
-        String input = inputFile.getAbsolutePath();
-        HashFunction hashFunction = Hashing.sha1();
-        HashCode hashCode = hashFunction.hashString(input, Charsets.UTF_16LE);
-
         // If multidex is enabled, this name will be used for a folder and classes*.dex files will
         // inside of it.
         String suffix = multiDex ? "" : SdkConstants.DOT_JAR;
 
-        if (name.equals("classes") && inputFile.getAbsolutePath().contains("exploded-aar")) {
-            // This naming scheme is coming from DependencyManager#computeArtifactPath.
-            File versionDir = inputFile.getParentFile().getParentFile();
-            File artifactDir = versionDir.getParentFile();
-            File groupDir = artifactDir.getParentFile();
-
-            name = Joiner.on('-').join(
-                    groupDir.getName(), artifactDir.getName(), versionDir.getName());
-        }
-
-        return name + "_" + hashCode.toString() + suffix;
+        return FileUtils.getDirectoryNameForJar(inputFile) + suffix;
     }
+
 }

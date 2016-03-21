@@ -1,4 +1,4 @@
-// $ANTLR 3.5.2 /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g 2015-11-12 00:33:48
+// $ANTLR 3.5.2 /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g 2015-11-23 19:11:30
 
 package com.android.builder.shrinker.parser;
 import static org.objectweb.asm.Opcodes.*;
@@ -146,12 +146,12 @@ public class ProguardParser extends Parser {
 	}
 
 	@Override public String[] getTokenNames() { return ProguardParser.tokenNames; }
-	@Override public String getGrammarFileName() { return "/usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g"; }
+	@Override public String getGrammarFileName() { return "/usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g"; }
 
 
 
 	// $ANTLR start "prog"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:20:1: prog[Flags flags, String baseDirectory] : ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )* EOF ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:20:1: prog[Flags flags, String baseDirectory] : ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )* EOF ;
 	public final void prog(Flags flags, String baseDirectory) throws RecognitionException {
 		Token baseDir=null;
 		Token proguardFile=null;
@@ -160,10 +160,10 @@ public class ProguardParser extends Parser {
 		ParserRuleReturnScope unFlag =null;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:21:3: ( ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )* EOF )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:22:3: ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )* EOF
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:21:3: ( ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )* EOF )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:22:3: ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )* EOF
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:22:3: ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )*
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:22:3: ( ( '-basedirectory' baseDir= NAME ) | ( '-include' | '@' ) proguardFile= NAME | ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification ) | ( '-dontshrink' ) | ( '-dontoptimize' ) | ( '-dontpreverify' ) | ( '-dontobfuscate' ) | ignoredFlag | (unFlag= unsupportedFlag ) )*
 			loop4:
 			while (true) {
 				int alt4=12;
@@ -269,10 +269,10 @@ public class ProguardParser extends Parser {
 				}
 				switch (alt4) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:23:5: ( '-basedirectory' baseDir= NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:23:5: ( '-basedirectory' baseDir= NAME )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:23:5: ( '-basedirectory' baseDir= NAME )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:23:6: '-basedirectory' baseDir= NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:23:5: ( '-basedirectory' baseDir= NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:23:6: '-basedirectory' baseDir= NAME
 					{
 					match(input,18,FOLLOW_18_in_prog66); 
 					baseDir=(Token)match(input,NAME,FOLLOW_NAME_in_prog70); 
@@ -282,7 +282,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:24:7: ( '-include' | '@' ) proguardFile= NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:24:7: ( '-include' | '@' ) proguardFile= NAME
 					{
 					if ( input.LA(1)==33||input.LA(1)==70 ) {
 						input.consume();
@@ -297,13 +297,13 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:7: ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:7: ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:7: ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:8: '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:7: ( '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:8: '-keepclassmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification
 					{
 					match(input,40,FOLLOW_40_in_prog100); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:40: (keepModifier= keepOptionModifier )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:40: (keepModifier= keepOptionModifier )?
 					int alt1=2;
 					int LA1_0 = input.LA(1);
 					if ( (LA1_0==11) ) {
@@ -311,7 +311,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt1) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:40: keepModifier= keepOptionModifier
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:25:40: keepModifier= keepOptionModifier
 							{
 							pushFollow(FOLLOW_keepOptionModifier_in_prog104);
 							keepModifier=keepOptionModifier();
@@ -332,13 +332,13 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 4 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:7: ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:7: ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:7: ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:8: '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:7: ( '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:8: '-keepclasseswithmembers' (keepModifier= keepOptionModifier )? classSpec= classSpecification
 					{
 					match(input,38,FOLLOW_38_in_prog121); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:46: (keepModifier= keepOptionModifier )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:46: (keepModifier= keepOptionModifier )?
 					int alt2=2;
 					int LA2_0 = input.LA(1);
 					if ( (LA2_0==11) ) {
@@ -346,7 +346,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt2) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:46: keepModifier= keepOptionModifier
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:26:46: keepModifier= keepOptionModifier
 							{
 							pushFollow(FOLLOW_keepOptionModifier_in_prog125);
 							keepModifier=keepOptionModifier();
@@ -367,13 +367,13 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 5 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:7: ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:7: ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:7: ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:8: '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:7: ( '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:8: '-keep' (keepModifier= keepOptionModifier )? classSpec= classSpecification
 					{
 					match(input,35,FOLLOW_35_in_prog142); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:28: (keepModifier= keepOptionModifier )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:28: (keepModifier= keepOptionModifier )?
 					int alt3=2;
 					int LA3_0 = input.LA(1);
 					if ( (LA3_0==11) ) {
@@ -381,7 +381,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt3) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:28: keepModifier= keepOptionModifier
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:27:28: keepModifier= keepOptionModifier
 							{
 							pushFollow(FOLLOW_keepOptionModifier_in_prog146);
 							keepModifier=keepOptionModifier();
@@ -402,10 +402,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 6 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:28:7: ( '-dontshrink' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:28:7: ( '-dontshrink' )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:28:7: ( '-dontshrink' )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:28:8: '-dontshrink'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:28:7: ( '-dontshrink' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:28:8: '-dontshrink'
 					{
 					match(input,24,FOLLOW_24_in_prog163); 
 					flags.setShrink(false);
@@ -414,10 +414,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 7 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:29:7: ( '-dontoptimize' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:29:7: ( '-dontoptimize' )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:29:7: ( '-dontoptimize' )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:29:8: '-dontoptimize'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:29:7: ( '-dontoptimize' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:29:8: '-dontoptimize'
 					{
 					match(input,22,FOLLOW_22_in_prog175); 
 					flags.setOptimize(false);
@@ -426,10 +426,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 8 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:30:7: ( '-dontpreverify' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:30:7: ( '-dontpreverify' )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:30:7: ( '-dontpreverify' )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:30:8: '-dontpreverify'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:30:7: ( '-dontpreverify' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:30:8: '-dontpreverify'
 					{
 					match(input,23,FOLLOW_23_in_prog188); 
 					flags.setPreverify(false);
@@ -438,10 +438,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 9 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:31:7: ( '-dontobfuscate' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:31:7: ( '-dontobfuscate' )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:31:7: ( '-dontobfuscate' )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:31:8: '-dontobfuscate'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:31:7: ( '-dontobfuscate' )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:31:8: '-dontobfuscate'
 					{
 					match(input,21,FOLLOW_21_in_prog201); 
 					flags.setObfuscate(false);
@@ -450,7 +450,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 10 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:32:7: ignoredFlag
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:32:7: ignoredFlag
 					{
 					pushFollow(FOLLOW_ignoredFlag_in_prog212);
 					ignoredFlag();
@@ -459,10 +459,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 11 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:33:7: (unFlag= unsupportedFlag )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:33:7: (unFlag= unsupportedFlag )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:33:7: (unFlag= unsupportedFlag )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:33:8: unFlag= unsupportedFlag
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:33:7: (unFlag= unsupportedFlag )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:33:8: unFlag= unsupportedFlag
 					{
 					pushFollow(FOLLOW_unsupportedFlag_in_prog223);
 					unFlag=unsupportedFlag();
@@ -498,15 +498,15 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "ignoredFlag"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:41:9: private ignoredFlag : ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' ) ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:41:9: private ignoredFlag : ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' ) ;
 	public final void ignoredFlag() throws RecognitionException {
 		ClassSpecification classSpec =null;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:42:3: ( ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' ) )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:43:3: ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:42:3: ( ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:43:3: ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' )
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:43:3: ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:43:3: ( '-keepparameternames' | ( '-keepattributes' filter[attribute_filter] ) | ( '-keepclassmembernames' classSpec= classSpecification ) | ( '-keepclasseswithmembernames' classSpec= classSpecification ) | ( '-keepnames' classSpec= classSpecification ) | '-verbose' | '-dontusemixedcaseclassnames' | '-useuniqueclassmembernames' | ( '-dontnote' filter[class_filter] ) | ( '-dontwarn' filter[class_filter] ) | '-dontskipnonpubliclibraryclasses' | '-dontskipnonpubliclibraryclassmembers' | '-allowaccessmodification' )
 			int alt5=13;
 			switch ( input.LA(1) ) {
 			case 44:
@@ -581,16 +581,16 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt5) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:43:7: '-keepparameternames'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:43:7: '-keepparameternames'
 					{
 					match(input,44,FOLLOW_44_in_ignoredFlag264); 
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:44:7: ( '-keepattributes' filter[attribute_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:44:7: ( '-keepattributes' filter[attribute_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:44:7: ( '-keepattributes' filter[attribute_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:44:8: '-keepattributes' filter[attribute_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:44:7: ( '-keepattributes' filter[attribute_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:44:8: '-keepattributes' filter[attribute_filter]
 					{
 					match(input,36,FOLLOW_36_in_ignoredFlag273); 
 					FilterSpecification attribute_filter = new FilterSpecification();
@@ -603,10 +603,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:45:7: ( '-keepclassmembernames' classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:45:7: ( '-keepclassmembernames' classSpec= classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:45:7: ( '-keepclassmembernames' classSpec= classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:45:8: '-keepclassmembernames' classSpec= classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:45:7: ( '-keepclassmembernames' classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:45:8: '-keepclassmembernames' classSpec= classSpecification
 					{
 					match(input,39,FOLLOW_39_in_ignoredFlag289); 
 					pushFollow(FOLLOW_classSpecification_in_ignoredFlag293);
@@ -618,10 +618,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 4 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:46:7: ( '-keepclasseswithmembernames' classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:46:7: ( '-keepclasseswithmembernames' classSpec= classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:46:7: ( '-keepclasseswithmembernames' classSpec= classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:46:8: '-keepclasseswithmembernames' classSpec= classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:46:7: ( '-keepclasseswithmembernames' classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:46:8: '-keepclasseswithmembernames' classSpec= classSpecification
 					{
 					match(input,37,FOLLOW_37_in_ignoredFlag305); 
 					pushFollow(FOLLOW_classSpecification_in_ignoredFlag309);
@@ -633,10 +633,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 5 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:47:7: ( '-keepnames' classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:47:7: ( '-keepnames' classSpec= classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:47:7: ( '-keepnames' classSpec= classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:47:8: '-keepnames' classSpec= classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:47:7: ( '-keepnames' classSpec= classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:47:8: '-keepnames' classSpec= classSpecification
 					{
 					match(input,42,FOLLOW_42_in_ignoredFlag321); 
 					pushFollow(FOLLOW_classSpecification_in_ignoredFlag325);
@@ -648,28 +648,28 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 6 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:48:7: '-verbose'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:48:7: '-verbose'
 					{
 					match(input,63,FOLLOW_63_in_ignoredFlag335); 
 					}
 					break;
 				case 7 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:49:7: '-dontusemixedcaseclassnames'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:49:7: '-dontusemixedcaseclassnames'
 					{
 					match(input,27,FOLLOW_27_in_ignoredFlag343); 
 					}
 					break;
 				case 8 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:50:7: '-useuniqueclassmembernames'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:50:7: '-useuniqueclassmembernames'
 					{
 					match(input,62,FOLLOW_62_in_ignoredFlag351); 
 					}
 					break;
 				case 9 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:52:7: ( '-dontnote' filter[class_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:52:7: ( '-dontnote' filter[class_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:52:7: ( '-dontnote' filter[class_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:52:8: '-dontnote' filter[class_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:52:7: ( '-dontnote' filter[class_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:52:8: '-dontnote' filter[class_filter]
 					{
 					match(input,20,FOLLOW_20_in_ignoredFlag365); 
 					FilterSpecification class_filter = new FilterSpecification();
@@ -682,10 +682,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 10 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:53:7: ( '-dontwarn' filter[class_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:53:7: ( '-dontwarn' filter[class_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:53:7: ( '-dontwarn' filter[class_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:53:8: '-dontwarn' filter[class_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:53:7: ( '-dontwarn' filter[class_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:53:8: '-dontwarn' filter[class_filter]
 					{
 					match(input,28,FOLLOW_28_in_ignoredFlag380); 
 					FilterSpecification class_filter = new FilterSpecification();
@@ -698,19 +698,19 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 11 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:55:7: '-dontskipnonpubliclibraryclasses'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:55:7: '-dontskipnonpubliclibraryclasses'
 					{
 					match(input,25,FOLLOW_25_in_ignoredFlag399); 
 					}
 					break;
 				case 12 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:56:7: '-dontskipnonpubliclibraryclassmembers'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:56:7: '-dontskipnonpubliclibraryclassmembers'
 					{
 					match(input,26,FOLLOW_26_in_ignoredFlag407); 
 					}
 					break;
 				case 13 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:57:7: '-allowaccessmodification'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:57:7: '-allowaccessmodification'
 					{
 					match(input,15,FOLLOW_15_in_ignoredFlag415); 
 					}
@@ -737,7 +737,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "unsupportedFlag"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:61:9: private unsupportedFlag : ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath ) ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:61:9: private unsupportedFlag : ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath ) ;
 	public final ProguardParser.unsupportedFlag_return unsupportedFlag() throws RecognitionException {
 		ProguardParser.unsupportedFlag_return retval = new ProguardParser.unsupportedFlag_return();
 		retval.start = input.LT(1);
@@ -752,10 +752,10 @@ public class ProguardParser extends Parser {
 		Token seedOutputFile=null;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:62:3: ( ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath ) )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:63:3: ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:62:3: ( ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:63:3: ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath )
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:63:3: ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:63:3: ( '-skipnonpubliclibraryclasses' | ( '-keepdirectories' filter[directory_filter] ) | ( '-target' NAME ) | '-forceprocessing' | ( '-printusage' NAME ) | ( '-whyareyoukeeping' classSpecification ) | ( '-optimizations' filter[optimization_filter] ) | ( '-optimizationpasses' NAME ) | ( '-assumenosideeffects' classSpecification ) | '-mergeinterfacesaggressively' | '-overloadaggressively' | '-microedition' | ( '-renamesourcefileattribute' (sourceFile= NAME )? ) | '-ignorewarnings' | ( '-printconfiguration' ( NAME )? ) | ( '-dump' ( NAME )? ) | ( '-adaptclassstrings' filter[filter] ) | ( '-applymapping' mapping= NAME ) | '-obfuscationdictionary' obfuscationDictionary= NAME | '-classobfuscationdictionary' classObfuscationDictionary= NAME | '-packageobfuscationdictionary' packageObfuscationDictionary= NAME | '-printmapping' (outputMapping= NAME )? | ( '-keeppackagenames' filter[package_filter] ) | ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? ) | ( '-printseeds' (seedOutputFile= NAME )? ) | ( '-adaptresourcefilenames' filter[file_filter] ) | ( '-adaptresourcefilecontents' filter[file_filter] ) | '-injars' inJars= classpath | '-outjars' outJars= classpath | '-libraryjars' libraryJars= classpath )
 			int alt15=31;
 			switch ( input.LA(1) ) {
 			case 60:
@@ -920,16 +920,16 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt15) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:63:4: '-skipnonpubliclibraryclasses'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:63:4: '-skipnonpubliclibraryclasses'
 					{
 					match(input,60,FOLLOW_60_in_unsupportedFlag437); 
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:64:7: ( '-keepdirectories' filter[directory_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:64:7: ( '-keepdirectories' filter[directory_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:64:7: ( '-keepdirectories' filter[directory_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:64:8: '-keepdirectories' filter[directory_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:64:7: ( '-keepdirectories' filter[directory_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:64:8: '-keepdirectories' filter[directory_filter]
 					{
 					match(input,41,FOLLOW_41_in_unsupportedFlag446); 
 					FilterSpecification directory_filter = new FilterSpecification();
@@ -942,10 +942,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:65:7: ( '-target' NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:65:7: ( '-target' NAME )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:65:7: ( '-target' NAME )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:65:8: '-target' NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:65:7: ( '-target' NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:65:8: '-target' NAME
 					{
 					match(input,61,FOLLOW_61_in_unsupportedFlag461); 
 					match(input,NAME,FOLLOW_NAME_in_unsupportedFlag463); 
@@ -954,16 +954,16 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 4 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:66:7: '-forceprocessing'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:66:7: '-forceprocessing'
 					{
 					match(input,31,FOLLOW_31_in_unsupportedFlag473); 
 					}
 					break;
 				case 5 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:67:7: ( '-printusage' NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:67:7: ( '-printusage' NAME )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:67:7: ( '-printusage' NAME )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:67:8: '-printusage' NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:67:7: ( '-printusage' NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:67:8: '-printusage' NAME
 					{
 					match(input,57,FOLLOW_57_in_unsupportedFlag482); 
 					match(input,NAME,FOLLOW_NAME_in_unsupportedFlag484); 
@@ -972,10 +972,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 6 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:68:7: ( '-whyareyoukeeping' classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:68:7: ( '-whyareyoukeeping' classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:68:7: ( '-whyareyoukeeping' classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:68:8: '-whyareyoukeeping' classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:68:7: ( '-whyareyoukeeping' classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:68:8: '-whyareyoukeeping' classSpecification
 					{
 					match(input,64,FOLLOW_64_in_unsupportedFlag495); 
 					pushFollow(FOLLOW_classSpecification_in_unsupportedFlag497);
@@ -987,10 +987,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 7 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:69:7: ( '-optimizations' filter[optimization_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:69:7: ( '-optimizations' filter[optimization_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:69:7: ( '-optimizations' filter[optimization_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:69:8: '-optimizations' filter[optimization_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:69:7: ( '-optimizations' filter[optimization_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:69:8: '-optimizations' filter[optimization_filter]
 					{
 					match(input,50,FOLLOW_50_in_unsupportedFlag507); 
 					FilterSpecification optimization_filter = new FilterSpecification();
@@ -1003,10 +1003,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 8 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:70:7: ( '-optimizationpasses' NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:70:7: ( '-optimizationpasses' NAME )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:70:7: ( '-optimizationpasses' NAME )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:70:8: '-optimizationpasses' NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:70:7: ( '-optimizationpasses' NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:70:8: '-optimizationpasses' NAME
 					{
 					match(input,49,FOLLOW_49_in_unsupportedFlag522); 
 					match(input,NAME,FOLLOW_NAME_in_unsupportedFlag524); 
@@ -1015,10 +1015,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 9 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:71:7: ( '-assumenosideeffects' classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:71:7: ( '-assumenosideeffects' classSpecification )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:71:7: ( '-assumenosideeffects' classSpecification )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:71:8: '-assumenosideeffects' classSpecification
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:71:7: ( '-assumenosideeffects' classSpecification )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:71:8: '-assumenosideeffects' classSpecification
 					{
 					match(input,17,FOLLOW_17_in_unsupportedFlag535); 
 					pushFollow(FOLLOW_classSpecification_in_unsupportedFlag537);
@@ -1030,31 +1030,31 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 10 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:72:7: '-mergeinterfacesaggressively'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:72:7: '-mergeinterfacesaggressively'
 					{
 					match(input,46,FOLLOW_46_in_unsupportedFlag546); 
 					}
 					break;
 				case 11 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:73:7: '-overloadaggressively'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:73:7: '-overloadaggressively'
 					{
 					match(input,52,FOLLOW_52_in_unsupportedFlag554); 
 					}
 					break;
 				case 12 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:74:7: '-microedition'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:74:7: '-microedition'
 					{
 					match(input,47,FOLLOW_47_in_unsupportedFlag562); 
 					}
 					break;
 				case 13 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:7: ( '-renamesourcefileattribute' (sourceFile= NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:7: ( '-renamesourcefileattribute' (sourceFile= NAME )? )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:7: ( '-renamesourcefileattribute' (sourceFile= NAME )? )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:8: '-renamesourcefileattribute' (sourceFile= NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:7: ( '-renamesourcefileattribute' (sourceFile= NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:8: '-renamesourcefileattribute' (sourceFile= NAME )?
 					{
 					match(input,58,FOLLOW_58_in_unsupportedFlag571); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:47: (sourceFile= NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:47: (sourceFile= NAME )?
 					int alt6=2;
 					int LA6_0 = input.LA(1);
 					if ( (LA6_0==NAME) ) {
@@ -1062,7 +1062,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt6) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:47: sourceFile= NAME
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:75:47: sourceFile= NAME
 							{
 							sourceFile=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag575); 
 							}
@@ -1075,19 +1075,19 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 14 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:76:7: '-ignorewarnings'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:76:7: '-ignorewarnings'
 					{
 					match(input,32,FOLLOW_32_in_unsupportedFlag585); 
 					}
 					break;
 				case 15 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:7: ( '-printconfiguration' ( NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:7: ( '-printconfiguration' ( NAME )? )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:7: ( '-printconfiguration' ( NAME )? )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:8: '-printconfiguration' ( NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:7: ( '-printconfiguration' ( NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:8: '-printconfiguration' ( NAME )?
 					{
 					match(input,54,FOLLOW_54_in_unsupportedFlag594); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:30: ( NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:30: ( NAME )?
 					int alt7=2;
 					int LA7_0 = input.LA(1);
 					if ( (LA7_0==NAME) ) {
@@ -1095,7 +1095,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt7) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:30: NAME
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:77:30: NAME
 							{
 							match(input,NAME,FOLLOW_NAME_in_unsupportedFlag596); 
 							}
@@ -1108,13 +1108,13 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 16 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:7: ( '-dump' ( NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:7: ( '-dump' ( NAME )? )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:7: ( '-dump' ( NAME )? )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:8: '-dump' ( NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:7: ( '-dump' ( NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:8: '-dump' ( NAME )?
 					{
 					match(input,29,FOLLOW_29_in_unsupportedFlag608); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:16: ( NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:16: ( NAME )?
 					int alt8=2;
 					int LA8_0 = input.LA(1);
 					if ( (LA8_0==NAME) ) {
@@ -1122,7 +1122,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt8) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:16: NAME
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:78:16: NAME
 							{
 							match(input,NAME,FOLLOW_NAME_in_unsupportedFlag610); 
 							}
@@ -1135,10 +1135,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 17 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:79:7: ( '-adaptclassstrings' filter[filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:79:7: ( '-adaptclassstrings' filter[filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:79:7: ( '-adaptclassstrings' filter[filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:79:8: '-adaptclassstrings' filter[filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:79:7: ( '-adaptclassstrings' filter[filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:79:8: '-adaptclassstrings' filter[filter]
 					{
 					match(input,12,FOLLOW_12_in_unsupportedFlag622); 
 					FilterSpecification filter = new FilterSpecification();
@@ -1151,10 +1151,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 18 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:80:7: ( '-applymapping' mapping= NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:80:7: ( '-applymapping' mapping= NAME )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:80:7: ( '-applymapping' mapping= NAME )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:80:8: '-applymapping' mapping= NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:80:7: ( '-applymapping' mapping= NAME )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:80:8: '-applymapping' mapping= NAME
 					{
 					match(input,16,FOLLOW_16_in_unsupportedFlag637); 
 					mapping=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag641); 
@@ -1163,31 +1163,31 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 19 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:81:7: '-obfuscationdictionary' obfuscationDictionary= NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:81:7: '-obfuscationdictionary' obfuscationDictionary= NAME
 					{
 					match(input,48,FOLLOW_48_in_unsupportedFlag651); 
 					obfuscationDictionary=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag655); 
 					}
 					break;
 				case 20 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:82:7: '-classobfuscationdictionary' classObfuscationDictionary= NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:82:7: '-classobfuscationdictionary' classObfuscationDictionary= NAME
 					{
 					match(input,19,FOLLOW_19_in_unsupportedFlag663); 
 					classObfuscationDictionary=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag667); 
 					}
 					break;
 				case 21 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:83:7: '-packageobfuscationdictionary' packageObfuscationDictionary= NAME
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:83:7: '-packageobfuscationdictionary' packageObfuscationDictionary= NAME
 					{
 					match(input,53,FOLLOW_53_in_unsupportedFlag675); 
 					packageObfuscationDictionary=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag679); 
 					}
 					break;
 				case 22 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:84:7: '-printmapping' (outputMapping= NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:84:7: '-printmapping' (outputMapping= NAME )?
 					{
 					match(input,55,FOLLOW_55_in_unsupportedFlag687); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:84:36: (outputMapping= NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:84:36: (outputMapping= NAME )?
 					int alt9=2;
 					int LA9_0 = input.LA(1);
 					if ( (LA9_0==NAME) ) {
@@ -1195,7 +1195,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt9) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:84:36: outputMapping= NAME
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:84:36: outputMapping= NAME
 							{
 							outputMapping=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag691); 
 							}
@@ -1206,10 +1206,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 23 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:85:7: ( '-keeppackagenames' filter[package_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:85:7: ( '-keeppackagenames' filter[package_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:85:7: ( '-keeppackagenames' filter[package_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:85:8: '-keeppackagenames' filter[package_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:85:7: ( '-keeppackagenames' filter[package_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:85:8: '-keeppackagenames' filter[package_filter]
 					{
 					match(input,43,FOLLOW_43_in_unsupportedFlag701); 
 					FilterSpecification package_filter = new FilterSpecification();
@@ -1222,13 +1222,13 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 24 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:7: ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:7: ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:7: ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:8: '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:7: ( '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:8: '-repackageclasses' ( '\\'' (newPackage= NAME )? '\\'' )?
 					{
 					match(input,59,FOLLOW_59_in_unsupportedFlag717); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:28: ( '\\'' (newPackage= NAME )? '\\'' )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:28: ( '\\'' (newPackage= NAME )? '\\'' )?
 					int alt11=2;
 					int LA11_0 = input.LA(1);
 					if ( (LA11_0==72) ) {
@@ -1236,10 +1236,10 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt11) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:29: '\\'' (newPackage= NAME )? '\\''
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:29: '\\'' (newPackage= NAME )? '\\''
 							{
 							match(input,72,FOLLOW_72_in_unsupportedFlag720); 
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:44: (newPackage= NAME )?
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:44: (newPackage= NAME )?
 							int alt10=2;
 							int LA10_0 = input.LA(1);
 							if ( (LA10_0==NAME) ) {
@@ -1247,7 +1247,7 @@ public class ProguardParser extends Parser {
 							}
 							switch (alt10) {
 								case 1 :
-									// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:44: newPackage= NAME
+									// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:86:44: newPackage= NAME
 									{
 									newPackage=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag724); 
 									}
@@ -1266,13 +1266,13 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 25 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:7: ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:7: ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:7: ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:8: '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:7: ( '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:8: '-flattenpackagehierarchy' ( '\\'' (newPackage= NAME )? '\\'' )?
 					{
 					match(input,30,FOLLOW_30_in_unsupportedFlag740); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:35: ( '\\'' (newPackage= NAME )? '\\'' )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:35: ( '\\'' (newPackage= NAME )? '\\'' )?
 					int alt13=2;
 					int LA13_0 = input.LA(1);
 					if ( (LA13_0==72) ) {
@@ -1280,10 +1280,10 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt13) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:36: '\\'' (newPackage= NAME )? '\\''
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:36: '\\'' (newPackage= NAME )? '\\''
 							{
 							match(input,72,FOLLOW_72_in_unsupportedFlag743); 
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:51: (newPackage= NAME )?
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:51: (newPackage= NAME )?
 							int alt12=2;
 							int LA12_0 = input.LA(1);
 							if ( (LA12_0==NAME) ) {
@@ -1291,7 +1291,7 @@ public class ProguardParser extends Parser {
 							}
 							switch (alt12) {
 								case 1 :
-									// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:51: newPackage= NAME
+									// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:87:51: newPackage= NAME
 									{
 									newPackage=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag747); 
 									}
@@ -1310,13 +1310,13 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 26 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:7: ( '-printseeds' (seedOutputFile= NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:7: ( '-printseeds' (seedOutputFile= NAME )? )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:7: ( '-printseeds' (seedOutputFile= NAME )? )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:8: '-printseeds' (seedOutputFile= NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:7: ( '-printseeds' (seedOutputFile= NAME )? )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:8: '-printseeds' (seedOutputFile= NAME )?
 					{
 					match(input,56,FOLLOW_56_in_unsupportedFlag763); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:36: (seedOutputFile= NAME )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:36: (seedOutputFile= NAME )?
 					int alt14=2;
 					int LA14_0 = input.LA(1);
 					if ( (LA14_0==NAME) ) {
@@ -1324,7 +1324,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt14) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:36: seedOutputFile= NAME
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:88:36: seedOutputFile= NAME
 							{
 							seedOutputFile=(Token)match(input,NAME,FOLLOW_NAME_in_unsupportedFlag767); 
 							}
@@ -1337,10 +1337,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 27 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:89:7: ( '-adaptresourcefilenames' filter[file_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:89:7: ( '-adaptresourcefilenames' filter[file_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:89:7: ( '-adaptresourcefilenames' filter[file_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:89:8: '-adaptresourcefilenames' filter[file_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:89:7: ( '-adaptresourcefilenames' filter[file_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:89:8: '-adaptresourcefilenames' filter[file_filter]
 					{
 					match(input,14,FOLLOW_14_in_unsupportedFlag779); 
 					FilterSpecification file_filter = new FilterSpecification();
@@ -1353,10 +1353,10 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 28 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:90:7: ( '-adaptresourcefilecontents' filter[file_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:90:7: ( '-adaptresourcefilecontents' filter[file_filter] )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:90:7: ( '-adaptresourcefilecontents' filter[file_filter] )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:90:8: '-adaptresourcefilecontents' filter[file_filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:90:7: ( '-adaptresourcefilecontents' filter[file_filter] )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:90:8: '-adaptresourcefilecontents' filter[file_filter]
 					{
 					match(input,13,FOLLOW_13_in_unsupportedFlag795); 
 					FilterSpecification file_filter = new FilterSpecification();
@@ -1369,7 +1369,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 29 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:91:7: '-injars' inJars= classpath
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:91:7: '-injars' inJars= classpath
 					{
 					match(input,34,FOLLOW_34_in_unsupportedFlag810); 
 					pushFollow(FOLLOW_classpath_in_unsupportedFlag814);
@@ -1379,7 +1379,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 30 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:92:7: '-outjars' outJars= classpath
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:92:7: '-outjars' outJars= classpath
 					{
 					match(input,51,FOLLOW_51_in_unsupportedFlag822); 
 					pushFollow(FOLLOW_classpath_in_unsupportedFlag826);
@@ -1389,7 +1389,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 31 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:93:7: '-libraryjars' libraryJars= classpath
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:93:7: '-libraryjars' libraryJars= classpath
 					{
 					match(input,45,FOLLOW_45_in_unsupportedFlag834); 
 					pushFollow(FOLLOW_classpath_in_unsupportedFlag838);
@@ -1420,14 +1420,14 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "classpath"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:97:9: private classpath : NAME ( ( ':' | ';' ) classpath )? ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:97:9: private classpath : NAME ( ( ':' | ';' ) classpath )? ;
 	public final void classpath() throws RecognitionException {
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:3: ( NAME ( ( ':' | ';' ) classpath )? )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:6: NAME ( ( ':' | ';' ) classpath )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:3: ( NAME ( ( ':' | ';' ) classpath )? )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:6: NAME ( ( ':' | ';' ) classpath )?
 			{
 			match(input,NAME,FOLLOW_NAME_in_classpath858); 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:11: ( ( ':' | ';' ) classpath )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:11: ( ( ':' | ';' ) classpath )?
 			int alt16=2;
 			int LA16_0 = input.LA(1);
 			if ( ((LA16_0 >= 65 && LA16_0 <= 66)) ) {
@@ -1435,7 +1435,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt16) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:12: ( ':' | ';' ) classpath
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:98:12: ( ':' | ';' ) classpath
 					{
 					if ( (input.LA(1) >= 65 && input.LA(1) <= 66) ) {
 						input.consume();
@@ -1470,10 +1470,10 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "filter"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:101:9: private filter[FilterSpecification filter] : ( nonEmptytFilter[filter] |);
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:101:9: private filter[FilterSpecification filter] : ( nonEmptytFilter[filter] |);
 	public final void filter(FilterSpecification filter) throws RecognitionException {
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:102:3: ( nonEmptytFilter[filter] |)
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:102:3: ( nonEmptytFilter[filter] |)
 			int alt17=2;
 			int LA17_0 = input.LA(1);
 			if ( ((LA17_0 >= NAME && LA17_0 <= NEGATOR)) ) {
@@ -1491,7 +1491,7 @@ public class ProguardParser extends Parser {
 
 			switch (alt17) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:103:3: nonEmptytFilter[filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:103:3: nonEmptytFilter[filter]
 					{
 					pushFollow(FOLLOW_nonEmptytFilter_in_filter888);
 					nonEmptytFilter(filter);
@@ -1500,7 +1500,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:104:5: 
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:104:5: 
 					{
 					GrammarActions.filter(filter, false, "**");
 					}
@@ -1521,7 +1521,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "nonEmptytFilter"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:108:9: private nonEmptytFilter[FilterSpecification filter] : ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? ) ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:108:9: private nonEmptytFilter[FilterSpecification filter] : ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? ) ;
 	public final void nonEmptytFilter(FilterSpecification filter) throws RecognitionException {
 		Token NAME1=null;
 
@@ -1529,13 +1529,13 @@ public class ProguardParser extends Parser {
 		  boolean negator = false;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:112:3: ( ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? ) )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:3: ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:112:3: ( ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:3: ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? )
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:3: ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:4: ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:3: ( ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )? )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:4: ( NEGATOR )? NAME ( ',' nonEmptytFilter[filter] )?
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:4: ( NEGATOR )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:4: ( NEGATOR )?
 			int alt18=2;
 			int LA18_0 = input.LA(1);
 			if ( (LA18_0==NEGATOR) ) {
@@ -1543,7 +1543,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt18) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:5: NEGATOR
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:5: NEGATOR
 					{
 					match(input,NEGATOR,FOLLOW_NEGATOR_in_nonEmptytFilter922); 
 					negator=true;
@@ -1554,7 +1554,7 @@ public class ProguardParser extends Parser {
 
 			NAME1=(Token)match(input,NAME,FOLLOW_NAME_in_nonEmptytFilter928); 
 			GrammarActions.filter(filter, negator, (NAME1!=null?NAME1.getText():null));
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:91: ( ',' nonEmptytFilter[filter] )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:91: ( ',' nonEmptytFilter[filter] )?
 			int alt19=2;
 			int LA19_0 = input.LA(1);
 			if ( (LA19_0==11) ) {
@@ -1562,7 +1562,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt19) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:92: ',' nonEmptytFilter[filter]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:113:92: ',' nonEmptytFilter[filter]
 					{
 					match(input,11,FOLLOW_11_in_nonEmptytFilter933); 
 					pushFollow(FOLLOW_nonEmptytFilter_in_nonEmptytFilter935);
@@ -1592,7 +1592,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "classSpecification"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:116:9: private classSpecification returns [ClassSpecification classSpec] : ( annotation )? cType= classModifierAndType[modifier] ( NEGATOR )? NAME (inheritanceSpec= inheritance )? ( members[classSpec] )? ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:116:9: private classSpecification returns [ClassSpecification classSpec] : ( annotation )? cType= classModifierAndType[modifier] ( NEGATOR )? NAME (inheritanceSpec= inheritance )? ( members[classSpec] )? ;
 	public final ClassSpecification classSpecification() throws RecognitionException {
 		ClassSpecification classSpec = null;
 
@@ -1607,10 +1607,10 @@ public class ProguardParser extends Parser {
 		  boolean hasNameNegator = false;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:121:3: ( ( annotation )? cType= classModifierAndType[modifier] ( NEGATOR )? NAME (inheritanceSpec= inheritance )? ( members[classSpec] )? )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:122:3: ( annotation )? cType= classModifierAndType[modifier] ( NEGATOR )? NAME (inheritanceSpec= inheritance )? ( members[classSpec] )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:121:3: ( ( annotation )? cType= classModifierAndType[modifier] ( NEGATOR )? NAME (inheritanceSpec= inheritance )? ( members[classSpec] )? )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:122:3: ( annotation )? cType= classModifierAndType[modifier] ( NEGATOR )? NAME (inheritanceSpec= inheritance )? ( members[classSpec] )?
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:122:3: ( annotation )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:122:3: ( annotation )?
 			int alt20=2;
 			int LA20_0 = input.LA(1);
 			if ( (LA20_0==70) ) {
@@ -1618,7 +1618,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt20) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:122:4: annotation
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:122:4: annotation
 					{
 					pushFollow(FOLLOW_annotation_in_classSpecification965);
 					annotation3=annotation();
@@ -1633,7 +1633,7 @@ public class ProguardParser extends Parser {
 			cType=classModifierAndType(modifier);
 			state._fsp--;
 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:124:3: ( NEGATOR )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:124:3: ( NEGATOR )?
 			int alt21=2;
 			int LA21_0 = input.LA(1);
 			if ( (LA21_0==NEGATOR) ) {
@@ -1641,7 +1641,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt21) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:124:4: NEGATOR
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:124:4: NEGATOR
 					{
 					match(input,NEGATOR,FOLLOW_NEGATOR_in_classSpecification979); 
 					hasNameNegator = true;
@@ -1652,7 +1652,7 @@ public class ProguardParser extends Parser {
 
 			NAME2=(Token)match(input,NAME,FOLLOW_NAME_in_classSpecification985); 
 			classSpec = GrammarActions.classSpec((NAME2!=null?NAME2.getText():null), hasNameNegator, cType, annotation3, modifier);
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:125:3: (inheritanceSpec= inheritance )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:125:3: (inheritanceSpec= inheritance )?
 			int alt22=2;
 			int LA22_0 = input.LA(1);
 			if ( (LA22_0==80||LA22_0==82) ) {
@@ -1660,7 +1660,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt22) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:125:4: inheritanceSpec= inheritance
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:125:4: inheritanceSpec= inheritance
 					{
 					pushFollow(FOLLOW_inheritance_in_classSpecification994);
 					inheritanceSpec=inheritance();
@@ -1672,7 +1672,7 @@ public class ProguardParser extends Parser {
 
 			}
 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:126:3: ( members[classSpec] )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:126:3: ( members[classSpec] )?
 			int alt23=2;
 			int LA23_0 = input.LA(1);
 			if ( (LA23_0==95) ) {
@@ -1680,7 +1680,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt23) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:126:3: members[classSpec]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:126:3: members[classSpec]
 					{
 					pushFollow(FOLLOW_members_in_classSpecification1002);
 					members(classSpec);
@@ -1708,7 +1708,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "classModifierAndType"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:129:9: private classModifierAndType[ModifierSpecification modifier] returns [ClassTypeSpecification cType] : ( NEGATOR )? ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType ) ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:129:9: private classModifierAndType[ModifierSpecification modifier] returns [ClassTypeSpecification cType] : ( NEGATOR )? ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType ) ;
 	public final ClassTypeSpecification classModifierAndType(ModifierSpecification modifier) throws RecognitionException {
 		ClassTypeSpecification cType = null;
 
@@ -1720,10 +1720,10 @@ public class ProguardParser extends Parser {
 		  boolean hasNegator = false;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:133:3: ( ( NEGATOR )? ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType ) )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:134:3: ( NEGATOR )? ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:133:3: ( ( NEGATOR )? ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:134:3: ( NEGATOR )? ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType )
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:134:3: ( NEGATOR )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:134:3: ( NEGATOR )?
 			int alt24=2;
 			int LA24_0 = input.LA(1);
 			if ( (LA24_0==NEGATOR) ) {
@@ -1731,7 +1731,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt24) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:134:4: NEGATOR
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:134:4: NEGATOR
 					{
 					match(input,NEGATOR,FOLLOW_NEGATOR_in_classModifierAndType1031); 
 					hasNegator = true;
@@ -1740,7 +1740,7 @@ public class ProguardParser extends Parser {
 
 			}
 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:135:3: ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:135:3: ( 'public' cmat= classModifierAndType[modifier] | 'abstract' cmat= classModifierAndType[modifier] | 'final' cmat= classModifierAndType[modifier] | classType )
 			int alt25=4;
 			switch ( input.LA(1) ) {
 			case 87:
@@ -1772,7 +1772,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt25) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:136:3: 'public' cmat= classModifierAndType[modifier]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:136:3: 'public' cmat= classModifierAndType[modifier]
 					{
 					match(input,87,FOLLOW_87_in_classModifierAndType1043); 
 					GrammarActions.addModifier(modifier, ACC_PUBLIC, hasNegator);
@@ -1784,7 +1784,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:137:5: 'abstract' cmat= classModifierAndType[modifier]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:137:5: 'abstract' cmat= classModifierAndType[modifier]
 					{
 					match(input,73,FOLLOW_73_in_classModifierAndType1058); 
 					GrammarActions.addModifier(modifier, ACC_ABSTRACT, hasNegator);
@@ -1796,7 +1796,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:138:5: 'final' cmat= classModifierAndType[modifier]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:138:5: 'final' cmat= classModifierAndType[modifier]
 					{
 					match(input,81,FOLLOW_81_in_classModifierAndType1073); 
 					GrammarActions.addModifier(modifier, ACC_FINAL, hasNegator);
@@ -1808,7 +1808,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 4 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:139:5: classType
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:139:5: classType
 					{
 					pushFollow(FOLLOW_classType_in_classModifierAndType1088);
 					classType4=classType();
@@ -1837,13 +1837,13 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "classType"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:143:9: private classType returns [int type] : ( 'interface' | 'enum' | 'class' );
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:143:9: private classType returns [int type] : ( 'interface' | 'enum' | 'class' );
 	public final int classType() throws RecognitionException {
 		int type = 0;
 
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:144:3: ( 'interface' | 'enum' | 'class' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:144:3: ( 'interface' | 'enum' | 'class' )
 			int alt26=3;
 			switch ( input.LA(1) ) {
 			case 83:
@@ -1868,21 +1868,21 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt26) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:145:5: 'interface'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:145:5: 'interface'
 					{
 					match(input,83,FOLLOW_83_in_classType1117); 
 					type = ACC_INTERFACE;
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:146:5: 'enum'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:146:5: 'enum'
 					{
 					match(input,79,FOLLOW_79_in_classType1125); 
 					type = ACC_ENUM;
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:147:5: 'class'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:147:5: 'class'
 					{
 					match(input,78,FOLLOW_78_in_classType1133); 
 					type = 0;
@@ -1905,14 +1905,14 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "members"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:150:9: private members[ClassSpecification classSpec] : '{' ( member[classSpec] )* '}' ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:150:9: private members[ClassSpecification classSpec] : '{' ( member[classSpec] )* '}' ;
 	public final void members(ClassSpecification classSpec) throws RecognitionException {
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:151:3: ( '{' ( member[classSpec] )* '}' )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:152:3: '{' ( member[classSpec] )* '}'
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:151:3: ( '{' ( member[classSpec] )* '}' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:152:3: '{' ( member[classSpec] )* '}'
 			{
 			match(input,95,FOLLOW_95_in_members1154); 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:153:5: ( member[classSpec] )*
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:153:5: ( member[classSpec] )*
 			loop27:
 			while (true) {
 				int alt27=2;
@@ -1923,7 +1923,7 @@ public class ProguardParser extends Parser {
 
 				switch (alt27) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:153:5: member[classSpec]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:153:5: member[classSpec]
 					{
 					pushFollow(FOLLOW_member_in_members1160);
 					member(classSpec);
@@ -1954,7 +1954,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "member"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:157:9: private member[ClassSpecification classSpec] : ( annotation )? modifiers ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' ) ';' ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:157:9: private member[ClassSpecification classSpec] : ( annotation )? modifiers ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' ) ';' ;
 	public final void member(ClassSpecification classSpec) throws RecognitionException {
 		Token name=null;
 		String typeSig =null;
@@ -1963,10 +1963,10 @@ public class ProguardParser extends Parser {
 		ModifierSpecification modifiers6 =null;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:158:3: ( ( annotation )? modifiers ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' ) ';' )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:159:5: ( annotation )? modifiers ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' ) ';'
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:158:3: ( ( annotation )? modifiers ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' ) ';' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:159:5: ( annotation )? modifiers ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' ) ';'
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:159:5: ( annotation )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:159:5: ( annotation )?
 			int alt28=2;
 			int LA28_0 = input.LA(1);
 			if ( (LA28_0==70) ) {
@@ -1974,7 +1974,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt28) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:159:5: annotation
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:159:5: annotation
 					{
 					pushFollow(FOLLOW_annotation_in_member1187);
 					annotation5=annotation();
@@ -1989,7 +1989,7 @@ public class ProguardParser extends Parser {
 			modifiers6=modifiers();
 			state._fsp--;
 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:160:5: ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:160:5: ( (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |) | '<methods>' | '<fields>' )
 			int alt31=3;
 			switch ( input.LA(1) ) {
 			case NAME:
@@ -2016,9 +2016,9 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt31) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:7: (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |)
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:7: (typeSig= type )? name= ( NAME | '<init>' ) (signature= arguments |)
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:7: (typeSig= type )?
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:7: (typeSig= type )?
 					int alt29=2;
 					int LA29_0 = input.LA(1);
 					if ( (LA29_0==8) ) {
@@ -2032,7 +2032,7 @@ public class ProguardParser extends Parser {
 					}
 					switch (alt29) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:8: typeSig= type
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:8: typeSig= type
 							{
 							pushFollow(FOLLOW_type_in_member1207);
 							typeSig=type();
@@ -2052,7 +2052,7 @@ public class ProguardParser extends Parser {
 						MismatchedSetException mse = new MismatchedSetException(null,input);
 						throw mse;
 					}
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:44: (signature= arguments |)
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:44: (signature= arguments |)
 					int alt30=2;
 					int LA30_0 = input.LA(1);
 					if ( (LA30_0==9) ) {
@@ -2070,7 +2070,7 @@ public class ProguardParser extends Parser {
 
 					switch (alt30) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:45: signature= arguments
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:161:45: signature= arguments
 							{
 							pushFollow(FOLLOW_arguments_in_member1222);
 							signature=arguments();
@@ -2080,7 +2080,7 @@ public class ProguardParser extends Parser {
 							}
 							break;
 						case 2 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:162:21: 
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:162:21: 
 							{
 							GrammarActions.fieldOrAnyMember(classSpec, annotation5, typeSig, (name!=null?name.getText():null), modifiers6);
 							}
@@ -2091,7 +2091,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:163:9: '<methods>'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:163:9: '<methods>'
 					{
 					match(input,69,FOLLOW_69_in_member1257); 
 					GrammarActions.method(classSpec, annotation5,
@@ -2100,7 +2100,7 @@ public class ProguardParser extends Parser {
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:166:9: '<fields>'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:166:9: '<fields>'
 					{
 					match(input,67,FOLLOW_67_in_member1269); 
 					GrammarActions.field(classSpec, annotation5, null, "*", modifiers6);
@@ -2126,7 +2126,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "annotation"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:170:9: private annotation returns [AnnotationSpecification annotSpec] : '@' ( NEGATOR )? NAME ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:170:9: private annotation returns [AnnotationSpecification annotSpec] : '@' ( NEGATOR )? NAME ;
 	public final AnnotationSpecification annotation() throws RecognitionException {
 		AnnotationSpecification annotSpec = null;
 
@@ -2137,11 +2137,11 @@ public class ProguardParser extends Parser {
 		  boolean hasNameNegator = false;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:3: ( '@' ( NEGATOR )? NAME )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:6: '@' ( NEGATOR )? NAME
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:3: ( '@' ( NEGATOR )? NAME )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:6: '@' ( NEGATOR )? NAME
 			{
 			match(input,70,FOLLOW_70_in_annotation1303); 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:10: ( NEGATOR )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:10: ( NEGATOR )?
 			int alt32=2;
 			int LA32_0 = input.LA(1);
 			if ( (LA32_0==NEGATOR) ) {
@@ -2149,7 +2149,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt32) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:11: NEGATOR
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:174:11: NEGATOR
 					{
 					match(input,NEGATOR,FOLLOW_NEGATOR_in_annotation1306); 
 					hasNameNegator = true;
@@ -2177,7 +2177,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "modifiers"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:176:9: private modifiers returns [ModifierSpecification modifiers] : ( modifier[modifiers] )* ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:176:9: private modifiers returns [ModifierSpecification modifiers] : ( modifier[modifiers] )* ;
 	public final ModifierSpecification modifiers() throws RecognitionException {
 		ModifierSpecification modifiers = null;
 
@@ -2186,10 +2186,10 @@ public class ProguardParser extends Parser {
 		  modifiers = new ModifierSpecification();
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:180:3: ( ( modifier[modifiers] )* )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:181:3: ( modifier[modifiers] )*
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:180:3: ( ( modifier[modifiers] )* )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:181:3: ( modifier[modifiers] )*
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:181:3: ( modifier[modifiers] )*
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:181:3: ( modifier[modifiers] )*
 			loop33:
 			while (true) {
 				int alt33=2;
@@ -2200,7 +2200,7 @@ public class ProguardParser extends Parser {
 
 				switch (alt33) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:181:3: modifier[modifiers]
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:181:3: modifier[modifiers]
 					{
 					pushFollow(FOLLOW_modifier_in_modifiers1336);
 					modifier(modifiers);
@@ -2231,16 +2231,16 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "modifier"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:184:9: private modifier[ModifierSpecification modifiers] : ( NEGATOR )? ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' ) ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:184:9: private modifier[ModifierSpecification modifiers] : ( NEGATOR )? ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' ) ;
 	public final void modifier(ModifierSpecification modifiers) throws RecognitionException {
 
 		  boolean hasNegator = false;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:188:3: ( ( NEGATOR )? ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' ) )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:189:3: ( NEGATOR )? ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:188:3: ( ( NEGATOR )? ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:189:3: ( NEGATOR )? ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' )
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:189:3: ( NEGATOR )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:189:3: ( NEGATOR )?
 			int alt34=2;
 			int LA34_0 = input.LA(1);
 			if ( (LA34_0==NEGATOR) ) {
@@ -2248,7 +2248,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt34) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:189:4: NEGATOR
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:189:4: NEGATOR
 					{
 					match(input,NEGATOR,FOLLOW_NEGATOR_in_modifier1362); 
 					hasNegator = true;
@@ -2257,7 +2257,7 @@ public class ProguardParser extends Parser {
 
 			}
 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:190:3: ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:190:3: ( 'public' | 'private' | 'protected' | 'static' | 'synchronized' | 'volatile' | 'native' | 'abstract' | 'strictfp' | 'final' | 'transient' | 'synthetic' | 'bridge' | 'varargs' )
 			int alt35=14;
 			switch ( input.LA(1) ) {
 			case 87:
@@ -2337,98 +2337,98 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt35) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:191:5: 'public'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:191:5: 'public'
 					{
 					match(input,87,FOLLOW_87_in_modifier1376); 
 					modifiers.addModifier(ACC_PUBLIC, hasNegator);
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:192:7: 'private'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:192:7: 'private'
 					{
 					match(input,85,FOLLOW_85_in_modifier1386); 
 					modifiers.addModifier(ACC_PRIVATE, hasNegator);
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:193:7: 'protected'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:193:7: 'protected'
 					{
 					match(input,86,FOLLOW_86_in_modifier1396); 
 					modifiers.addModifier(ACC_PROTECTED, hasNegator);
 					}
 					break;
 				case 4 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:194:7: 'static'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:194:7: 'static'
 					{
 					match(input,88,FOLLOW_88_in_modifier1406); 
 					modifiers.addModifier(ACC_STATIC, hasNegator);
 					}
 					break;
 				case 5 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:195:7: 'synchronized'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:195:7: 'synchronized'
 					{
 					match(input,90,FOLLOW_90_in_modifier1416); 
 					modifiers.addModifier(ACC_SYNCHRONIZED, hasNegator);
 					}
 					break;
 				case 6 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:196:7: 'volatile'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:196:7: 'volatile'
 					{
 					match(input,94,FOLLOW_94_in_modifier1426); 
 					modifiers.addModifier(ACC_VOLATILE, hasNegator);
 					}
 					break;
 				case 7 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:197:7: 'native'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:197:7: 'native'
 					{
 					match(input,84,FOLLOW_84_in_modifier1436); 
 					modifiers.addModifier(ACC_NATIVE, hasNegator);
 					}
 					break;
 				case 8 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:198:7: 'abstract'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:198:7: 'abstract'
 					{
 					match(input,73,FOLLOW_73_in_modifier1446); 
 					modifiers.addModifier(ACC_ABSTRACT, hasNegator);
 					}
 					break;
 				case 9 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:199:7: 'strictfp'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:199:7: 'strictfp'
 					{
 					match(input,89,FOLLOW_89_in_modifier1456); 
 					modifiers.addModifier(ACC_STRICT, hasNegator);
 					}
 					break;
 				case 10 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:200:7: 'final'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:200:7: 'final'
 					{
 					match(input,81,FOLLOW_81_in_modifier1466); 
 					modifiers.addModifier(ACC_FINAL, hasNegator);
 					}
 					break;
 				case 11 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:201:7: 'transient'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:201:7: 'transient'
 					{
 					match(input,92,FOLLOW_92_in_modifier1476); 
 					modifiers.addModifier(ACC_TRANSIENT, hasNegator);
 					}
 					break;
 				case 12 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:202:7: 'synthetic'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:202:7: 'synthetic'
 					{
 					match(input,91,FOLLOW_91_in_modifier1486); 
 					modifiers.addModifier(ACC_SYNTHETIC, hasNegator);
 					}
 					break;
 				case 13 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:203:7: 'bridge'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:203:7: 'bridge'
 					{
 					match(input,77,FOLLOW_77_in_modifier1496); 
 					modifiers.addModifier(ACC_BRIDGE, hasNegator);
 					}
 					break;
 				case 14 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:204:7: 'varargs'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:204:7: 'varargs'
 					{
 					match(input,93,FOLLOW_93_in_modifier1506); 
 					modifiers.addModifier(ACC_VARARGS, hasNegator);
@@ -2453,7 +2453,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "inheritance"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:208:9: private inheritance returns [InheritanceSpecification inheritanceSpec] : ( 'extends' | 'implements' ) ( annotation )? ( NEGATOR )? NAME ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:208:9: private inheritance returns [InheritanceSpecification inheritanceSpec] : ( 'extends' | 'implements' ) ( annotation )? ( NEGATOR )? NAME ;
 	public final InheritanceSpecification inheritance() throws RecognitionException {
 		InheritanceSpecification inheritanceSpec = null;
 
@@ -2465,8 +2465,8 @@ public class ProguardParser extends Parser {
 		  boolean hasNameNegator = false;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:212:3: ( ( 'extends' | 'implements' ) ( annotation )? ( NEGATOR )? NAME )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:213:3: ( 'extends' | 'implements' ) ( annotation )? ( NEGATOR )? NAME
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:212:3: ( ( 'extends' | 'implements' ) ( annotation )? ( NEGATOR )? NAME )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:213:3: ( 'extends' | 'implements' ) ( annotation )? ( NEGATOR )? NAME
 			{
 			if ( input.LA(1)==80||input.LA(1)==82 ) {
 				input.consume();
@@ -2476,7 +2476,7 @@ public class ProguardParser extends Parser {
 				MismatchedSetException mse = new MismatchedSetException(null,input);
 				throw mse;
 			}
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:3: ( annotation )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:3: ( annotation )?
 			int alt36=2;
 			int LA36_0 = input.LA(1);
 			if ( (LA36_0==70) ) {
@@ -2484,7 +2484,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt36) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:3: annotation
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:3: annotation
 					{
 					pushFollow(FOLLOW_annotation_in_inheritance1547);
 					annotation9=annotation();
@@ -2495,7 +2495,7 @@ public class ProguardParser extends Parser {
 
 			}
 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:15: ( NEGATOR )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:15: ( NEGATOR )?
 			int alt37=2;
 			int LA37_0 = input.LA(1);
 			if ( (LA37_0==NEGATOR) ) {
@@ -2503,7 +2503,7 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt37) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:16: NEGATOR
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:214:16: NEGATOR
 					{
 					match(input,NEGATOR,FOLLOW_NEGATOR_in_inheritance1551); 
 					hasNameNegator = true;
@@ -2531,7 +2531,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "arguments"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:216:9: private arguments returns [String signature] : '(' ( (parameterSig= type ( ',' parameterSig= type )* )? ) ')' ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:216:9: private arguments returns [String signature] : '(' ( (parameterSig= type ( ',' parameterSig= type )* )? ) ')' ;
 	public final String arguments() throws RecognitionException {
 		String signature = null;
 
@@ -2539,15 +2539,15 @@ public class ProguardParser extends Parser {
 		String parameterSig =null;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:217:3: ( '(' ( (parameterSig= type ( ',' parameterSig= type )* )? ) ')' )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:218:3: '(' ( (parameterSig= type ( ',' parameterSig= type )* )? ) ')'
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:217:3: ( '(' ( (parameterSig= type ( ',' parameterSig= type )* )? ) ')' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:218:3: '(' ( (parameterSig= type ( ',' parameterSig= type )* )? ) ')'
 			{
 			match(input,9,FOLLOW_9_in_arguments1577); 
 			signature = "(";
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:219:5: ( (parameterSig= type ( ',' parameterSig= type )* )? )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:220:7: (parameterSig= type ( ',' parameterSig= type )* )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:219:5: ( (parameterSig= type ( ',' parameterSig= type )* )? )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:220:7: (parameterSig= type ( ',' parameterSig= type )* )?
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:220:7: (parameterSig= type ( ',' parameterSig= type )* )?
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:220:7: (parameterSig= type ( ',' parameterSig= type )* )?
 			int alt39=2;
 			int LA39_0 = input.LA(1);
 			if ( (LA39_0==NAME||LA39_0==8) ) {
@@ -2555,14 +2555,14 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt39) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:221:9: parameterSig= type ( ',' parameterSig= type )*
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:221:9: parameterSig= type ( ',' parameterSig= type )*
 					{
 					pushFollow(FOLLOW_type_in_arguments1605);
 					parameterSig=type();
 					state._fsp--;
 
 					signature += parameterSig;
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:222:9: ( ',' parameterSig= type )*
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:222:9: ( ',' parameterSig= type )*
 					loop38:
 					while (true) {
 						int alt38=2;
@@ -2573,7 +2573,7 @@ public class ProguardParser extends Parser {
 
 						switch (alt38) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:222:10: ',' parameterSig= type
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:222:10: ',' parameterSig= type
 							{
 							match(input,11,FOLLOW_11_in_arguments1618); 
 							pushFollow(FOLLOW_type_in_arguments1622);
@@ -2615,7 +2615,7 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "type"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:228:9: private type returns [String signature] : (typeName= '%' | (typeName= NAME ( '[]' )* ) ) ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:228:9: private type returns [String signature] : (typeName= '%' | (typeName= NAME ( '[]' )* ) ) ;
 	public final String type() throws RecognitionException {
 		String signature = null;
 
@@ -2626,10 +2626,10 @@ public class ProguardParser extends Parser {
 		  int dim = 0;
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:232:3: ( (typeName= '%' | (typeName= NAME ( '[]' )* ) ) )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:233:3: (typeName= '%' | (typeName= NAME ( '[]' )* ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:232:3: ( (typeName= '%' | (typeName= NAME ( '[]' )* ) ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:233:3: (typeName= '%' | (typeName= NAME ( '[]' )* ) )
 			{
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:233:3: (typeName= '%' | (typeName= NAME ( '[]' )* ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:233:3: (typeName= '%' | (typeName= NAME ( '[]' )* ) )
 			int alt41=2;
 			int LA41_0 = input.LA(1);
 			if ( (LA41_0==8) ) {
@@ -2647,20 +2647,20 @@ public class ProguardParser extends Parser {
 
 			switch (alt41) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:234:5: typeName= '%'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:234:5: typeName= '%'
 					{
 					typeName=(Token)match(input,8,FOLLOW_8_in_type1687); 
 					String sig = (typeName!=null?typeName.getText():null); signature = GrammarActions.getSignature(sig == null ? "" : sig, 0);
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:5: (typeName= NAME ( '[]' )* )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:5: (typeName= NAME ( '[]' )* )
 					{
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:5: (typeName= NAME ( '[]' )* )
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:6: typeName= NAME ( '[]' )*
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:5: (typeName= NAME ( '[]' )* )
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:6: typeName= NAME ( '[]' )*
 					{
 					typeName=(Token)match(input,NAME,FOLLOW_NAME_in_type1704); 
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:20: ( '[]' )*
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:20: ( '[]' )*
 					loop40:
 					while (true) {
 						int alt40=2;
@@ -2671,7 +2671,7 @@ public class ProguardParser extends Parser {
 
 						switch (alt40) {
 						case 1 :
-							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:21: '[]'
+							// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:236:21: '[]'
 							{
 							match(input,71,FOLLOW_71_in_type1707); 
 							dim++;
@@ -2708,17 +2708,17 @@ public class ProguardParser extends Parser {
 
 
 	// $ANTLR start "keepOptionModifier"
-	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:240:9: private keepOptionModifier returns [KeepModifier modifier] : ',' ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' ) ;
+	// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:240:9: private keepOptionModifier returns [KeepModifier modifier] : ',' ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' ) ;
 	public final KeepModifier keepOptionModifier() throws RecognitionException {
 		KeepModifier modifier = null;
 
 
 		try {
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:241:3: ( ',' ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' ) )
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:241:5: ',' ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:241:3: ( ',' ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' ) )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:241:5: ',' ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' )
 			{
 			match(input,11,FOLLOW_11_in_keepOptionModifier1738); 
-			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:242:3: ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' )
+			// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:242:3: ( 'allowshrinking' | 'allowoptimization' | 'allowobfuscation' )
 			int alt42=3;
 			switch ( input.LA(1) ) {
 			case 76:
@@ -2743,20 +2743,20 @@ public class ProguardParser extends Parser {
 			}
 			switch (alt42) {
 				case 1 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:242:4: 'allowshrinking'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:242:4: 'allowshrinking'
 					{
 					match(input,76,FOLLOW_76_in_keepOptionModifier1743); 
 					modifier = KeepModifier.ALLOW_SHRINKING;
 					}
 					break;
 				case 2 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:243:5: 'allowoptimization'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:243:5: 'allowoptimization'
 					{
 					match(input,75,FOLLOW_75_in_keepOptionModifier1751); 
 					}
 					break;
 				case 3 :
-					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-1.5-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:244:5: 'allowobfuscation'
+					// /usr/local/google/home/android-devtools-build/jenkins-slave-agent/workspace/tools-2.0-rel-publish/tools/base/build-system/builder/src/main/java/com/android/builder/shrinker/parser/Proguard.g:244:5: 'allowobfuscation'
 					{
 					match(input,74,FOLLOW_74_in_keepOptionModifier1758); 
 					modifier = KeepModifier.ALLOW_OBFUSCATION;

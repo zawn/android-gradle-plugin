@@ -25,11 +25,14 @@ import com.android.annotations.Nullable;
 import com.android.build.gradle.internal.core.Abi;
 import com.android.build.gradle.internal.core.GradleVariantConfiguration;
 import com.android.build.gradle.internal.coverage.JacocoReportTask;
+import com.android.build.gradle.internal.incremental.InstantRunBuildContext;
+import com.android.build.gradle.internal.dsl.AbiSplitOptions;
 import com.android.build.gradle.internal.pipeline.TransformManager;
 import com.android.build.gradle.internal.pipeline.TransformTask;
 import com.android.build.gradle.internal.tasks.CheckManifest;
 import com.android.build.gradle.internal.tasks.FileSupplier;
 import com.android.build.gradle.internal.tasks.PrepareDependenciesTask;
+import com.android.build.gradle.internal.transforms.InstantRunVerifierTransform;
 import com.android.build.gradle.internal.tasks.databinding.DataBindingExportBuildInfoTask;
 import com.android.build.gradle.internal.tasks.databinding.DataBindingProcessLayoutsTask;
 import com.android.build.gradle.internal.variant.BaseVariantData;
@@ -61,8 +64,11 @@ import org.gradle.api.tasks.compile.AbstractCompile;
 import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A scope containing data for a specific variant.
@@ -122,7 +128,7 @@ public class VariantScopeImpl implements VariantScope {
     @Nullable
     private AndroidTask<? extends AbstractCompile> javaCompilerTask;
     @Nullable
-    private AndroidTask<JavaCompile> javacTask;
+    private AndroidTask<? extends JavaCompile> javacTask;
     @Nullable
     private AndroidTask<JackTask> jackTask;
 
@@ -277,6 +283,24 @@ public class VariantScopeImpl implements VariantScope {
                 null;
     }
 
+    @NonNull
+    @Override
+    public File getDexOutputFolder() {
+        return new File(globalScope.getIntermediatesDir(), "/dex/" + getVariantConfiguration().getDirName());
+    }
+
+    @Override
+    @NonNull
+    public File getReloadDexOutputFolder() {
+        return new File(globalScope.getIntermediatesDir(), "/reload-dex/" + getVariantConfiguration().getDirName());
+    }
+
+    @Override
+    @NonNull
+    public File getRestartDexOutputFolder() {
+        return new File(globalScope.getIntermediatesDir(), "/restart-dex/" + getVariantConfiguration().getDirName());
+    }
+
     // Precomputed file paths.
 
     @Override
@@ -291,6 +315,34 @@ public class VariantScopeImpl implements VariantScope {
     @NonNull
     public File getJavaOutputDir() {
         return new File(globalScope.getIntermediatesDir(), "/classes/" +
+                variantData.getVariantConfiguration().getDirName());
+    }
+
+    @NonNull
+    @Override
+    public File getInstantRunSupportDir() {
+        return new File(globalScope.getIntermediatesDir(), "/instant-run-support/" +
+                variantData.getVariantConfiguration().getDirName());
+    }
+
+    @NonNull
+    @Override
+    public File getIncrementalRuntimeSupportJar() {
+        return new File(globalScope.getIntermediatesDir(), "/incremental-runtime-classes/" +
+                variantData.getVariantConfiguration().getDirName() + "/instant-run.jar");
+    }
+
+    @Override
+    @NonNull
+    public File getIncrementalApplicationSupportDir() {
+        return new File(globalScope.getIntermediatesDir(), "/incremental-classes/" +
+                variantData.getVariantConfiguration().getDirName());
+    }
+
+    @Override
+    @NonNull
+    public File getIncrementalVerifierDir() {
+        return new File(globalScope.getIntermediatesDir(), "/incremental-verifier/" +
                 variantData.getVariantConfiguration().getDirName());
     }
 
@@ -599,6 +651,59 @@ public class VariantScopeImpl implements VariantScope {
                 "/mapping/" + getVariantConfiguration().getDirName() + "/mapping.txt");
     }
 
+    @Override
+    @NonNull
+    public File getGenerateSplitAbiResOutputDirectory() {
+        return new File(globalScope.getIntermediatesDir(),
+                "abi/" + getVariantConfiguration().getDirName());
+    }
+
+    @Override
+    @NonNull
+    public File getSplitOutputDirectory() {
+        return new File(globalScope.getIntermediatesDir(),
+                "splits/" + getVariantConfiguration().getDirName());
+    }
+
+
+    @Override
+    @NonNull
+    public List<File> getSplitAbiResOutputFiles() {
+        Set<String> filters = AbiSplitOptions.getAbiFilters(
+                globalScope.getExtension().getSplits().getAbiFilters());
+        List<File> outputFiles = new ArrayList<File>();
+        for (String split : filters) {
+            outputFiles.add(getOutputFileForSplit(split));
+        }
+        return outputFiles;
+    }
+
+    private File getOutputFileForSplit(final String split) {
+        return new File(getGenerateSplitAbiResOutputDirectory(),
+                "resources-" + getVariantConfiguration().getBaseName() + "-" + split + ".ap_");
+    }
+
+    @Override
+    @NonNull
+    public List<File> getPackageSplitAbiOutputFiles() {
+        ImmutableList.Builder<File> builder = ImmutableList.builder();
+        for (String split : globalScope.getExtension().getSplits().getAbiFilters()) {
+            String apkName = getApkName(split);
+            builder.add(new File(getSplitOutputDirectory(), apkName));
+        }
+        return builder.build();
+    }
+
+    private String getApkName(final String split) {
+        String archivesBaseName = globalScope.getArchivesBaseName();
+        String apkName =
+                archivesBaseName + "-" + getVariantConfiguration().getBaseName() + "_" + split;
+        return apkName
+                + (getVariantConfiguration().getSigningConfig() == null
+                        ? "-unsigned.apk"
+                        : "-unaligned.apk");
+    }
+
     @NonNull
     @Override
     public File getAaptFriendlyManifestOutputFile() {
@@ -820,13 +925,13 @@ public class VariantScopeImpl implements VariantScope {
 
     @Override
     @Nullable
-    public AndroidTask<JavaCompile> getJavacTask() {
+    public AndroidTask<? extends  JavaCompile> getJavacTask() {
         return javacTask;
     }
 
     @Override
     public void setJavacTask(
-            @Nullable AndroidTask<JavaCompile> javacTask) {
+            @Nullable AndroidTask<? extends JavaCompile> javacTask) {
         this.javacTask = javacTask;
     }
 
@@ -855,5 +960,14 @@ public class VariantScopeImpl implements VariantScope {
     @Override
     public void setCoverageReportTask(AndroidTask<?> coverageReportTask) {
         this.coverageReportTask = coverageReportTask;
+    }
+
+    @NonNull
+    InstantRunBuildContext instantRunBuildContext = new InstantRunBuildContext();
+
+    @Override
+    @NonNull
+    public InstantRunBuildContext getInstantRunBuildContext() {
+        return instantRunBuildContext;
     }
 }

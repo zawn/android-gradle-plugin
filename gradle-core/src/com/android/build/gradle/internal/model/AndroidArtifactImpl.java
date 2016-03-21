@@ -22,6 +22,7 @@ import com.android.builder.model.AndroidArtifact;
 import com.android.builder.model.AndroidArtifactOutput;
 import com.android.builder.model.ClassField;
 import com.android.builder.model.Dependencies;
+import com.android.builder.model.InstantRun;
 import com.android.builder.model.NativeLibrary;
 import com.android.builder.model.SourceProvider;
 import com.google.common.collect.Sets;
@@ -59,6 +60,8 @@ public class AndroidArtifactImpl extends BaseArtifactImpl implements AndroidArti
     private final Map<String, ClassField> buildConfigFields;
     @NonNull
     private final Map<String, ClassField> resValues;
+    @NonNull
+    private final InstantRun instantRun;
 
     AndroidArtifactImpl(
             @NonNull String name,
@@ -79,8 +82,10 @@ public class AndroidArtifactImpl extends BaseArtifactImpl implements AndroidArti
             @Nullable Set<String> abiFilters,
             @NonNull Collection<NativeLibrary> nativeLibraries,
             @NonNull Map<String,ClassField> buildConfigFields,
-            @NonNull Map<String,ClassField> resValues) {
-        super(name, assembleTaskName, compileTaskName, classesFolder, javaResourcesFolder,
+            @NonNull Map<String,ClassField> resValues,
+            @NonNull InstantRun instantRun) {
+        super(name, assembleTaskName, compileTaskName,
+                classesFolder, javaResourcesFolder,
                 dependencies, variantSourceProvider, multiFlavorSourceProviders,
                 generatedSourceFolders);
 
@@ -94,6 +99,7 @@ public class AndroidArtifactImpl extends BaseArtifactImpl implements AndroidArti
         this.nativeLibraries = nativeLibraries;
         this.buildConfigFields = buildConfigFields;
         this.resValues = resValues;
+        this.instantRun = instantRun;
     }
 
     @NonNull
@@ -159,5 +165,11 @@ public class AndroidArtifactImpl extends BaseArtifactImpl implements AndroidArti
     @Override
     public Map<String, ClassField> getResValues() {
         return resValues;
+    }
+
+    @NonNull
+    @Override
+    public InstantRun getInstantRun() {
+        return instantRun;
     }
 }

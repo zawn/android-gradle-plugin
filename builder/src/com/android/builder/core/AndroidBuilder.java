@@ -39,6 +39,7 @@ import com.android.builder.internal.SymbolLoader;
 import com.android.builder.internal.SymbolWriter;
 import com.android.builder.internal.TestManifestGenerator;
 import com.android.builder.internal.compiler.AidlProcessor;
+import com.android.builder.internal.compiler.DexWrapper;
 import com.android.builder.internal.compiler.JackConversionCache;
 import com.android.builder.internal.compiler.LeafFolderGatherer;
 import com.android.builder.internal.compiler.PreDexCache;
@@ -47,7 +48,6 @@ import com.android.builder.internal.compiler.SourceSearcher;
 import com.android.builder.internal.incremental.DependencyData;
 import com.android.builder.internal.packaging.Packager;
 import com.android.builder.model.ClassField;
-import com.android.builder.model.PackagingOptions;
 import com.android.builder.model.SigningConfig;
 import com.android.builder.model.SyncIssue;
 import com.android.builder.packaging.DuplicateFileException;
@@ -72,6 +72,7 @@ import com.android.ide.common.process.ProcessResult;
 import com.android.ide.common.signing.CertificateInfo;
 import com.android.ide.common.signing.KeystoreHelper;
 import com.android.ide.common.signing.KeytoolException;
+import com.android.ide.common.xml.XmlPrettyPrinter;
 import com.android.jack.api.ConfigNotSupportedException;
 import com.android.jack.api.JackProvider;
 import com.android.jack.api.v01.Api01CompilationTask;
@@ -89,10 +90,10 @@ import com.android.manifmerger.MergingReport;
 import com.android.manifmerger.PlaceholderEncoder;
 import com.android.manifmerger.PlaceholderHandler;
 import com.android.manifmerger.XmlDocument;
+import com.android.repository.Revision;
 import com.android.sdklib.BuildToolInfo;
 import com.android.sdklib.IAndroidTarget;
 import com.android.sdklib.IAndroidTarget.OptionalLibrary;
-import com.android.sdklib.repository.FullRevision;
 import com.android.utils.FileUtils;
 import com.android.utils.ILogger;
 import com.android.utils.Pair;
@@ -140,14 +141,14 @@ import java.util.zip.ZipFile;
  * {@link #processResources(AaptPackageProcessBuilder, boolean, ProcessOutputHandler)}
  * {@link #compileAllAidlFiles(List, File, File, Collection, List, DependencyFileProcessor, ProcessOutputHandler)}
  * {@link #convertByteCode(Collection, File, boolean, File, DexOptions, List, boolean, boolean, ProcessOutputHandler)}
- * {@link #packageApk(String, Map, File, Collection, File, Set, boolean, SigningConfig, PackagingOptions, SignedJarBuilder.IZipEntryFilter, String)}
+ * {@link #packageApk(String, Set, Collection, Collection, Set, boolean, SigningConfig, String)}
  *
  * Java compilation is not handled but the builder provides the bootclasspath with
  * {@link #getBootClasspath(boolean)}.
  */
 public class AndroidBuilder {
 
-    private static final FullRevision MIN_BUILD_TOOLS_REV = new FullRevision(19, 1, 0);
+    private static final Revision MIN_BUILD_TOOLS_REV = new Revision(19, 1, 0);
     private static final DependencyFileProcessor sNoOpDependencyFileProcessor = new DependencyFileProcessor() {
         @Override
         public DependencyData processFile(@NonNull File dependencyFile) {
@@ -575,6 +576,11 @@ public class AndroidBuilder {
         return new ClassFieldImpl(type, name, value);
     }
 
+    // Temporary trampoline
+    public static String formatXml(@NonNull org.w3c.dom.Node node, boolean endWithNewline) {
+        return XmlPrettyPrinter.prettyPrint(node, endWithNewline);
+    }
+
     /**
      * Invoke the Manifest Merger version 2.
      */
@@ -918,10 +924,8 @@ public class AndroidBuilder {
         ProcessResult result = mProcessExecutor.execute(processInfo, processOutputHandler);
         result.rethrowFailure().assertNormalExitValue();
 
-        // now if the project has libraries, R needs to be created for each libraries,
-        // but only if the current project is not a library.
+        // If the project has libraries, R needs to be created for each library.
         if (aaptCommand.getSourceOutputDir() != null
-                && aaptCommand.getType() != VariantType.LIBRARY
                 && !aaptCommand.getLibraries().isEmpty()) {
             SymbolLoader fullSymbolValues = null;
 
@@ -1199,19 +1203,20 @@ public class AndroidBuilder {
      * @throws InterruptedException
      * @throws LoggedErrorException
      */
-    public void compileAllRenderscriptFiles(@NonNull List<File> sourceFolders,
-                                            @NonNull List<File> importFolders,
-                                            @NonNull File sourceOutputDir,
-                                            @NonNull File resOutputDir,
-                                            @NonNull File objOutputDir,
-                                            @NonNull File libOutputDir,
-                                            int targetApi,
-                                            boolean debugBuild,
-                                            int optimLevel,
-                                            boolean ndkMode,
-                                            boolean supportMode,
-                                            @Nullable Set<String> abiFilters,
-                                            @NonNull ProcessOutputHandler processOutputHandler)
+    public void compileAllRenderscriptFiles(
+            @NonNull List<File> sourceFolders,
+            @NonNull List<File> importFolders,
+            @NonNull File sourceOutputDir,
+            @NonNull File resOutputDir,
+            @NonNull File objOutputDir,
+            @NonNull File libOutputDir,
+            int targetApi,
+            boolean debugBuild,
+            int optimLevel,
+            boolean ndkMode,
+            boolean supportMode,
+            @Nullable Set<String> abiFilters,
+            @NonNull ProcessOutputHandler processOutputHandler)
             throws InterruptedException, ProcessException, LoggedErrorException, IOException {
         checkNotNull(sourceFolders, "sourceFolders cannot be null.");
         checkNotNull(importFolders, "importFolders cannot be null.");
@@ -1294,6 +1299,8 @@ public class AndroidBuilder {
      * @param dexOptions dex options
      * @param additionalParameters list of additional parameters to give to dx
      * @param incremental true if it should attempt incremental dex if applicable
+     * @param instantRunMode true if we are invoking dex to convert classes while creating
+     *                       instant-run related artifacts.
      *
      * @throws IOException
      * @throws InterruptedException
@@ -1308,7 +1315,8 @@ public class AndroidBuilder {
             @Nullable List<String> additionalParameters,
             boolean incremental,
             boolean optimize,
-            @NonNull ProcessOutputHandler processOutputHandler)
+            @NonNull ProcessOutputHandler processOutputHandler,
+            boolean instantRunMode)
             throws IOException, InterruptedException, ProcessException {
         checkNotNull(inputs, "inputs cannot be null.");
         checkNotNull(outDexFolder, "outDexFolder cannot be null.");
@@ -1324,7 +1332,6 @@ public class AndroidBuilder {
             }
         }
 
-        BuildToolInfo buildToolInfo = mTargetInfo.getBuildTools();
         DexProcessBuilder builder = new DexProcessBuilder(outDexFolder);
 
         builder.setVerbose(mVerboseExec)
@@ -1338,8 +1345,44 @@ public class AndroidBuilder {
             builder.additionalParameters(additionalParameters);
         }
 
-        JavaProcessInfo javaProcessInfo = builder.build(buildToolInfo, dexOptions);
+        runDexer(builder, dexOptions, processOutputHandler, instantRunMode);
+    }
 
+    private void runDexer(
+            @NonNull DexProcessBuilder builder,
+            @NonNull DexOptions dexOptions,
+            @NonNull ProcessOutputHandler processOutputHandler,
+            boolean instantRunMode)
+            throws ProcessException, IOException {
+        if (dexOptions.getDexInProcess()) {
+            // Version that supports all flags that we know about, including numThreads.
+            Revision minimumBuildTools = DexProcessBuilder.FIXED_DX_MERGER;
+            Revision buildToolsVersion = mTargetInfo.getBuildTools().getRevision();
+            if (buildToolsVersion.compareTo(minimumBuildTools) < 0) {
+                // in instant run mode, where we set the dexInProcess to true for the user, just
+                // display a warning.
+                if (instantRunMode) {
+                    getLogger().warning(
+                            "Running dex in-process requires build tools "
+                                    + minimumBuildTools.toShortString());
+                } else {
+                    throw new RuntimeException("Running dex in-process requires build tools "
+                            + minimumBuildTools.toShortString());
+                }
+            } else {
+                File dxJar = new File(
+                        mTargetInfo.getBuildTools().getPath(BuildToolInfo.PathId.DX_JAR));
+                DexWrapper dexWrapper = DexWrapper.obtain(dxJar);
+                try {
+                    dexWrapper.run(builder, dexOptions, processOutputHandler, mLogger);
+                } finally {
+                    dexWrapper.release();
+                }
+                return;
+            }
+        }
+        // fall through, use external process.
+        JavaProcessInfo javaProcessInfo = builder.build(mTargetInfo.getBuildTools(), dexOptions);
         ProcessResult result = mJavaProcessExecutor.execute(javaProcessInfo, processOutputHandler);
         result.rethrowFailure().assertNormalExitValue();
     }
@@ -1374,7 +1417,8 @@ public class AndroidBuilder {
     }
 
     /**
-     * Converts the bytecode to Dalvik format
+     * Converts the bytecode to Dalvik format, using the {@link PreDexCache} layer.
+     *
      * @param inputFile the input file
      * @param outFile the output file or folder if multi-dex is enabled.
      * @param multiDex whether multidex is enabled.
@@ -1394,43 +1438,34 @@ public class AndroidBuilder {
         checkState(mTargetInfo != null,
                 "Cannot call preDexLibrary() before setTargetInfo() is called.");
 
-        BuildToolInfo buildToolInfo = mTargetInfo.getBuildTools();
-
         PreDexCache.getCache().preDexLibrary(
+                this,
                 inputFile,
                 outFile,
                 multiDex,
                 dexOptions,
-                buildToolInfo,
-                mVerboseExec,
-                mJavaProcessExecutor,
                 processOutputHandler);
     }
 
     /**
-     * Converts the bytecode to Dalvik format
+     * Converts the bytecode to Dalvik format, ignoring the {@link PreDexCache} layer.
      *
      * @param inputFile the input file
      * @param outFile the output file or folder if multi-dex is enabled.
      * @param multiDex whether multidex is enabled.
      * @param dexOptions the dex options
-     * @param buildToolInfo the build tools info
-     * @param verbose verbose flag
-     * @param processExecutor the java process executor
      * @return the list of generated files.
+     *
      * @throws ProcessException
      */
     @NonNull
-    public static ImmutableList<File> preDexLibrary(
+    public ImmutableList<File> preDexLibraryNoCache(
             @NonNull File inputFile,
             @NonNull File outFile,
             boolean multiDex,
             @NonNull DexOptions dexOptions,
-            @NonNull BuildToolInfo buildToolInfo,
-                     boolean verbose,
-            @NonNull JavaProcessExecutor processExecutor,
             @NonNull ProcessOutputHandler processOutputHandler)
-            throws ProcessException {
+            throws ProcessException, IOException {
         checkNotNull(inputFile, "inputFile cannot be null.");
         checkNotNull(outFile, "outFile cannot be null.");
         checkNotNull(dexOptions, "dexOptions cannot be null.");
@@ -1444,14 +1479,11 @@ public class AndroidBuilder {
         }
         DexProcessBuilder builder = new DexProcessBuilder(outFile);
 
-        builder.setVerbose(verbose)
+        builder.setVerbose(mVerboseExec)
                 .setMultiDex(multiDex)
                 .addInput(inputFile);
 
-        JavaProcessInfo javaProcessInfo = builder.build(buildToolInfo, dexOptions);
-
-        ProcessResult result = processExecutor.execute(javaProcessInfo, processOutputHandler);
-        result.rethrowFailure().assertNormalExitValue();
+        runDexer(builder, dexOptions, processOutputHandler, false /* instantRunMode */);
 
         if (multiDex) {
             File[] files = outFile.listFiles(new FilenameFilter() {
@@ -1824,7 +1856,8 @@ public class AndroidBuilder {
             @NonNull Set<String> abiFilters,
             boolean jniDebugBuild,
             @Nullable SigningConfig signingConfig,
-            @NonNull String outApkLocation)
+            @NonNull String outApkLocation,
+            int minSdkVersion)
             throws DuplicateFileException, FileNotFoundException,
             KeytoolException, PackagerException, SigningException {
         checkNotNull(androidResPkgLocation, "androidResPkgLocation cannot be null.");
@@ -1841,7 +1874,8 @@ public class AndroidBuilder {
         try {
             Packager packager = new Packager(
                     outApkLocation, androidResPkgLocation,
-                    certificateInfo, mCreatedBy, mLogger);
+                    certificateInfo, mCreatedBy, mLogger,
+                    minSdkVersion);
 
             // add dex folder to the apk root.
             if (!dexFolders.isEmpty()) {
@@ -1896,7 +1930,7 @@ public class AndroidBuilder {
                 new FileOutputStream(out),
                 certificateInfo != null ? certificateInfo.getKey() : null,
                 certificateInfo != null ? certificateInfo.getCertificate() : null,
-                Packager.getLocalVersion(), mCreatedBy);
+                Packager.getLocalVersion(), mCreatedBy, 1 /* minSdkVersion */);
 
 
         signedJarBuilder.writeZip(new FileInputStream(in));

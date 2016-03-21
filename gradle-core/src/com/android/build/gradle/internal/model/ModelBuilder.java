@@ -33,6 +33,8 @@ import com.android.build.gradle.internal.core.Abi;
 import com.android.build.gradle.internal.dsl.CoreNdkOptions;
 import com.android.build.gradle.internal.core.GradleVariantConfiguration;
 import com.android.build.gradle.internal.dsl.CoreProductFlavor;
+import com.android.build.gradle.internal.incremental.BuildInfoGeneratorTask;
+import com.android.build.gradle.internal.incremental.InstantRunAnchorTask;
 import com.android.build.gradle.internal.scope.VariantScope;
 import com.android.build.gradle.internal.variant.ApkVariantOutputData;
 import com.android.build.gradle.internal.variant.BaseVariantData;
@@ -417,6 +419,13 @@ public class ModelBuilder implements ToolingModelBuilder {
                     intVersionCode));
         }
 
+        InstantRunImpl instantRun = new InstantRunImpl(
+                InstantRunAnchorTask.InstantRunAnchorTaskConfigAction.getName(scope),
+                new File(scope.getRestartDexOutputFolder(), "classes.dex"),
+                new File(scope.getReloadDexOutputFolder(), "classes.dex"),
+                // todo : move this to a shared location.
+                BuildInfoGeneratorTask.ConfigAction.getBuildInfoFile(scope));
+
         return new AndroidArtifactImpl(
                 name,
                 outputs,
@@ -440,7 +449,8 @@ public class ModelBuilder implements ToolingModelBuilder {
                 variantConfiguration.getSupportedAbis(),
                 nativeLibraries,
                 variantConfiguration.getMergedBuildConfigFields(),
-                variantConfiguration.getMergedResValues());
+                variantConfiguration.getMergedResValues(),
+                instantRun);
     }
 
     private static Collection<Abi> createAbiList(Collection<String> abiNames) {
