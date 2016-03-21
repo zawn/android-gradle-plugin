@@ -1,0 +1,91 @@
+/**
+ *
+ *
+ #控制开关
+ publish_is_upload_remote = false                       //true:提交到远程仓库,false:提交到${project.rootDir}/repo目录下
+
+ #仓库相关设置
+ release_repository_url=ftp://192.168.108.42/projects/
+ snapshot_repository_url=ftp://192.168.108.42/projects/
+ nexus_username=your_username
+ nexus_password=your_password
+
+ */
+apply plugin: 'maven'
+apply plugin: 'nebula.info'
+
+configurations {
+    deployerJars
+}
+
+dependencies {
+    deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
+}
+
+def groupId = project.group
+def version = project.version
+
+def localReleaseDest = "${project.getRootDir()}/repo"
+
+def getReleaseRepositoryUrl() {
+    return hasProperty('release_repository_url') ? release_repository_url
+            : "http://192.168.108.60/nexus/content/repositories/releases/"
+}
+
+def getSnapshotRepositoryUrl() {
+    return hasProperty('snapshot_repository_url') ? snapshot_repository_url
+            : "http://192.168.108.60/nexus/content/repositories/snapshots/"
+}
+
+def getRepositoryUsername() {
+    return hasProperty('nexus_username') ? nexus_username : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('nexus_password') ? nexus_password : ""
+}
+
+def isUploadRemoteMaven() {
+    return hasProperty('publish_is_upload_remote') ? publish_is_upload_remote.toBoolean() : false
+}
+
+clean.doFirst {
+    delete "file://${localReleaseDest}"
+}
+
+uploadArchives
+        {
+            repositories.mavenDeployer {
+                //添加FTP协议支持.
+                addProtocolProviderJars configurations.deployerJars.files
+
+                pom.groupId = groupId
+                pom.version = version
+                // Add other pom properties here if you want (developer details / licenses)
+
+                repository(url: "file://${localReleaseDest}")
+                if (isUploadRemoteMaven()) {
+                    // 关闭上传至私有Maven仓库
+                    repository(url: getReleaseRepositoryUrl()) {
+                        authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                    }
+                    snapshotRepository(url: getSnapshotRepositoryUrl()) {
+                        authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                    }
+                }
+            }
+        }
+
+afterEvaluate { project ->
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives jar
+        archives sourcesJar
+    }
+
+}

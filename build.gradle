@@ -1,0 +1,35 @@
+group 'com.android.tools.build'
+
+version VERSION_NAME
+
+buildscript {
+    repositories {
+        maven {
+            url "http://192.168.108.60/nexus/content/groups/public/"
+        }
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-info-plugin:2.2.4'
+    }
+
+}
+
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+
+    group 'com.android.tools.build'
+    version "$VERSION_NAME"
+
+    repositories {
+
+        maven {
+            url "http://192.168.108.60/nexus/content/groups/public/"
+        }
+        mavenLocal()
+        jcenter()
+    }
+}

@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.android.tools.build'
+version = '1.5.0'
+
+description = """com.android.tools.build.transform-api"""
+
+sourceCompatibility = 1.5
+targetCompatibility = 1.5
+
+
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    runtime group: 'com.android.tools', name: 'annotations', version:'24.5.0'
+    runtime group: 'com.google.guava', name: 'guava', version:'17.0'
+}

@@ -1,0 +1,50 @@
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply from: '../maven.gradle'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src'
+        }
+        groovy {
+            srcDir 'src'
+        }
+    }
+}
+
+dependencies {
+    compile project(':builder')
+    compile project(':transform-api')
+    compile group: 'com.android.tools.lint', name: 'lint', version: "$BUILD_TOOLS_VERSION"
+    compile group: 'com.android.databinding', name: 'compilerCommon', version: '1.0-rc5'
+    compile group: 'net.sf.proguard', name: 'proguard-gradle', version: '5.2.1'
+    compile group: 'org.jacoco', name: 'org.jacoco.core', version: '0.7.4.201502262128'
+    compile gradleApi()
+    compile localGroovy()
+//    providedCompile files(home.toString() + 'lib/plugins/core-3.1.1.jar');
+
+}
+
+
+def home = project.gradle.startParameter.gradleHomeDir
+
+compileJava {
+    classpath = classpath.filter { File file ->
+        !file.name.equals("core-3.1.1.jar")
+    }
+}
+
+compileGroovy {
+    classpath = classpath.filter { File file ->
+        !file.name.equals("core-3.1.1.jar")
+    }
+//    classpath.each {
+//        println it
+//    }
+}
+
+

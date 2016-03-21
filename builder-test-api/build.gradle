@@ -1,0 +1,19 @@
+
+apply plugin: 'java'
+apply from: '../maven.gradle'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+}
+
+dependencies {
+    compile group: 'com.android.tools.ddms', name: 'ddmlib', version:"$BUILD_TOOLS_VERSION"
+    compile gradleApi()
+}

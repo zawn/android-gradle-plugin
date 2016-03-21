@@ -1,0 +1,20 @@
+
+apply plugin: 'java'
+apply from: '../maven.gradle'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+}
+
+dependencies {
+    compile group: 'com.android.tools', name: 'annotations', version:"$BUILD_TOOLS_VERSION"
+    compile group: 'com.google.guava', name: 'guava', version:'17.0'
+    compile gradleApi()
+}
