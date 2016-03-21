@@ -45,6 +45,8 @@ public interface AndroidProject {
     String PROPERTY_SIGNING_KEY_PASSWORD = "android.injected.signing.key.password";
     String PROPERTY_SIGNING_STORE_TYPE = "android.injected.signing.store.type";
 
+    String PROPERTY_SIGNING_COLDSWAP_MODE = "android.injected.coldswap.mode";
+
     // InstantDev related properties, must be ',' separated list of OptionalCompilationStep values.
     String OPTIONAL_COMPILATION_STEPS = "android.optional.compilation";
 
@@ -59,6 +61,8 @@ public interface AndroidProject {
     String FD_OUTPUTS = "outputs";
     String FD_GENERATED = "generated";
 
+    int GENERATION_ORIGINAL = 1;
+    int GENERATION_COMPONENT = 2;
 
     /**
      * Returns the model version. This is a string in the format X.Y.Z
@@ -244,4 +248,20 @@ public interface AndroidProject {
      */
     @Nullable
     String getResourcePrefix();
+
+    /**
+     * Returns the build tools version used by this module.
+     * @return the build tools version.
+     */
+    @NonNull
+    String getBuildToolsVersion();
+
+    /**
+     * Returns the generation of the plugin.
+     *
+     * 1: original plugin
+     * 2: component based plugin (AKA experimental)
+     * @return the generation value
+     */
+    int getPluginGeneration();
 }

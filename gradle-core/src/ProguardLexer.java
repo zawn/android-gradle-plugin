@@ -1,4 +1,4 @@
-// $ANTLR 3.5.2 Proguard.g 2016-01-22 22:13:45
+// $ANTLR 3.5.2 Proguard.g 2016-01-27 03:20:12
 
 package com.android.build.gradle.shrinker.parser;
 
@@ -2010,10 +2010,10 @@ public class ProguardLexer extends Lexer {
 		try {
 			int _type = NAME;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// Proguard.g:267:15: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' | '?' | '$' | '.' | '*' | '/' | '\\\\' | '-' | '<' | '>' )+ )
-			// Proguard.g:267:17: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' | '?' | '$' | '.' | '*' | '/' | '\\\\' | '-' | '<' | '>' )+
+			// Proguard.g:272:15: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' | '?' | '$' | '.' | '*' | '/' | '\\\\' | '-' | '<' | '>' )+ )
+			// Proguard.g:272:17: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' | '?' | '$' | '.' | '*' | '/' | '\\\\' | '-' | '<' | '>' )+
 			{
-			// Proguard.g:267:17: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' | '?' | '$' | '.' | '*' | '/' | '\\\\' | '-' | '<' | '>' )+
+			// Proguard.g:272:17: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' | '?' | '$' | '.' | '*' | '/' | '\\\\' | '-' | '<' | '>' )+
 			int cnt1=0;
 			loop1:
 			while (true) {
@@ -2062,11 +2062,11 @@ public class ProguardLexer extends Lexer {
 		try {
 			int _type = LINE_COMMENT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// Proguard.g:270:3: ( '#' (~ ( '\\r' | '\\n' ) )* )
-			// Proguard.g:270:6: '#' (~ ( '\\r' | '\\n' ) )*
+			// Proguard.g:275:3: ( '#' (~ ( '\\r' | '\\n' ) )* )
+			// Proguard.g:275:6: '#' (~ ( '\\r' | '\\n' ) )*
 			{
 			match('#'); 
-			// Proguard.g:270:10: (~ ( '\\r' | '\\n' ) )*
+			// Proguard.g:275:10: (~ ( '\\r' | '\\n' ) )*
 			loop2:
 			while (true) {
 				int alt2=2;
@@ -2112,8 +2112,8 @@ public class ProguardLexer extends Lexer {
 		try {
 			int _type = WS;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// Proguard.g:273:13: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-			// Proguard.g:273:17: ( ' ' | '\\t' | '\\r' | '\\n' )
+			// Proguard.g:278:13: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+			// Proguard.g:278:17: ( ' ' | '\\t' | '\\r' | '\\n' )
 			{
 			if ( (input.LA(1) >= '\t' && input.LA(1) <= '\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
 				input.consume();
