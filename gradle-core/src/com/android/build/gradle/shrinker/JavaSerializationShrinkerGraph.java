@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -119,11 +120,29 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
         return new JavaSerializationShrinkerGraph(stateDir);
     }
 
+    /**
+     * Constructs a graph by deserializing saved state.
+     *
+     * @param dir directory where the state was saved
+     * @param classLoader class loader used to resolve class names
+     * @throws IOException
+     */
     @SuppressWarnings("unchecked") // readObject() returns an Object, we need to cast it.
-    public static JavaSerializationShrinkerGraph readFromDir(File dir) throws IOException {
+    public static JavaSerializationShrinkerGraph readFromDir(
+            @NonNull File dir,
+            @NonNull final ClassLoader classLoader) throws IOException {
         File stateFile = getStateFile(dir);
+
+        // For some reason, when invoked from Gradle on a complex project, sometimes shrinker
+        // classes cannot be found. This seems to fix the problem.
         ObjectInputStream stream =
-                new ObjectInputStream(new BufferedInputStream(new FileInputStream(stateFile)));
+                new ObjectInputStream(new BufferedInputStream(new FileInputStream(stateFile))) {
+                    @Override
+                    protected Class<?> resolveClass(ObjectStreamClass desc)
+                            throws IOException, ClassNotFoundException {
+                        return Class.forName(desc.getName(), false, classLoader);
+                    }
+                };
         try {
             return new JavaSerializationShrinkerGraph(
                     dir,
@@ -137,9 +156,9 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
                     (ConcurrentMap) stream.readObject(),
                     (Map) stream.readObject());
         } catch (ClassNotFoundException e) {
-            throw new IncrementalRunImpossibleException("Can't load incremental state.");
+            throw new IncrementalRunImpossibleException("Failed to load incremental state.", e);
         } catch (InvalidClassException e) {
-            throw new IncrementalRunImpossibleException("Can't load incremental state.");
+            throw new IncrementalRunImpossibleException("Failed to load incremental state.", e);
         } finally {
             stream.close();
         }
@@ -243,7 +262,9 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
     public void removeAllCodeDependencies(@NonNull String source) {
         Set<Dependency<String>> dependencies = mDependencies.get(source);
         for (Iterator<Dependency<String>> iterator = dependencies.iterator(); iterator.hasNext(); ) {
-            if (iterator.next().type == DependencyType.REQUIRED_CODE_REFERENCE) {
+            Dependency<String> dependency = iterator.next();
+            if (dependency.type == DependencyType.REQUIRED_CODE_REFERENCE
+                    || dependency.type == DependencyType.REQUIRED_CODE_REFERENCE_REFLECTION) {
                 iterator.remove();
             }
         }
@@ -316,8 +337,11 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
             String target = dep.target;
             if (!target.contains(".")) {
                 if (!mClasses.containsKey(target)) {
-                    shrinkerLogger.invalidClassReference(source, target);
-                    invalidDeps.put(source, entry.getValue());
+                    // We don't warn about by-name references in strings.
+                    if (dep.type != DependencyType.REQUIRED_CODE_REFERENCE_REFLECTION) {
+                        shrinkerLogger.invalidClassReference(source, target);
+                        invalidDeps.put(source, entry.getValue());
+                    }
                 }
             } else {
                 if (!mMembers.containsEntry(getClassForMember(target), target)) {
@@ -569,6 +593,7 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
             switch (type) {
                 case REQUIRED_CLASS_STRUCTURE:
                 case REQUIRED_CODE_REFERENCE:
+                case REQUIRED_CODE_REFERENCE_REFLECTION:
                     required++;
                     break;
                 case IF_CLASS_KEPT:

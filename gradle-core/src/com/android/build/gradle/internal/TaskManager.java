@@ -146,8 +146,10 @@ import com.android.builder.core.VariantConfiguration;
 import com.android.builder.core.VariantType;
 import com.android.builder.dependency.LibraryDependency;
 import com.android.builder.internal.testing.SimpleTestCallable;
+import com.android.builder.model.AndroidProject;
 import com.android.builder.model.DataBindingOptions;
 import com.android.builder.model.SyncIssue;
+import com.android.builder.sdk.SdkLoader;
 import com.android.builder.sdk.TargetInfo;
 import com.android.builder.testing.ConnectedDeviceProvider;
 import com.android.builder.testing.api.DeviceProvider;
@@ -1988,7 +1990,12 @@ public abstract class TaskManager {
             if (InstantRunPatchingPolicy.PRE_LOLLIPOP !=
                     variantScope.getInstantRunBuildContext().getPatchingPolicy()) {
                 isMultiDexEnabled = true;
+                // force pre-dexing to be true as we rely on individual slices to be packaged
+                // separately.
+                extension.getDexOptions().setPreDexLibraries(true);
             }
+
+            extension.getDexOptions().setJumboMode(true);
         }
         // ----- Multi-Dex support
 
@@ -2029,7 +2036,6 @@ public abstract class TaskManager {
                     tasks, variantScope, multiDexTransform);
             multiDexClassListTask.dependsOn(tasks, manifestKeepListTask);
         }
-
         // create dex transform
         DexTransform dexTransform = new DexTransform(
                 extension.getDexOptions(),

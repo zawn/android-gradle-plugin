@@ -101,6 +101,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
@@ -1390,7 +1391,7 @@ public class AndroidBuilder {
     }
 
     private static final Object LOCK_FOR_DEX = new Object();
-    private static final AtomicInteger DEX_PROCESS_COUNT = new AtomicInteger(1);
+    private static final AtomicInteger DEX_PROCESS_COUNT = new AtomicInteger(2);
     private static ExecutorService sDexExecutorService = null;
 
     private void runDexer(
@@ -1422,7 +1423,7 @@ public class AndroidBuilder {
                     if (dexOptions.getMaxProcessCount() != null) {
                         DEX_PROCESS_COUNT.set(dexOptions.getMaxProcessCount());
                     }
-                    getLogger().warning("Allocated dexExecutorService of size %d", DEX_PROCESS_COUNT
+                    getLogger().info("Allocated dexExecutorService of size %d", DEX_PROCESS_COUNT
                             .get());
                     sDexExecutorService = Executors.newFixedThreadPool(DEX_PROCESS_COUNT.get());
                 } else {
@@ -1444,26 +1445,24 @@ public class AndroidBuilder {
                 // this is a hack, we always spawn a new process for dependencies.jar so it does
                 // get built in parallel with the slices, this is only valid for InstantRun mode.
                 if (submission.contains("dependencies.jar")) {
-                    long startTime = System.currentTimeMillis();
+                    Stopwatch stopwatch = Stopwatch.createStarted();
                     JavaProcessInfo javaProcessInfo = builder.build(mTargetInfo.getBuildTools(), dexOptions);
                     ProcessResult result = mJavaProcessExecutor.execute(javaProcessInfo,
                             processOutputHandler);
                     result.rethrowFailure().assertNormalExitValue();
-                    getLogger().warning(
-                            "Dexing " + Joiner.on(',').join(builder.getInputs()) + " took " +
-                                    (System.currentTimeMillis() - startTime));
+                    getLogger().info("Dexing " + submission + " took " + stopwatch.toString());
                 } else {
                     sDexExecutorService.submit(new Callable<Void>() {
                         @Override
                         public Void call() throws Exception {
-                            long startTime = System.currentTimeMillis();
+                            Stopwatch stopwatch = Stopwatch.createStarted();
                             JavaProcessInfo javaProcessInfo = builder
                                     .build(mTargetInfo.getBuildTools(), dexOptions);
                             ProcessResult result = mJavaProcessExecutor.execute(javaProcessInfo,
                                     processOutputHandler);
                             result.rethrowFailure().assertNormalExitValue();
-                            getLogger().warning("Dexing " + submission + " took "
-                                    + (System.currentTimeMillis() - startTime));
+                            getLogger().info(
+                                    "Dexing " + submission + " took " + stopwatch.toString());
                             return null;
                         }
                     }).get();
@@ -1491,10 +1490,6 @@ public class AndroidBuilder {
             boolean instantRunMode,
             @NonNull ILogger logger) {
 
-        if (!Boolean.TRUE.equals(dexOptions.getDexInProcess())) {
-            return false;
-        }
-        logger.warning("dexInProcess flag ignored, reverted to out of process.");
         return false;
 
         //

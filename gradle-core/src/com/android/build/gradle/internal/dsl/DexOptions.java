@@ -55,7 +55,7 @@ public class DexOptions implements com.android.builder.core.DexOptions {
         return isIncrementalFlag;
     }
 
-    void setPreDexLibraries(boolean flag) {
+    public void setPreDexLibraries(boolean flag) {
         isPreDexLibrariesFlag = flag;
     }
 
@@ -82,20 +82,6 @@ public class DexOptions implements com.android.builder.core.DexOptions {
         return isJumboModeFlag;
     }
 
-    public void setDexInProcess(boolean dexInProcess) {
-        isDexInProcess = dexInProcess;
-    }
-
-    /**
-     * Whether to run the dx compiler in the same JVM as Gradle.
-     *
-     * <p>Default to {@code true} when build tools version is at least 23.0.2.
-     */
-    @Override
-    public Boolean getDexInProcess() {
-        return isDexInProcess;
-    }
-
     public void setJavaMaxHeapSize(String theJavaMaxHeapSize) {
         if (theJavaMaxHeapSize.matches("\\d+[kKmMgGtT]?")) {
             javaMaxHeapSize = theJavaMaxHeapSize;
@@ -120,7 +106,7 @@ public class DexOptions implements com.android.builder.core.DexOptions {
     }
 
     /**
-     * Number of threads to use when running dx.
+     * Number of threads to use when running dx. Defaults to 4.
      */
     @Override
     @Nullable
@@ -130,10 +116,11 @@ public class DexOptions implements com.android.builder.core.DexOptions {
 
 
     /**
-     * Returns the maximum number of concurrent processes that can be used to dex.
-     * Be aware that the number of concurrent process times the memory requirement represent the
-     * minimum amount of memory that will be used by the dx processes :
-     *  Total Memory = getMaxProcessCount() * getJavaMaxHeapSize()
+     * Returns the maximum number of concurrent processes that can be used to dex. Defaults to 2.
+     *
+     * <p>Be aware that the number of concurrent process times the memory requirement represent the
+     * minimum amount of memory that will be used by the dx processes:
+     * {@code Total Memory = getMaxProcessCount() * getJavaMaxHeapSize()}
      *
      * To avoid trashing, keep these two settings appropriate for your configuration.
      * @return the max number of concurrent dx processes.

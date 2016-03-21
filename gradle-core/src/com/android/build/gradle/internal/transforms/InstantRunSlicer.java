@@ -16,23 +16,24 @@
 
 package com.android.build.gradle.internal.transforms;
 
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_SUPER;
+import static org.objectweb.asm.Opcodes.V1_6;
+
 import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
-import com.android.build.api.transform.SecondaryFile;
-import com.android.build.api.transform.SecondaryInput;
-import com.android.build.api.transform.Context;
 import com.android.build.api.transform.DirectoryInput;
 import com.android.build.api.transform.Format;
 import com.android.build.api.transform.JarInput;
 import com.android.build.api.transform.QualifiedContent;
 import com.android.build.api.transform.QualifiedContent.Scope;
+import com.android.build.api.transform.SecondaryFile;
 import com.android.build.api.transform.Status;
 import com.android.build.api.transform.Transform;
 import com.android.build.api.transform.TransformException;
 import com.android.build.api.transform.TransformInput;
 import com.android.build.api.transform.TransformInvocation;
 import com.android.build.api.transform.TransformOutputProvider;
-import com.android.build.gradle.OptionalCompilationStep;
 import com.android.build.gradle.internal.LoggerWrapper;
 import com.android.build.gradle.internal.pipeline.TransformManager;
 import com.android.build.gradle.internal.scope.VariantScope;
@@ -40,7 +41,7 @@ import com.android.build.gradle.tasks.ColdswapArtifactsKickerTask;
 import com.android.build.gradle.tasks.MarkerFile;
 import com.android.utils.FileUtils;
 import com.android.utils.ILogger;
-import com.android.utils.XmlUtils;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
@@ -50,12 +51,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 
 import org.gradle.api.logging.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.objectweb.asm.ClassWriter;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -64,21 +60,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Transform that slices the project's classes into approximately 12 slices.
@@ -95,12 +83,14 @@ public class InstantRunSlicer extends Transform {
 
     public static final String MAIN_SLICE_NAME = "main_slice";
 
-    // somehow a number based on experimentation, to make the slices not too big, not too many.
+    @VisibleForTesting
+    static final String PACKAGE_FOR_GUARD_CLASSS = "com/android/tools/fd/dummy";
+
+    // since we use the last digit of the FQCN hashcode() as the bucket, 10 is the appropriate
+    // number of slices.
     public static final int NUMBER_OF_SLICES_FOR_PROJECT_CLASSES = 10;
 
     private final ILogger logger;
-
-    private final File instantRunSupportDir;
 
     @NonNull
     private final VariantScope variantScope;
@@ -108,7 +98,6 @@ public class InstantRunSlicer extends Transform {
     public InstantRunSlicer(@NonNull Logger logger, @NonNull VariantScope variantScope) {
         this.logger = new LoggerWrapper(logger);
         this.variantScope = variantScope;
-        this.instantRunSupportDir = variantScope.getInstantRunSupportDir();
     }
 
     @NonNull
@@ -157,11 +146,12 @@ public class InstantRunSlicer extends Transform {
                 ColdswapArtifactsKickerTask.ConfigAction.getMarkerFile(variantScope))) {
             return;
         }
+        Slices slices = new Slices();
 
         if (isIncremental) {
-            sliceIncrementally(inputs, outputProvider);
+            sliceIncrementally(inputs, outputProvider, slices);
         } else {
-            slice(inputs, outputProvider);
+            slice(inputs, outputProvider, slices);
             combineAllJars(inputs, outputProvider);
         }
     }
@@ -177,11 +167,9 @@ public class InstantRunSlicer extends Transform {
      * @throws InterruptedException never thrown.
      */
     private void slice(@NonNull Collection<TransformInput> inputs,
-            @NonNull TransformOutputProvider outputProvider)
+            @NonNull TransformOutputProvider outputProvider,
+            @NonNull Slices slices)
             throws IOException, TransformException, InterruptedException {
-
-        // sort all of our input classes per package.
-        Packages packages = new Packages();
 
         File dependenciesLocation =
                 getDependenciesSliceOutputFolder(outputProvider, Format.DIRECTORY);
@@ -204,12 +192,13 @@ public class InstantRunSlicer extends Transform {
                     if (directoryInput.getScopes().contains(Scope.PROJECT) ||
                             directoryInput.getScopes().contains(Scope.SUB_PROJECTS)) {
 
-                        packages.add(packagePath, file);
+                        slices.addElement(packagePath, file);
                     } else {
                         // dump in a single directory that may end up producing several .dex in case
                         // we are over 65K limit.
                         File outputFile = new File(dependenciesLocation,
                                 new File(packagePath, file.getName()).getPath());
+                        Files.createParentDirs(outputFile);
                         Files.copy(file, outputFile);
                     }
                 }
@@ -217,17 +206,7 @@ public class InstantRunSlicer extends Transform {
         }
 
         // now produces the output streams for each slice.
-        Slices slices = packages.toSlices();
         slices.writeTo(outputProvider);
-
-        // and save the metadata necessary for incremental support so we know if which slice
-        // classes belong to.
-        try {
-            Files.write(slices.toXml(),
-                    new File(instantRunSupportDir, "slices.xml"), Charsets.UTF_8);
-        } catch (ParserConfigurationException e) {
-            throw new TransformException(e);
-        }
     }
 
     /**
@@ -317,10 +296,11 @@ public class InstantRunSlicer extends Transform {
     }
 
     private void sliceIncrementally(@NonNull Collection<TransformInput> inputs,
-            @NonNull TransformOutputProvider outputProvider)
+            @NonNull TransformOutputProvider outputProvider,
+            @NonNull Slices slices)
             throws IOException, TransformException, InterruptedException {
 
-        processChangesSinceLastRestart(inputs, outputProvider);
+        processChangesSinceLastRestart(inputs, outputProvider, slices);
 
         // in any case, we always process jar input changes incrementally.
         for (TransformInput input : inputs) {
@@ -357,19 +337,9 @@ public class InstantRunSlicer extends Transform {
 
     private void processChangesSinceLastRestart(
             @NonNull final Collection<TransformInput> inputs,
-            @NonNull final TransformOutputProvider outputProvider)
+            @NonNull final TransformOutputProvider outputProvider,
+            @NonNull final Slices slices)
             throws TransformException, InterruptedException, IOException {
-
-        // first read our slicing information so we can find out in which slice changed files belong
-        // to.
-        final SlicingInfo slicingInfo = new SlicingInfo();
-        try {
-            slicingInfo.readFrom(new File(instantRunSupportDir, "slices.xml"));
-        } catch (Exception e) {
-            logger.error(e, "Incremental slicing failed, cannot read slices.xml");
-            slice(inputs, outputProvider);
-            return;
-        }
 
         File incrementalChangesFile = InstantRunBuildType.RESTART
                 .getIncrementalChangesFile(variantScope);
@@ -388,7 +358,7 @@ public class InstantRunSlicer extends Transform {
                             return;
                         }
                         File sliceOutputLocation = getOutputStreamForFile(
-                                outputProvider, directoryInput, fileToProcess, slicingInfo);
+                                outputProvider, directoryInput, fileToProcess, slices);
 
                         // add the buildID timestamp to the slice out directory so we force the
                         // dex task to rerun, even if no .class files appear to have changed. This
@@ -430,14 +400,14 @@ public class InstantRunSlicer extends Transform {
             @NonNull TransformOutputProvider transformOutputProvider,
             @NonNull DirectoryInput input,
             @NonNull File file,
-            @NonNull SlicingInfo slicingInfo) {
+            @NonNull Slices slices) {
 
-        String relativePath = FileUtils.relativePossiblyNonExistingPath(file, input.getFile());
+        String relativePackagePath = FileUtils.relativePossiblyNonExistingPath(file.getParentFile(),
+                input.getFile());
         if (input.getScopes().contains(Scope.PROJECT)
                 || input.getScopes().contains(Scope.SUB_PROJECTS)) {
 
-
-            SlicingInfo.SliceInfo slice = slicingInfo.getSliceFor(relativePath);
+            Slice slice = slices.getSliceFor(new Slice.SlicedElement(relativePackagePath, file));
             return transformOutputProvider.getContentLocation(slice.name,
                     TransformManager.CONTENT_CLASS,
                     Sets.immutableEnumSet(Scope.PROJECT, Scope.SUB_PROJECTS),
@@ -471,83 +441,21 @@ public class InstantRunSlicer extends Transform {
                                 Scope.PROJECT_LOCAL_DEPS), format);
     }
 
-    private static class SlicingInfo {
-
-        private static class SliceInfo {
-            @NonNull
-            private final String name;
-            @NonNull
-            private final String upperBound;
-
-            private SliceInfo(@NonNull String name, @NonNull String upperBound) {
-                this.name = name;
-                this.upperBound = upperBound;
-            }
-        }
-
-        @NonNull
-        private final List<SliceInfo> slices = new ArrayList<SliceInfo>();
-
-        private void readFrom(@NonNull  File file)
-                throws IOException, ParserConfigurationException, SAXException {
-            Document document = XmlUtils.parseUtfXmlFile(file, false);
-            Node slicesNode = document.getFirstChild();
-            if (!slicesNode.getNodeName().equals("slices")) {
-                throw new IOException("invalid slices.xml file " + file.getAbsolutePath());
-            }
-            NodeList sliceNodes = slicesNode.getChildNodes();
-            for (int i = 0; i < sliceNodes.getLength(); i++) {
-                Node slice = sliceNodes.item(i);
-                NamedNodeMap attributes = slice.getAttributes();
-                SliceInfo sliceInfo = new SliceInfo(
-                        attributes.getNamedItem("name").getNodeValue(),
-                        attributes.getNamedItem("upper-bound").getNodeValue());
-                slices.add(sliceInfo);
-            }
-        }
-
-        /**
-         * Returns the {@link SliceInfo} for a package name. We will use existing slices' upper
-         * bounds to determine in which slice a new element falls into. This will ensure some sort
-         * of distribution among slices of all the new elements.
-         */
-        public SliceInfo getSliceFor(@NonNull String relativePath) {
-            Iterator<SliceInfo> sliceIterator = slices.iterator();
-            SliceInfo currentSlice = sliceIterator.next();
-            while (sliceIterator.hasNext() && currentSlice.upperBound.compareTo(relativePath) < 0) {
-                currentSlice = sliceIterator.next();
-            }
-            // any new class which is above the last upper bound will still get automatically
-            // packaged in the last slice.
-            return currentSlice;
-        }
-    }
-
     private static class Slices {
-        private final int sliceSize;
         @NonNull
         private final List<Slice> slices = new ArrayList<Slice>();
-        @NonNull
-        private Slice currentSlice;
 
-        private Slices(int totalSize) {
-            int nbOfElementsPerSlice = (totalSize / NUMBER_OF_SLICES_FOR_PROJECT_CLASSES ) + 1;
-            this.sliceSize = nbOfElementsPerSlice < 1 ? 1 : nbOfElementsPerSlice;
-            currentSlice = allocateSlice();
+        private Slices() {
+            for (int i=0; i<NUMBER_OF_SLICES_FOR_PROJECT_CLASSES; i++) {
+                Slice newSlice = new Slice("slice_" + i, i);
+                slices.add(newSlice);
+            }
         }
 
         private void addElement(@NonNull String packagePath, @NonNull File file) {
-            if (currentSlice.isFull()) {
-                currentSlice = allocateSlice();
-            }
-            currentSlice.add(packagePath, file);
-        }
-
-        @NonNull
-        private Slice allocateSlice() {
-            Slice newSlice = new Slice("slice_" + slices.size(), sliceSize);
-            slices.add(newSlice);
-            return newSlice;
+            Slice.SlicedElement slicedElement = new Slice.SlicedElement(packagePath, file);
+            Slice slice = getSliceFor(slicedElement);
+            slice.add(slicedElement);
         }
 
         private void writeTo(@NonNull TransformOutputProvider outputProvider) throws IOException {
@@ -556,19 +464,8 @@ public class InstantRunSlicer extends Transform {
             }
         }
 
-        /**
-         * Serialize this context into an xml file.
-         * @return the xml persisted information as a {@link String}
-         * @throws ParserConfigurationException
-         */
-        @NonNull
-        public String toXml() throws ParserConfigurationException {
-            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-            Element slicesElement = document.createElement("slices");
-            for (Slice slice : slices) {
-                slicesElement.appendChild(slice.toXml(document));
-            }
-            return XmlUtils.toXml(slicesElement);
+        private Slice getSliceFor(Slice.SlicedElement slicedElement) {
+            return slices.get(slicedElement.getHashBucket());
         }
     }
 
@@ -585,6 +482,18 @@ public class InstantRunSlicer extends Transform {
                 this.slicedFile = slicedFile;
             }
 
+            /**
+             * Returns the bucket number in which this {@link SlicedElement} belongs.
+             * @return an integer between 0 and {@link #NUMBER_OF_SLICES_FOR_PROJECT_CLASSES}
+             * exclusive that will be used to bucket this item.
+             */
+            public int getHashBucket() {
+                String hashTarget = Strings.isNullOrEmpty(packagePath)
+                        ? slicedFile.getName()
+                        : packagePath;
+                return Math.abs(hashTarget.hashCode() % NUMBER_OF_SLICES_FOR_PROJECT_CLASSES);
+            }
+
             @Override
             public String toString() {
                 return packagePath + slicedFile.getName();
@@ -593,47 +502,34 @@ public class InstantRunSlicer extends Transform {
 
         @NonNull
         private final String name;
-        private final int expectedSize;
+        private final int hashBucket;
         private final List<SlicedElement> slicedElements;
 
-        private Slice(@NonNull String name, int expectedSize) {
+        private Slice(@NonNull String name, int hashBucket) {
             this.name = name;
-            this.expectedSize = expectedSize;
-            slicedElements = new ArrayList<SlicedElement>(expectedSize);
+            this.hashBucket = hashBucket;
+            slicedElements = new ArrayList<SlicedElement>();
         }
 
-        private void add(@NonNull String packagePath, @NonNull File file) {
-            slicedElements.add(new SlicedElement(packagePath, file));
-        }
-
-        private boolean isFull() {
-            return slicedElements.size() == expectedSize;
-        }
-
-        @NonNull
-        public Element toXml(@NonNull Document document) {
-            Element sliceElement = document.createElement("slice");
-            sliceElement.setAttribute("name", name);
-            sliceElement.setAttribute("upper-bound", getUpperBound());
-            return sliceElement;
-        }
-
-        @NonNull
-        private String getUpperBound() {
-            SlicedElement sliceElement = slicedElements.get(slicedElements.size() -1);
-            return sliceElement.toString();
+        private void add(@NonNull SlicedElement slicedElement) {
+            if (hashBucket != slicedElement.getHashBucket()) {
+                throw new RuntimeException("Wrong bucket for " + slicedElement);
+            }
+            slicedElements.add(slicedElement);
         }
 
         private void writeTo(@NonNull TransformOutputProvider outputProvider) throws IOException {
-            if (slicedElements.isEmpty()) {
-                return;
-            }
+
             File sliceOutputLocation = outputProvider.getContentLocation(name,
                     TransformManager.CONTENT_CLASS,
                     Sets.immutableEnumSet(Scope.PROJECT, Scope.SUB_PROJECTS),
                     Format.DIRECTORY);
 
-            // now move all the files into its new location.
+            // always write our dummy guard class, nobody will ever delete this file which mean
+            // the slice will continue existing even it there is no other .class file in it.
+            createGuardClass(name, sliceOutputLocation);
+
+            // now copy all the files into its new location.
             for (Slice.SlicedElement slicedElement : slicedElements) {
                 File outputFile = new File(sliceOutputLocation, new File(slicedElement.packagePath,
                         slicedElement.slicedFile.getName()).getPath());
@@ -643,58 +539,20 @@ public class InstantRunSlicer extends Transform {
         }
     }
 
-    private static class Packages {
-        // we need a sorted Map, so that packages are added in their natural order in the slices.
-        @NonNull
-        private final Map<String, PackageRef> packagesRef = new TreeMap<String, PackageRef>();
-        private int nbOfElements = 0;
+    private static void createGuardClass(@NonNull String name, @NonNull File outputDir)
+            throws IOException {
 
-        private void add(@NonNull String packagePath,@NonNull File file) {
+        ClassWriter cw = new ClassWriter(0);
 
-            PackageRef packageRef = packagesRef.get(packagePath);
-            if (packageRef == null) {
-                packageRef = new PackageRef(packagePath);
-                packagesRef.put(packagePath, packageRef);
-            }
-            packageRef.add(file);
-            nbOfElements++;
-        }
+        File packageDir = new File(outputDir, PACKAGE_FOR_GUARD_CLASSS);
+        File outputFile = new File(packageDir, name + ".class");
+        Files.createParentDirs(outputFile);
 
-        @NonNull
-        private Slices toSlices() {
-            Slices slices = new Slices(nbOfElements);
+        // use package separator below which is always /
+        String appInfoOwner = PACKAGE_FOR_GUARD_CLASSS + '/' + name;
+        cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, appInfoOwner, null, "java/lang/Object", null);
+        cw.visitEnd();
 
-            // package related classes will be added one after the other so they can be part of the
-            // same slice as much as possible. This could be refined later to make more elaborate
-            // slicing decisions.
-            for (PackageRef packageRef : packagesRef.values()) {
-                for (File packageFile : packageRef.packageFiles) {
-                    slices.addElement(packageRef.packagePath, packageFile);
-                }
-            }
-            return slices;
-        }
-    }
-
-    private static class PackageRef {
-        // package name with File.separatorChar instead of . between elements.
-        @NonNull
-        private final String packagePath;
-        @NonNull
-        private final Set<File> packageFiles = new TreeSet<File>(new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                // all files belong to the same package, just order them based on the file name.
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-
-        private PackageRef(@NonNull String packagePath) {
-            this.packagePath = packagePath;
-        }
-
-        private void add(@NonNull File file) {
-            packageFiles.add(file);
-        }
+        Files.write(cw.toByteArray(), outputFile);
     }
 }

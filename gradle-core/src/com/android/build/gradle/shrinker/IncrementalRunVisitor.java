@@ -211,7 +211,8 @@ class IncrementalRunVisitor<T> extends DependencyFinderVisitor<T> {
 
     @Override
     protected void handleDependency(T source, T target, DependencyType type) {
-        if (type == DependencyType.REQUIRED_CODE_REFERENCE) {
+        if (type == DependencyType.REQUIRED_CODE_REFERENCE
+                || type == DependencyType.REQUIRED_CODE_REFERENCE_REFLECTION) {
             mGraph.addDependency(source, target, type);
         }
     }
@@ -242,8 +243,10 @@ class IncrementalRunVisitor<T> extends DependencyFinderVisitor<T> {
                             mGraph.getFieldDesc(field)));
         }
 
-        T method = Iterables.getFirst(mMethods, null);
-        if (method != null) {
+        for (T method : mMethods) {
+            if (mGraph.getMemberName(method).contains(FullRunShrinker.SHRINKER_FAKE_MARKER)) {
+                continue;
+            }
             throw new IncrementalShrinker.IncrementalRunImpossibleException(
                     String.format(
                             "Method %s.%s removed.",
