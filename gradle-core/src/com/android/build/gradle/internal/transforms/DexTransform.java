@@ -348,8 +348,6 @@ public class DexTransform extends Transform {
                             entry.getValue(),
                             hashs,
                             outputHandler);
-                    instantRunBuildContext.addChangedFile(FileType.DEX,
-                            new File(entry.getValue(), "classes.dex"));
                     executor.execute(action);
                 }
 
@@ -422,6 +420,8 @@ public class DexTransform extends Transform {
             throw new TransformException(e);
         } catch (ProcessException e) {
             throw new TransformException(e);
+        } catch (Exception e) {
+            throw new TransformException(e);
         }
     }
 
@@ -473,6 +473,12 @@ public class DexTransform extends Transform {
 
             androidBuilder.preDexLibrary(
                     from, to, multiDex, dexOptions, mOutputHandler);
+
+            for (File file : Files.fileTreeTraverser().breadthFirstTraversal(to)) {
+                if (file.isFile()) {
+                    instantRunBuildContext.addChangedFile(FileType.DEX, file);
+                }
+            }
 
             return null;
         }

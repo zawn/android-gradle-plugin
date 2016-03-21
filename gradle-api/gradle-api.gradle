@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.android.tools.build'
-version = '2.0.0-beta2'
+version = '2.0.0-beta4'
 
 description = """com.android.tools.build.gradle-api"""
 
@@ -16,6 +16,6 @@ repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    runtime group: 'com.android.tools', name: 'annotations', version:'25.0.0-beta2'
+    runtime group: 'com.android.tools', name: 'annotations', version:'25.0.0-beta4'
     runtime group: 'com.google.guava', name: 'guava', version:'17.0'
 }
