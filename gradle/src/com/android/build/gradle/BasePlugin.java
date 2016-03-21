@@ -112,8 +112,8 @@ import java.util.regex.Pattern;
  */
 public abstract class BasePlugin {
 
-    private static final String GRADLE_MIN_VERSION = "2.8";
-    public static final Pattern GRADLE_ACCEPTABLE_VERSIONS = Pattern.compile("2\\.([8-9]|\\d{2,}).*");
+    private static final String GRADLE_MIN_VERSION = "2.10";
+    public static final Pattern GRADLE_ACCEPTABLE_VERSIONS = Pattern.compile("2\\.\\d{2,}.*");
     private static final String GRADLE_VERSION_CHECK_OVERRIDE_PROPERTY =
             "com.android.build.gradle.overrideVersionCheck";
     private static final String SKIP_PATH_CHECK_PROPERTY =
@@ -318,7 +318,7 @@ public abstract class BasePlugin {
                     }
                 }, new Recorder.Property("project", project.getName()));
 
-        ThreadRecorder.get().record(ExecutionType.BASE_PLUGIN_PROJECT_BASE_EXTENSTION_CREATION,
+        ThreadRecorder.get().record(ExecutionType.BASE_PLUGIN_PROJECT_BASE_EXTENSION_CREATION,
                 new Recorder.Block<Void>() {
                     @Override
                     public Void call() throws Exception {
@@ -437,7 +437,7 @@ public abstract class BasePlugin {
                 new BuildTypeFactory(instantiator, project, project.getLogger()));
         final NamedDomainObjectContainer<ProductFlavor> productFlavorContainer = project.container(
                 ProductFlavor.class,
-                new ProductFlavorFactory(instantiator, project, project.getLogger()));
+                new ProductFlavorFactory(instantiator, project, project.getLogger(), extraModelInfo));
         final NamedDomainObjectContainer<SigningConfig>  signingConfigContainer = project.container(
                 SigningConfig.class,
                 new SigningConfigFactory(instantiator));

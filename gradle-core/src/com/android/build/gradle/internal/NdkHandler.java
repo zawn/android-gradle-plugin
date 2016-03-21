@@ -22,9 +22,9 @@ import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
 import com.android.build.gradle.internal.core.Abi;
 import com.android.build.gradle.internal.core.Toolchain;
+import com.android.repository.Revision;
 import com.android.sdklib.AndroidTargetHash;
 import com.android.sdklib.AndroidVersion;
-import com.android.repository.Revision;
 import com.android.utils.FileUtils;
 import com.android.utils.Pair;
 import com.google.common.base.Charsets;
@@ -294,13 +294,6 @@ public class NdkHandler {
     }
 
     /**
-     * Return the directory containing prebuilt binaries such as gdbserver.
-     */
-    public File getPrebuiltDirectory(Abi abi) {
-        return new File(ndkDirectory, "prebuilt/android-" + abi.getArchitecture());
-    }
-
-    /**
      * Return true if compiledSdkVersion supports 64 bits ABI.
      */
     public boolean supports64Bits() {
@@ -439,7 +432,10 @@ public class NdkHandler {
     /**
      * Return a list of include directories for an STl.
      */
-    public List<File> getStlIncludes(@Nullable String stlName, @NonNull Abi abi) {
+    public List<File> getStlIncludes(
+            @Nullable String stlName,
+            @Nullable String stlVersion,
+            @NonNull Abi abi) {
         File stlBaseDir = new File(ndkDirectory, "sources/cxx-stl/");
         if (stlName == null || stlName.isEmpty()) {
             stlName = "system";
@@ -454,12 +450,11 @@ public class NdkHandler {
             includeDirs.add(new File(stlBaseDir, "stlport/stlport"));
             includeDirs.add(new File(stlBaseDir, "gabi++/include"));
         } else if (stlName.equals("gnustl")) {
-            String gccToolchainVersion = getGccToolchainVersion(abi);
-            includeDirs.add(new File(stlBaseDir, "gnu-libstdc++/" + gccToolchainVersion + "/include"));
-            includeDirs.add(new File(stlBaseDir, "gnu-libstdc++/" + gccToolchainVersion +
-                    "/libs/" + abi.getName() + "/include"));
-            includeDirs.add(new File(stlBaseDir, "gnu-libstdc++/" + gccToolchainVersion +
-                    "/include/backward"));
+            String version = stlVersion != null ? stlVersion : getGccToolchainVersion(abi) ;
+            includeDirs.add(new File(stlBaseDir, "gnu-libstdc++/" + version + "/include"));
+            includeDirs.add(new File(stlBaseDir, "gnu-libstdc++/" + version + "/libs/"
+                    + abi.getName() + "/include"));
+            includeDirs.add(new File(stlBaseDir, "gnu-libstdc++/" + version + "/include/backward"));
         } else if (stlName.equals("gabi++")) {
             includeDirs.add(new File(stlBaseDir, "gabi++/include"));
         } else if (stlName.equals("c++")) {

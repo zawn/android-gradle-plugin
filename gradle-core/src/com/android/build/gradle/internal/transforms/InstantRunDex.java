@@ -18,19 +18,23 @@ package com.android.build.gradle.internal.transforms;
 
 import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
+import com.android.annotations.VisibleForTesting;
+import com.android.build.api.transform.SecondaryFile;
+import com.android.build.api.transform.SecondaryInput;
 import com.android.build.api.transform.Context;
 import com.android.build.api.transform.DirectoryInput;
 import com.android.build.api.transform.QualifiedContent;
+import com.android.build.api.transform.Status;
 import com.android.build.api.transform.Transform;
 import com.android.build.api.transform.TransformException;
 import com.android.build.api.transform.TransformInput;
+import com.android.build.api.transform.TransformInvocation;
 import com.android.build.api.transform.TransformOutputProvider;
 import com.android.build.gradle.OptionalCompilationStep;
 import com.android.build.gradle.internal.LoggerWrapper;
-import com.android.build.gradle.internal.incremental.BuildInfoGeneratorTask;
 import com.android.build.gradle.internal.incremental.InstantRunBuildContext;
 import com.android.build.gradle.internal.scope.VariantScope;
-import com.android.build.gradle.internal.transforms.InstantRunVerifierTransform.VerificationResult;
+import com.android.build.gradle.tasks.ColdswapArtifactsKickerTask;
 import com.android.builder.core.AndroidBuilder;
 import com.android.builder.core.DexOptions;
 import com.android.ide.common.process.LoggedProcessOutputHandler;
@@ -38,7 +42,6 @@ import com.android.ide.common.process.ProcessException;
 import com.android.utils.FileUtils;
 import com.android.utils.ILogger;
 import com.google.common.base.CaseFormat;
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -96,17 +99,15 @@ public class InstantRunDex extends Transform {
     }
 
     @Override
-    public void transform(@NonNull Context context, @NonNull Collection<TransformInput> inputs,
-            @NonNull Collection<TransformInput> referencedInputs,
-            @Nullable TransformOutputProvider output,
-            boolean isIncremental) throws IOException, TransformException, InterruptedException {
+    public void transform(TransformInvocation invocation)
+            throws IOException, TransformException, InterruptedException {
 
         File outputFolder = buildType.getOutputFolder(variantScope);
 
         boolean changesAreCompatible =
                 variantScope.getInstantRunBuildContext().hasPassedVerification();
         boolean restartDexRequested =
-                variantScope.getGlobalScope().isActive(OptionalCompilationStep.RESTART_DEX_ONLY);
+                variantScope.getGlobalScope().isActive(OptionalCompilationStep.RESTART_ONLY);
 
         switch(buildType) {
             case RELOAD:
@@ -140,44 +141,43 @@ public class InstantRunDex extends Transform {
             classesJar.delete();
         }
         Files.createParentDirs(classesJar);
-        JarOutputStream jarOutputStream = null;
+        final JarClassesBuilder jarClassesBuilder = getJarClassBuilder(classesJar);
 
         try {
 
-            for (TransformInput input : referencedInputs) {
+            for (TransformInput input : invocation.getReferencedInputs()) {
                 for (DirectoryInput directoryInput : input.getDirectoryInputs()) {
                     if (!directoryInput.getContentTypes().containsAll(inputTypes)) {
                         continue;
                     }
-                    File folder = directoryInput.getFile();
+                    final File folder = directoryInput.getFile();
                     File incremental = buildType.getIncrementalChangesFile(variantScope);
                     if (!incremental.exists()) {
                         // done
                         continue;
                     }
-                    List<String> filesToProcess = Files.readLines(incremental, Charsets.UTF_8);
-                    // delete the incremental changes file to reset the list of changes
-                    if (!incremental.delete()) {
-                        throw new RuntimeException("Cannot delete " + incremental);
-                    }
-                    if (filesToProcess == null || filesToProcess.isEmpty()) {
-                        return;
-                    }
-
-                    if (jarOutputStream == null) {
-                        jarOutputStream = new JarOutputStream(new FileOutputStream(classesJar));
-                    }
-
-                    for (String fileToProcess : filesToProcess) {
-                        // todo: check that file to process belongs to folder.
-                        copyFileInJar(folder, new File(fileToProcess), jarOutputStream);
-                    }
+                    ChangeRecords.process(incremental,
+                            new ChangeRecords.RecordHandler() {
+                                @Override
+                                public void handle(String filePath, Status status)
+                                        throws IOException {
+                                    // todo: check that file to process belongs to folder.
+                                    jarClassesBuilder.add(folder, new File(filePath));
+                                }
+                            });
                 }
             }
         } finally {
-            if (jarOutputStream != null) {
-                jarOutputStream.close();
+            jarClassesBuilder.close();
+        }
+
+        // if no files were added, clean up and return.
+        if (jarClassesBuilder.isEmpty()) {
+            FileUtils.emptyFolder(outputFolder);
+            if (!classesJar.delete()) {
+                logger.warning("Cannot delete tmp file : " + classesJar.getAbsolutePath());
             }
+            return;
         }
         final ImmutableList.Builder<File> inputFiles = ImmutableList.builder();
         inputFiles.add(classesJar);
@@ -185,22 +185,67 @@ public class InstantRunDex extends Transform {
         try {
             variantScope.getInstantRunBuildContext().startRecording(
                     InstantRunBuildContext.TaskType.INSTANT_RUN_DEX);
-            androidBuilder.convertByteCode(inputFiles.build(),
-                    outputFolder,
-                    false /* multiDexEnabled */,
-                    null /*getMainDexListFile */,
-                    new OverridingDexOptions(dexOptions),
-                    ImmutableList.<String>of() /* getAdditionalParameters */,
-                    false /* incremental */,
-                    true /* optimize */,
-                    new LoggedProcessOutputHandler(logger),
-                    true);
+            convertByteCode(inputFiles.build(), outputFolder);
+            variantScope.getInstantRunBuildContext().addChangedFile(
+                    buildType == InstantRunBuildType.RELOAD
+                            ? InstantRunBuildContext.FileType.RELOAD_DEX
+                            : InstantRunBuildContext.FileType.RESTART_DEX,
+                    new File(outputFolder, "classes.dex"));
         } catch (ProcessException e) {
             throw new TransformException(e);
         } finally {
             variantScope.getInstantRunBuildContext().stopRecording(
                     InstantRunBuildContext.TaskType.INSTANT_RUN_DEX);
         }
+    }
+
+    @VisibleForTesting
+    static class JarClassesBuilder {
+        final File outputFile;
+        JarOutputStream jarOutputStream;
+        boolean empty = true;
+
+        JarClassesBuilder(File outputFile) {
+            this.outputFile = outputFile;
+        }
+
+        void add(File inputDir, File file) throws IOException {
+            if (jarOutputStream == null) {
+                jarOutputStream = new JarOutputStream(new FileOutputStream(outputFile));
+            }
+            empty = false;
+            copyFileInJar(inputDir, file, jarOutputStream);
+        }
+
+        void close() throws IOException {
+            if (jarOutputStream != null) {
+                jarOutputStream.close();
+            }
+        }
+
+        boolean isEmpty() {
+            return empty;
+        }
+    }
+
+    @VisibleForTesting
+    protected void convertByteCode(List<File> inputFiles, File outputFolder)
+            throws InterruptedException, ProcessException, IOException {
+        androidBuilder.convertByteCode(inputFiles,
+                outputFolder,
+                false /* multiDexEnabled */,
+                null /*getMainDexListFile */,
+                new OverridingDexOptions(dexOptions),
+                ImmutableList.<String>of() /* getAdditionalParameters */,
+                false /* incremental */,
+                true /* optimize */,
+                new LoggedProcessOutputHandler(logger),
+                true);
+    }
+
+    @VisibleForTesting
+    protected JarClassesBuilder getJarClassBuilder(File outputFile) {
+        return new JarClassesBuilder(outputFile);
     }
 
     private static void copyFileInJar(File inputDir, File inputFile, JarOutputStream jarOutputStream)
@@ -236,6 +281,16 @@ public class InstantRunDex extends Transform {
     @Override
     public Set<QualifiedContent.Scope> getReferencedScopes() {
         return Sets.immutableEnumSet(QualifiedContent.Scope.PROJECT);
+    }
+
+    @NonNull
+    @Override
+    public Collection<SecondaryFile> getSecondaryFiles() {
+        return buildType == InstantRunBuildType.RESTART
+            ? ImmutableList.of(new SecondaryFile(
+                ColdswapArtifactsKickerTask.ConfigAction.getMarkerFile(variantScope),
+                true /* supportsIncrementalChange */))
+            : ImmutableList.<SecondaryFile>of();
     }
 
     @Override

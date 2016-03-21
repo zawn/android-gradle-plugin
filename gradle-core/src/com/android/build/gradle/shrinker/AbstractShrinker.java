@@ -28,7 +28,6 @@ import com.android.build.api.transform.TransformOutputProvider;
 import com.android.ide.common.internal.LoggedErrorException;
 import com.android.ide.common.internal.WaitableExecutor;
 import com.android.utils.FileUtils;
-import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Stopwatch;
@@ -58,6 +57,13 @@ import java.util.jar.JarFile;
  */
 public abstract class AbstractShrinker<T> {
 
+    /**
+     * Specifies whether the shrinker should assume certain package names are specific to the SDK,
+     * to trim the graph as early as possible.
+     */
+    private static final boolean IGNORE_PACKAGE_NAME =
+            Boolean.getBoolean("android.newShrinker.ignorePackageName");
+
     protected final WaitableExecutor<Void> mExecutor;
 
     protected final ShrinkerGraph<T> mGraph;
@@ -77,14 +83,14 @@ public abstract class AbstractShrinker<T> {
      * <p>This way we can make the check cheaper in the common case and also filter out a lot of
      * unnecessary edges from the graph early on, where we don't yet know which class is which.
      */
-    static boolean isSdkPackage(String className) {
-        // TODO: Add a flag to disable these checks?
-        return className.startsWith("java/")
+    static boolean isSdkPackage(@NonNull String className) {
+        return !IGNORE_PACKAGE_NAME
+                && (className.startsWith("java/")
                 || className.startsWith("android/os/")
                 || className.startsWith("android/view/")
                 || className.startsWith("android/content/")
                 || className.startsWith("android/graphics/")
-                || className.startsWith("android/widget/");
+                || className.startsWith("android/widget/"));
     }
 
     /**
@@ -174,8 +180,8 @@ public abstract class AbstractShrinker<T> {
      * the graph with additional edges accordingly.
      */
     protected void resolveReferences(
-            @NonNull Iterable<UnresolvedReference<T>> unresolvedReferences) {
-        for (final UnresolvedReference<T> unresolvedReference : unresolvedReferences) {
+            @NonNull Iterable<PostProcessingData.UnresolvedReference<T>> unresolvedReferences) {
+        for (final PostProcessingData.UnresolvedReference<T> unresolvedReference : unresolvedReferences) {
             mExecutor.execute(new Callable<Void>() {
                 @Override
                 public Void call() {
@@ -294,11 +300,6 @@ public abstract class AbstractShrinker<T> {
         waitForAllTasks();
     }
 
-    @NonNull
-    protected static UnsupportedOperationException todo(String message) {
-        return new UnsupportedOperationException("TODO: " + message);
-    }
-
     /**
      * Writes updates class files to the outputs.
      */
@@ -369,27 +370,6 @@ public abstract class AbstractShrinker<T> {
 
         /** Counters for finding classes that have to be in the main classes.dex file. */
         LEGACY_MULTIDEX
-    }
-
-    static class UnresolvedReference<T> {
-        final T method;
-        final T target;
-        final int opcode;
-
-        UnresolvedReference(@NonNull T method, @NonNull T target, int opcode) {
-            this.method = method;
-            this.target = target;
-            this.opcode = opcode;
-        }
-
-        @Override
-        public String toString() {
-            return Objects.toStringHelper(this)
-                    .add("method", method)
-                    .add("target", target)
-                    .add("opcode", opcode)
-                    .toString();
-        }
     }
 
     public static void logTime(String section, Stopwatch stopwatch) {

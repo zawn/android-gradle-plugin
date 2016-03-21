@@ -598,6 +598,7 @@ public class AndroidBuilder {
             @Nullable String outAaptSafeManifestLocation,
             ManifestMerger2.MergeType mergeType,
             Map<String, Object> placeHolders,
+            List<Invoker.Feature> optionalFeatures,
             @Nullable File reportFile) {
 
         try {
@@ -607,6 +608,8 @@ public class AndroidBuilder {
                     .addFlavorAndBuildTypeManifests(
                             manifestOverlays.toArray(new File[manifestOverlays.size()]))
                     .addLibraryManifests(collectLibraries(libraries))
+                    .withFeatures(optionalFeatures.toArray(
+                            new Invoker.Feature[optionalFeatures.size()]))
                     .setMergeReportFile(reportFile);
 
             if (mergeType == ManifestMerger2.MergeType.APPLICATION) {
@@ -1370,15 +1373,24 @@ public class AndroidBuilder {
                             + minimumBuildTools.toShortString());
                 }
             } else {
-                File dxJar = new File(
-                        mTargetInfo.getBuildTools().getPath(BuildToolInfo.PathId.DX_JAR));
-                DexWrapper dexWrapper = DexWrapper.obtain(dxJar);
-                try {
-                    dexWrapper.run(builder, dexOptions, processOutputHandler, mLogger);
-                } finally {
-                    dexWrapper.release();
+
+                // if the dx.jar is on the classpath, automatically revert to out of process.
+                if (DexWrapper.noMainDexOnClasspath()) {
+                    File dxJar = new File(
+                            mTargetInfo.getBuildTools().getPath(BuildToolInfo.PathId.DX_JAR));
+                    DexWrapper dexWrapper = DexWrapper.obtain(dxJar);
+                    try {
+                        ProcessResult result =
+                                dexWrapper.run(builder, dexOptions, processOutputHandler, mLogger);
+                        result.assertNormalExitValue();
+                    } finally {
+                        dexWrapper.release();
+                    }
+                    return;
+                } else {
+                    getLogger().warning("dx.jar is on Android Gradle plugin classpath, "
+                            + "reverted to out of process dexing");
                 }
-                return;
             }
         }
         // fall through, use external process.
@@ -1899,6 +1911,40 @@ public class AndroidBuilder {
             // shouldn't happen since we control the package from start to end.
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Creates a new split APK containing only code, this will only be functional on
+     * MarshMallow and above devices.
+     */
+    public void packageCodeSplitApk(
+            @NonNull String androidResPkgLocation,
+            @NonNull File dexFile,
+            @Nullable SigningConfig signingConfig,
+            @NonNull String outApkLocation) throws
+                FileNotFoundException, KeytoolException, PackagerException, DuplicateFileException {
+
+        CertificateInfo certificateInfo = null;
+        if (signingConfig != null && signingConfig.isSigningReady()) {
+            //noinspection ConstantConditions - isSigningReady() called above.
+            certificateInfo = KeystoreHelper.getCertificateInfo(signingConfig.getStoreType(),
+                    signingConfig.getStoreFile(), signingConfig.getStorePassword(),
+                    signingConfig.getKeyPassword(), signingConfig.getKeyAlias());
+        }
+
+        try {
+            Packager packager = new Packager(
+                    outApkLocation, androidResPkgLocation,
+                    certificateInfo, mCreatedBy, mLogger,
+                    23 /* minSdkVersion, MarshMallow */);
+
+            packager.addFile(dexFile, "classes.dex");
+            packager.sealApk();
+        } catch (SealedPackageException e) {
+            // shouldn't happen since we control the package from start to end.
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**

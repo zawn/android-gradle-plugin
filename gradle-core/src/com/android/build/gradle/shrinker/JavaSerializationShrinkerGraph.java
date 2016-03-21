@@ -25,6 +25,7 @@ import com.android.build.gradle.shrinker.AbstractShrinker.CounterSet;
 import com.android.ide.common.internal.WaitableExecutor;
 import com.android.utils.AsmUtils;
 import com.android.utils.FileUtils;
+import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -196,7 +197,6 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
     @Override
     public boolean incrementAndCheck(@NonNull String memberOrClass, @NonNull DependencyType type, @NonNull CounterSet counterSet) {
         try {
-
             return getCounters(counterSet).mReferenceCounters.get(memberOrClass).incrementAndCheck(type);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
@@ -289,8 +289,17 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
 
     @NonNull
     @Override
-    public String[] getInterfaces(String klass) {
-        return mClasses.get(klass).interfaces;
+    public String[] getInterfaces(String klass) throws ClassLookupException {
+        ClassInfo classInfo = mClasses.get(klass);
+        if (classInfo == null) {
+            throw new ClassLookupException(klass);
+        }
+
+        if (classInfo.interfaces == null) {
+            return new String[0];
+        } else {
+            return classInfo.interfaces;
+        }
     }
 
     @Override
@@ -372,8 +381,8 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
     @Override
     public String addClass(
             @NonNull String name,
-            String superName,
-            String[] interfaces,
+            @Nullable String superName,
+            @Nullable String[] interfaces,
             int modifiers,
             @Nullable File classFile) {
         //noinspection unchecked - ASM API
@@ -433,6 +442,7 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
 
     @Override
     public void addAnnotation(@NonNull String classOrMember, @NonNull String annotationName) {
+        Preconditions.checkArgument(!annotationName.endsWith(";"));
         mAnnotations.put(classOrMember, annotationName);
     }
 
@@ -497,11 +507,19 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
     }
 
     private static final class ClassInfo implements Serializable {
+        @Nullable
         final File classFile;
+
+        @Nullable
         final String superclass;
+
+        @Nullable
         final String[] interfaces;
 
-        private ClassInfo(File classFile, String superclass, String[] interfaces) {
+        private ClassInfo(
+                @Nullable File classFile,
+                @Nullable String superclass,
+                @Nullable String[] interfaces) {
             this.classFile = classFile;
             this.superclass = superclass;
             this.interfaces = interfaces;
@@ -539,6 +557,8 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
         int required = 0;
         int ifClassKept = 0;
         int classIsKept = 0;
+        int superInterfaceKept = 0;
+        int interfaceImplemented = 0;
 
         synchronized boolean incrementAndCheck(DependencyType type) {
             boolean before = isReachable();
@@ -553,13 +573,23 @@ public class JavaSerializationShrinkerGraph implements ShrinkerGraph<String> {
                 case CLASS_IS_KEPT:
                     classIsKept++;
                     break;
+                case SUPERINTERFACE_KEPT:
+                    superInterfaceKept++;
+                    break;
+                case INTERFACE_IMPLEMENTED:
+                    interfaceImplemented++;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown dependency type.");
             }
             boolean after = isReachable();
             return before != after;
         }
 
         synchronized boolean isReachable() {
-            return required > 0 || (ifClassKept > 0 && classIsKept > 0);
+            return required > 0
+                    || (ifClassKept > 0 && classIsKept > 0)
+                    || (superInterfaceKept > 0 && interfaceImplemented > 0);
         }
     }
 }

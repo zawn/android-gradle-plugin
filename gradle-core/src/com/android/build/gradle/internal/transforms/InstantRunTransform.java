@@ -22,6 +22,7 @@ import static com.android.build.api.transform.QualifiedContent.Scope;
 import com.android.SdkConstants;
 import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
+import com.android.build.api.transform.SecondaryInput;
 import com.android.build.api.transform.Context;
 import com.android.build.api.transform.DirectoryInput;
 import com.android.build.api.transform.Format;
@@ -31,6 +32,7 @@ import com.android.build.api.transform.Status;
 import com.android.build.api.transform.Transform;
 import com.android.build.api.transform.TransformException;
 import com.android.build.api.transform.TransformInput;
+import com.android.build.api.transform.TransformInvocation;
 import com.android.build.api.transform.TransformOutputProvider;
 import com.android.build.gradle.internal.LoggerWrapper;
 import com.android.build.gradle.internal.incremental.IncrementalChangeVisitor;
@@ -41,9 +43,9 @@ import com.android.build.gradle.internal.pipeline.ExtendedContentType;
 import com.android.build.gradle.internal.pipeline.TransformManager;
 import com.android.build.gradle.internal.scope.VariantScope;
 import com.android.build.api.transform.QualifiedContent.ContentType;
+import com.android.ide.common.util.UrlClassLoaderUtil;
 import com.android.utils.FileUtils;
 import com.android.utils.ILogger;
-import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -56,7 +58,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,11 +76,10 @@ public class InstantRunTransform extends Transform {
 
     protected static final ILogger LOGGER =
             new LoggerWrapper(Logging.getLogger(InstantRunTransform.class));
-    private final ImmutableSet.Builder<String> generatedClasses2Files = ImmutableSet.builder();
+    private final ChangeRecords generatedClasses2Files = new ChangeRecords();
+    private final ChangeRecords generatedClasses3Files = new ChangeRecords();
     private final ImmutableList.Builder<String> generatedClasses3Names = ImmutableList.builder();
-    private final ImmutableList.Builder<String> generatedClasses3Files = ImmutableList.builder();
     private final VariantScope variantScope;
-
 
     public InstantRunTransform(VariantScope variantScope) {
         this.variantScope = variantScope;
@@ -127,18 +127,18 @@ public class InstantRunTransform extends Transform {
     }
 
     @Override
-    public void transform(@NonNull Context context, @NonNull Collection<TransformInput> inputs,
-            @NonNull Collection<TransformInput> referencedInputs,
-            @Nullable TransformOutputProvider outputProvider, boolean isIncremental)
+    public void transform(TransformInvocation invocation)
             throws IOException, TransformException, InterruptedException {
-        
+
+        TransformOutputProvider outputProvider = invocation.getOutputProvider();
         if (outputProvider == null) {
             throw new IllegalStateException("InstantRunTransform called with null output");
         }
 
         // first get all referenced input to construct a class loader capable of loading those
         // classes. This is useful for ASM as it needs to load classes
-        List<URL> referencedInputUrls = getAllClassesLocations(inputs, referencedInputs);
+        List<URL> referencedInputUrls = getAllClassesLocations(
+                invocation.getInputs(), invocation.getReferencedInputs());
 
         // This classloader could be optimized a bit, first we could create a parent class loader
         // with the android.jar only that could be stored in the GlobalScope for reuse. This
@@ -166,10 +166,10 @@ public class InstantRunTransform extends Transform {
                     ImmutableSet.<ContentType>of(ExtendedContentType.CLASSES_ENHANCED),
                     getScopes(), Format.DIRECTORY);
 
-            for (TransformInput input : inputs) {
+            for (TransformInput input : invocation.getInputs()) {
                 for (DirectoryInput directoryInput : input.getDirectoryInputs()) {
                     File inputDir = directoryInput.getFile();
-                    if (isIncremental) {
+                    if (invocation.isIncremental()) {
                         for (Map.Entry<File, Status> fileEntry : directoryInput.getChangedFiles()
                                 .entrySet()) {
 
@@ -194,7 +194,7 @@ public class InstantRunTransform extends Transform {
                                     break;
                                 case CHANGED:
                                     // an existing file was changed, we regenerate the classes.2 and
-                                    // classes.3 files at they are both needed to support restart and
+                                    // classes.3 files as they are both needed to support restart and
                                     // reload.
                                     transformToClasses2Format(
                                             inputDir,
@@ -245,6 +245,7 @@ public class InstantRunTransform extends Transform {
             wrapUpOutputs(classesTwoOutput, classesThreeOutput);
         } finally {
             Thread.currentThread().setContextClassLoader(currentClassLoader);
+            UrlClassLoaderUtil.attemptToClose(urlClassLoader);
             variantScope.getInstantRunBuildContext().stopRecording(
                     InstantRunBuildContext.TaskType.INSTANT_RUN_TRANSFORM);
         }
@@ -254,23 +255,25 @@ public class InstantRunTransform extends Transform {
             throws IOException {
 
         // generate the patch file and add to the list of files to process next.
-        File patchFile = writePatchFileContents(generatedClasses3Names.build(), classes3Folder);
-        generatedClasses3Files.add(patchFile.getAbsolutePath());
+        ImmutableList<String> generatedClassNames = generatedClasses3Names.build();
+        if (!generatedClassNames.isEmpty()) {
+            File patchFile = writePatchFileContents(generatedClassNames, classes3Folder);
+            generatedClasses3Files.add(Status.CHANGED, patchFile.getAbsolutePath());
+        }
 
         // read the previous iterations output and append it to this iteration changes.
         File incremental = InstantRunBuildType.RESTART.getIncrementalChangesFile(variantScope);
         if (incremental.exists()) {
-            List<String> previousIterationIncrementalChanges =
-                    Files.readLines(incremental, Charsets.UTF_8);
-            generatedClasses2Files.addAll(previousIterationIncrementalChanges);
+            ChangeRecords previousIterationChanges = ChangeRecords.load(incremental);
+            generatedClasses2Files.addAll(previousIterationChanges);
         }
 
-        writeIncrementalChanges(
-                InstantRunBuildType.RESTART, generatedClasses2Files.build(), variantScope);
-        writeIncrementalChanges(
-                InstantRunBuildType.RELOAD, generatedClasses3Files.build(), variantScope);
-    }
+        generatedClasses2Files.write(
+                InstantRunBuildType.RESTART.getIncrementalChangesFile(variantScope));
 
+        generatedClasses3Files.write(
+                InstantRunBuildType.RELOAD.getIncrementalChangesFile(variantScope));
+    }
 
     /**
      * Calculate a list of {@link URL} that represent all the directories containing classes
@@ -313,7 +316,7 @@ public class InstantRunTransform extends Transform {
             into.add(directoryInput.getFile().toURI().toURL());
         }
         for (JarInput jarInput : transformInput.getJarInputs()) {
-            into.add(new URL("jar:" + jarInput.getFile().toURI().toURL() + "!/"));
+            into.add(jarInput.getFile().toURI().toURL());
         }
     }
 
@@ -336,7 +339,7 @@ public class InstantRunTransform extends Transform {
                     inputDir, inputFile, outputDir, IncrementalSupportVisitor.VISITOR_BUILDER);
 
             if (outputFile != null && recordingPolicy == RecordingPolicy.RECORD) {
-                generatedClasses2Files.add(outputFile.getAbsolutePath());
+                generatedClasses2Files.add(Status.CHANGED, outputFile.getAbsolutePath());
             }
         }
     }
@@ -383,7 +386,7 @@ public class InstantRunTransform extends Transform {
                     inputDir.getAbsolutePath().length() + 1,
                     inputFile.getAbsolutePath().length() - ".class".length())
                         .replace(File.separatorChar, '.'));
-        generatedClasses3Files.add(outputFile.getAbsolutePath());
+        generatedClasses3Files.add(Status.CHANGED, outputFile.getAbsolutePath());
     }
 
     /**
@@ -448,24 +451,6 @@ public class InstantRunTransform extends Transform {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-    }
-
-    private static void writeIncrementalChanges(
-            InstantRunBuildType buildType,
-            Collection<String> changes,
-            VariantScope variantScope) throws IOException {
-
-        File incrementalChangesFile = buildType.getIncrementalChangesFile(variantScope);
-        Files.createParentDirs(incrementalChangesFile);
-        FileWriter fileWriter = new FileWriter(incrementalChangesFile);
-        try {
-            for (String change : changes) {
-                fileWriter.write(change);
-                fileWriter.write("\n");
-            }
-        } finally {
-            fileWriter.close();
         }
     }
 }

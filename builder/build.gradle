@@ -16,7 +16,6 @@ sourceSets {
 dependencies {
     compile project(':builder-model')
     compile project(':builder-test-api')
-    compile project(':transform-api')
     compile group: 'com.android.tools', name: 'sdklib', version:"$BUILD_TOOLS_VERSION"
     compile group: 'com.android.tools', name: 'sdk-common', version:"$BUILD_TOOLS_VERSION"
     compile group: 'com.android.tools', name: 'common', version:"$BUILD_TOOLS_VERSION"

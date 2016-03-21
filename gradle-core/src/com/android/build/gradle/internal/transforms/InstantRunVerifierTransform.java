@@ -20,6 +20,7 @@ import com.android.SdkConstants;
 import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
 import com.android.annotations.VisibleForTesting;
+import com.android.build.api.transform.SecondaryInput;
 import com.android.build.api.transform.Context;
 import com.android.build.api.transform.DirectoryInput;
 import com.android.build.api.transform.JarInput;
@@ -28,7 +29,9 @@ import com.android.build.api.transform.Status;
 import com.android.build.api.transform.Transform;
 import com.android.build.api.transform.TransformException;
 import com.android.build.api.transform.TransformInput;
+import com.android.build.api.transform.TransformInvocation;
 import com.android.build.api.transform.TransformOutputProvider;
+import com.android.build.gradle.OptionalCompilationStep;
 import com.android.build.gradle.internal.LoggerWrapper;
 import com.android.build.gradle.internal.incremental.InstantRunVerifierStatus;
 import com.android.build.gradle.internal.incremental.InstantRunBuildContext;
@@ -107,18 +110,16 @@ public class InstantRunVerifierTransform extends Transform {
     }
 
     @Override
-    public void transform(@NonNull Context context, @NonNull Collection<TransformInput> inputs,
-            @NonNull Collection<TransformInput> referencedInputs,
-            @Nullable TransformOutputProvider outputProvider, boolean isIncremental)
+    public void transform(TransformInvocation invocation)
             throws IOException, TransformException, InterruptedException {
 
-        if (referencedInputs.isEmpty()) {
+        if (invocation.getReferencedInputs().isEmpty()) {
             throw new RuntimeException("Empty list of referenced inputs");
         }
         try {
             variantScope.getInstantRunBuildContext().startRecording(
                     InstantRunBuildContext.TaskType.VERIFIER);
-            doTransform(referencedInputs, isIncremental);
+            doTransform(invocation.getReferencedInputs(), invocation.isIncremental());
         } finally {
             variantScope.getInstantRunBuildContext().stopRecording(
                     InstantRunBuildContext.TaskType.VERIFIER);
@@ -136,18 +137,23 @@ public class InstantRunVerifierTransform extends Transform {
 
         InstantRunVerifierStatus resultSoFar = InstantRunVerifierStatus.COMPATIBLE;
         for (TransformInput transformInput : inputs) {
-            resultSoFar = processFolderInputs(isIncremental, transformInput);
+            resultSoFar = processFolderInputs(resultSoFar, isIncremental, transformInput);
             resultSoFar = processJarInputs(resultSoFar, transformInput);
         }
-        variantScope.getInstantRunBuildContext().setVerifierResult(resultSoFar);
+
+        // if we are being asked to produce the RESTART artifacts, there is no need to set the
+        // verifier result, however the transform needed to run to backup the .class files.
+        if (!variantScope.getGlobalScope().isActive(OptionalCompilationStep.RESTART_ONLY)) {
+            variantScope.getInstantRunBuildContext().setVerifierResult(resultSoFar);
+        }
     }
 
     @NonNull
     private InstantRunVerifierStatus processFolderInputs(
+            @NonNull InstantRunVerifierStatus verificationResult,
             boolean isIncremental,
             @NonNull TransformInput transformInput) throws IOException {
 
-        InstantRunVerifierStatus verificationResult = InstantRunVerifierStatus.COMPATIBLE;
         for (DirectoryInput DirectoryInput : transformInput.getDirectoryInputs()) {
 
             File inputDir = DirectoryInput.getFile();
@@ -350,8 +356,8 @@ public class InstantRunVerifierTransform extends Transform {
     @NonNull
     @Override
     public Set<QualifiedContent.Scope> getReferencedScopes() {
-        return Sets.immutableEnumSet(QualifiedContent.Scope.PROJECT);
-
+        return Sets.immutableEnumSet(
+                QualifiedContent.Scope.PROJECT, QualifiedContent.Scope.SUB_PROJECTS);
     }
 
     @NonNull

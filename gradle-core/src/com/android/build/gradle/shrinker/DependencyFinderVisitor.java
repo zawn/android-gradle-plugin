@@ -19,8 +19,9 @@ package com.android.build.gradle.shrinker;
 import static com.android.build.gradle.shrinker.AbstractShrinker.isSdkPackage;
 
 import com.android.annotations.Nullable;
-import com.android.build.gradle.shrinker.AbstractShrinker.UnresolvedReference;
+import com.android.build.gradle.shrinker.PostProcessingData.UnresolvedReference;
 import com.android.utils.AsmUtils;
+import com.google.common.base.Objects;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
@@ -59,7 +60,7 @@ public abstract class DependencyFinderVisitor<T> extends ClassVisitor {
         }
 
         mKlass = mGraph.getClassReference(name);
-        if (!superName.equals("java/lang/Object")) {
+        if (superName != null && !isSdkPackage(superName)) {
             // Don't create graph edges for obvious things.
             handleDependency(
                     mKlass,
@@ -67,15 +68,15 @@ public abstract class DependencyFinderVisitor<T> extends ClassVisitor {
                     DependencyType.REQUIRED_CLASS_STRUCTURE);
         }
 
-        // We don't create edges for interfaces, because interfaces can be removed by the shrinker,
-        // if they are not used.
-
         if (interfaces.length > 0) {
-            // It's possible the superclass is implementing a method from the interface, we may need
-            // to add more edges to the graph to represent this.
-            handleMultipleInheritance(mKlass);
-        }
+            handleInterfaceInheritance(mKlass);
 
+            if (!Objects.equal(superName, "java/lang/Object")) {
+                // It's possible the superclass is implementing a method from the interface, we may
+                // need to add more edges to the graph to represent this.
+                handleMultipleInheritance(mKlass);
+            }
+        }
 
         mClassName = name;
         mIsAnnotation = (access & Opcodes.ACC_ANNOTATION) != 0;
@@ -107,7 +108,7 @@ public abstract class DependencyFinderVisitor<T> extends ClassVisitor {
         }
 
         if (mIsAnnotation) {
-            // TODO: Strip annotation members.
+            // TODO: Strip unused annotation classes members.
             handleDependency(mKlass, method, DependencyType.REQUIRED_CLASS_STRUCTURE);
         }
 
@@ -154,7 +155,6 @@ public abstract class DependencyFinderVisitor<T> extends ClassVisitor {
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
         if (mClassName.equals(name) && outerName != null) {
             // I'm the inner class, keep the outer class, as ProGuard does.
-            // TODO: What if I'm the enclosing class? What if the inner class is not used?
             handleDependency(
                     mKlass,
                     mGraph.getClassReference(outerName),
@@ -208,6 +208,7 @@ public abstract class DependencyFinderVisitor<T> extends ClassVisitor {
     protected abstract void handleDependency(T source, T target, DependencyType type);
     protected abstract void handleMultipleInheritance(T klass);
     protected abstract void handleVirtualMethod(T method);
+    protected abstract void handleInterfaceInheritance(T klass);
     protected abstract void handleUnresolvedReference(UnresolvedReference<T> reference);
 
     private class DependencyFinderMethodVisitor extends MethodVisitor {
@@ -399,20 +400,13 @@ public abstract class DependencyFinderVisitor<T> extends ClassVisitor {
 
         @Override
         public void visitClassType(String name) {
-            if (!name.equals("java/lang/Object")) {
+            if (!isSdkPackage(name)) {
                 handleDependency(
                         mSource,
                         mGraph.getClassReference(name),
                         DependencyType.REQUIRED_CLASS_STRUCTURE);
             }
             super.visitClassType(name);
-        }
-
-        @SuppressWarnings("EmptyMethod")
-        @Override
-        public void visitInnerClassType(String name) {
-            // TODO: support inner classes.
-            super.visitInnerClassType(name);
         }
     }
 }

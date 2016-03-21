@@ -34,7 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO: Document.
+ * Implementation of {@link KeepRules} that uses {@link Flags} obtained from parsing a ProGuard
+ * config file.
  */
 public class ProguardFlagsKeepRules implements KeepRules {
 
@@ -204,7 +205,6 @@ public class ProguardFlagsKeepRules implements KeepRules {
         if (spec == null) {
             return true;
         }
-        // TODO: annotations.
 
         FluentIterable<T> superTypes =
                 TypeHierarchyTraverser.superclassesAndInterfaces(graph, mShrinkerLogger)

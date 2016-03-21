@@ -18,10 +18,10 @@ package com.android.build.gradle.internal.transforms;
 
 import static com.android.build.gradle.shrinker.AbstractShrinker.logTime;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
+import com.android.build.api.transform.SecondaryInput;
 import com.android.build.api.transform.Context;
 import com.android.build.api.transform.DirectoryInput;
 import com.android.build.api.transform.JarInput;
@@ -30,26 +30,25 @@ import com.android.build.api.transform.QualifiedContent.Scope;
 import com.android.build.api.transform.Status;
 import com.android.build.api.transform.TransformException;
 import com.android.build.api.transform.TransformInput;
+import com.android.build.api.transform.TransformInvocation;
 import com.android.build.api.transform.TransformOutputProvider;
-import com.android.build.gradle.AndroidGradleOptions;
 import com.android.build.gradle.internal.pipeline.TransformManager;
 import com.android.build.gradle.internal.scope.VariantScope;
-import com.android.build.gradle.shrinker.KeepRules;
-import com.android.build.gradle.shrinker.ProguardFlagsKeepRules;
-import com.android.build.gradle.shrinker.ShrinkerLogger;
-import com.android.build.gradle.shrinker.parser.FilterSpecification;
-import com.android.builder.core.VariantType;
 import com.android.build.gradle.shrinker.AbstractShrinker.CounterSet;
 import com.android.build.gradle.shrinker.FullRunShrinker;
 import com.android.build.gradle.shrinker.IncrementalShrinker;
 import com.android.build.gradle.shrinker.JavaSerializationShrinkerGraph;
+import com.android.build.gradle.shrinker.KeepRules;
 import com.android.build.gradle.shrinker.ProguardConfig;
+import com.android.build.gradle.shrinker.ProguardFlagsKeepRules;
+import com.android.build.gradle.shrinker.ShrinkerLogger;
+import com.android.builder.core.VariantType;
 import com.android.ide.common.internal.WaitableExecutor;
-import com.android.sdklib.IAndroidTarget;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.gradle.tooling.BuildException;
@@ -59,7 +58,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -69,22 +68,21 @@ import java.util.Set;
 public class NewShrinkerTransform extends ProguardConfigurable {
 
     private static final Logger logger = LoggerFactory.getLogger(NewShrinkerTransform.class);
-
     private static final String NAME = "newClassShrinker";
 
     private final VariantType variantType;
     private final Set<File> platformJars;
     private final File incrementalDir;
-    private final boolean incrementalEnabled;
+    private final List<String> dontwarnLines;
+    private final List<String> keepLines;
 
-    public NewShrinkerTransform(VariantScope scope) {
-        IAndroidTarget target = scope.getGlobalScope().getAndroidBuilder().getTarget();
-        checkState(target != null, "SDK target not ready.");
-        this.platformJars = ImmutableSet.of(new File(target.getPath(IAndroidTarget.ANDROID_JAR)));
+    public NewShrinkerTransform(@NonNull VariantScope scope) {
+        this.platformJars = ImmutableSet.copyOf(
+                scope.getGlobalScope().getAndroidBuilder().getBootClasspath(true));
         this.variantType = scope.getVariantData().getType();
         this.incrementalDir = scope.getIncrementalDir(scope.getTaskName(NAME));
-        this.incrementalEnabled =
-                AndroidGradleOptions.newShrinkerIncremental(scope.getGlobalScope().getProject());
+        this.dontwarnLines = Lists.newArrayList();
+        this.keepLines = Lists.newArrayList();
     }
 
     @NonNull
@@ -142,35 +140,30 @@ public class NewShrinkerTransform extends ProguardConfigurable {
 
     @Override
     public boolean isIncremental() {
-        return this.incrementalEnabled;
+        return true;
     }
 
     @Override
-    public void transform(
-            @NonNull Context context,
-            @NonNull Collection<TransformInput> inputs,
-            @NonNull Collection<TransformInput> referencedInputs,
-            @Nullable TransformOutputProvider output,
-            boolean isIncremental) throws IOException, TransformException, InterruptedException {
+    public void transform(TransformInvocation invocation)
+            throws IOException, TransformException, InterruptedException {
+        TransformOutputProvider output = invocation.getOutputProvider();
+        Collection<TransformInput> referencedInputs = invocation.getReferencedInputs();
+
         checkNotNull(output, "Missing output object for transform " + getName());
 
-        if (isIncrementalRun(isIncremental, referencedInputs)) {
-            incrementalRun(inputs, referencedInputs, output);
+        if (isIncrementalRun(invocation.isIncremental(), referencedInputs)) {
+            incrementalRun(invocation.getInputs(), referencedInputs, output);
         } else {
-            fullRun(inputs, referencedInputs, output);
+            fullRun(invocation.getInputs(), referencedInputs, output);
         }
 
     }
 
     private void fullRun(
-            Collection<TransformInput> inputs,
-            Collection<TransformInput> referencedInputs,
-            TransformOutputProvider output) throws IOException {
-        ProguardConfig config = new ProguardConfig();
-
-        for (File configFile : getAllConfigurationFiles()) {
-            config.parse(configFile);
-        }
+            @NonNull Collection<TransformInput> inputs,
+            @NonNull Collection<TransformInput> referencedInputs,
+            @NonNull TransformOutputProvider output) throws IOException {
+        ProguardConfig config = getConfig();
 
         ShrinkerLogger shrinkerLogger =
                 new ShrinkerLogger(config.getFlags().getDontWarnSpecs(), logger);
@@ -185,7 +178,6 @@ public class NewShrinkerTransform extends ProguardConfigurable {
         // Only save state if incremental mode is enabled.
         boolean saveState = this.isIncremental();
 
-        // TODO: check for -dontobfuscate and other required flags.
         shrinker.run(
                 inputs,
                 referencedInputs,
@@ -195,6 +187,12 @@ public class NewShrinkerTransform extends ProguardConfigurable {
                         new ProguardFlagsKeepRules(config.getFlags(), shrinkerLogger)),
                 saveState);
 
+        checkForWarnings(config, shrinkerLogger);
+    }
+
+    private static void checkForWarnings(
+            @NonNull ProguardConfig config,
+            @NonNull ShrinkerLogger shrinkerLogger) {
         if (shrinkerLogger.getWarningsCount() > 0 && !config.getFlags().isIgnoreWarnings()) {
             throw new BuildException(
                     "Warnings found during shrinking, please use -dontwarn or -ignorewarnings to suppress them.",
@@ -202,35 +200,67 @@ public class NewShrinkerTransform extends ProguardConfigurable {
         }
     }
 
+    @NonNull
+    private ProguardConfig getConfig() throws IOException {
+        ProguardConfig config = new ProguardConfig();
+
+        for (File configFile : getAllConfigurationFiles()) {
+            config.parse(configFile);
+        }
+
+        config.parse(getAdditionalConfigString());
+        return config;
+    }
+
+    @NonNull
+    private String getAdditionalConfigString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (String keepLine : keepLines) {
+            sb.append("-keep ");
+            sb.append(keepLine);
+            sb.append("\n");
+        }
+
+        for (String dontWarn : dontwarnLines) {
+            sb.append("-dontwarn ");
+            sb.append(dontWarn);
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
     private void incrementalRun(
-            Collection<TransformInput> inputs,
-            Collection<TransformInput> referencedInputs,
-            TransformOutputProvider output) throws IOException {
+            @NonNull Collection<TransformInput> inputs,
+            @NonNull Collection<TransformInput> referencedInputs,
+            @NonNull TransformOutputProvider output) throws IOException {
         Stopwatch stopwatch = Stopwatch.createStarted();
         JavaSerializationShrinkerGraph graph =
                 JavaSerializationShrinkerGraph.readFromDir(incrementalDir);
         logTime("loading state", stopwatch);
 
-        // TODO: Store dontwarn settings.
+        ProguardConfig config = getConfig();
+
         ShrinkerLogger shrinkerLogger =
-                new ShrinkerLogger(Collections.<FilterSpecification>emptyList(), logger);
+                new ShrinkerLogger(config.getFlags().getDontWarnSpecs(), logger);
 
         IncrementalShrinker<String> shrinker =
                 new IncrementalShrinker<String>(new WaitableExecutor<Void>(), graph, shrinkerLogger);
 
         try {
             shrinker.incrementalRun(inputs, output);
+            checkForWarnings(config, shrinkerLogger);
         } catch (IncrementalShrinker.IncrementalRunImpossibleException e) {
             logger.warn("Incremental shrinker run impossible: " + e.getMessage());
             fullRun(inputs, referencedInputs, output);
         }
     }
 
-
-    private boolean isIncrementalRun(
+    private static boolean isIncrementalRun(
             boolean isIncremental,
-            Collection<TransformInput> referencedInputs) {
-        if (!this.incrementalEnabled || !isIncremental) {
+            @NonNull Collection<TransformInput> referencedInputs) {
+        if (!isIncremental) {
             return false;
         }
 
@@ -249,5 +279,15 @@ public class NewShrinkerTransform extends ProguardConfigurable {
         }
 
         return true;
+    }
+
+    @Override
+    public void keep(@NonNull String keep) {
+        this.keepLines.add(keep);
+    }
+
+    @Override
+    public void dontwarn(@NonNull String dontwarn) {
+        this.dontwarnLines.add(dontwarn);
     }
 }

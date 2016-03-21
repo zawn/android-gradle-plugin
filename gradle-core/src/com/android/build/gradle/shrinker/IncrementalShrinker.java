@@ -28,14 +28,11 @@ import com.android.ide.common.internal.WaitableExecutor;
 import com.google.common.base.Optional;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,7 +83,7 @@ public class IncrementalShrinker<T> extends AbstractShrinker<T> {
             throws IOException, IncrementalRunImpossibleException {
         final Set<T> classesToWrite = Sets.newConcurrentHashSet();
         final Set<File> classFilesToDelete = Sets.newConcurrentHashSet();
-        final Set<UnresolvedReference<T>> unresolvedReferences = Sets.newConcurrentHashSet();
+        final Set<PostProcessingData.UnresolvedReference<T>> unresolvedReferences = Sets.newConcurrentHashSet();
 
         Stopwatch stopwatch = Stopwatch.createStarted();
         SetMultimap<T, String> oldState = resetState();
@@ -183,7 +180,7 @@ public class IncrementalShrinker<T> extends AbstractShrinker<T> {
         return oldState;
     }
 
-    private void finishGraph(@NonNull Iterable<UnresolvedReference<T>> unresolvedReferences) {
+    private void finishGraph(@NonNull Iterable<PostProcessingData.UnresolvedReference<T>> unresolvedReferences) {
         resolveReferences(unresolvedReferences);
         waitForAllTasks();
     }
@@ -191,7 +188,7 @@ public class IncrementalShrinker<T> extends AbstractShrinker<T> {
     private void processInputs(
             @NonNull Iterable<TransformInput> inputs,
             @NonNull final Collection<T> classesToWrite,
-            @NonNull final Collection<UnresolvedReference<T>> unresolvedReferences)
+            @NonNull final Collection<PostProcessingData.UnresolvedReference<T>> unresolvedReferences)
             throws IncrementalRunImpossibleException {
         for (final TransformInput input : inputs) {
             for (JarInput jarInput : input.getJarInputs()) {
@@ -255,102 +252,15 @@ public class IncrementalShrinker<T> extends AbstractShrinker<T> {
      */
     private void processChangedClassFile(
             @NonNull File file,
-            @NonNull final Collection<UnresolvedReference<T>> unresolvedReferences,
+            @NonNull final Collection<PostProcessingData.UnresolvedReference<T>> unresolvedReferences,
             @NonNull final Collection<T> classesToWrite)
             throws IOException, IncrementalRunImpossibleException {
-        // TODO: Detect changes to modifiers and annotations.
-
         ClassReader classReader = new ClassReader(Files.toByteArray(file));
-        DependencyFinderVisitor<T> finder = new DependencyFinderVisitor<T>(mGraph, null) {
-            private String mClassName;
-            private Set<T> mMethods;
-            private Set<T> mFields;
 
-            @Override
-            public void visit(int version, int access, String name, String signature,
-                    String superName,
-                    String[] interfaces) {
-                T klass = mGraph.getClassReference(name);
-                mClassName = name;
-                mMethods = mGraph.getMethods(klass);
-                mFields = mGraph.getFields(klass);
-                classesToWrite.add(klass);
-                super.visit(version, access, name, signature, superName, interfaces);
-            }
+        IncrementalRunVisitor<T> visitor =
+                new IncrementalRunVisitor<T>(mGraph, classesToWrite, unresolvedReferences);
 
-            @Override
-            public FieldVisitor visitField(int access, String name, String desc, String signature,
-                    Object value) {
-                T field = mGraph.getMemberReference(mClassName, name, desc);
-                if (!mFields.remove(field)) {
-                    throw new IncrementalRunImpossibleException(
-                            String.format(
-                                    "Field %s.%s:%s added.",
-                                    mClassName,
-                                    name,
-                                    desc));
-                }
-                return super.visitField(access, name, desc, signature, value);
-            }
-
-            @Override
-            public MethodVisitor visitMethod(int access, String name, String desc, String signature,
-                    String[] exceptions) {
-                T method = mGraph.getMemberReference(mClassName, name, desc);
-                if (!mMethods.remove(method)) {
-                    throw new IncrementalRunImpossibleException(
-                            String.format(
-                                    "Method %s.%s:%s added.",
-                                    mClassName,
-                                    name,
-                                    desc));
-                }
-                return super.visitMethod(access, name, desc, signature, exceptions);
-            }
-
-            @Override
-            protected void handleDependency(T source, T target, DependencyType type) {
-                if (type == DependencyType.REQUIRED_CODE_REFERENCE) {
-                    mGraph.addDependency(source, target, type);
-                }
-            }
-
-            @Override
-            protected void handleMultipleInheritance(T klass) {
-            }
-
-            @Override
-            protected void handleVirtualMethod(T method) {
-            }
-
-            @Override
-            protected void handleUnresolvedReference(UnresolvedReference<T> reference) {
-                unresolvedReferences.add(reference);
-            }
-
-            @Override
-            public void visitEnd() {
-                T field = Iterables.getFirst(mFields, null);
-                if (field != null) {
-                    throw new IncrementalRunImpossibleException(
-                            String.format(
-                                    "Field %s.%s:%s removed.",
-                                    mClassName,
-                                    mGraph.getFieldName(field),
-                                    mGraph.getFieldDesc(field)));
-                }
-
-                T method = Iterables.getFirst(mMethods, null);
-                if (method != null) {
-                    throw new IncrementalRunImpossibleException(
-                            String.format(
-                                    "Method %s.%s removed.",
-                                    mClassName,
-                                    mGraph.getMethodNameAndDesc(method)));
-                }
-            }
-        };
-        DependencyRemoverVisitor<T> remover = new DependencyRemoverVisitor<T>(mGraph, finder);
+        DependencyRemoverVisitor<T> remover = new DependencyRemoverVisitor<T>(mGraph, visitor);
 
         classReader.accept(remover, 0);
     }
@@ -367,4 +277,5 @@ public class IncrementalShrinker<T> extends AbstractShrinker<T> {
             }
         }
     }
+
 }

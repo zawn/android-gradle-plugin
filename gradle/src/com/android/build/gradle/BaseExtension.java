@@ -189,7 +189,7 @@ public abstract class BaseExtension implements AndroidConfig {
         logger = Logging.getLogger(this.getClass());
 
         defaultConfig = instantiator.newInstance(ProductFlavor.class, BuilderConstants.MAIN,
-                project, instantiator, project.getLogger());
+                project, instantiator, project.getLogger(), extraModelInfo);
 
         aaptOptions = instantiator.newInstance(AaptOptions.class);
         dexOptions = instantiator.newInstance(DexOptions.class);
@@ -253,7 +253,8 @@ public abstract class BaseExtension implements AndroidConfig {
         for (Density density : densities) {
             strings.add(density.getResourceValue());
         }
-        defaultConfig.setGeneratedDensities(strings);
+        defaultConfig.getVectorDrawables().setGeneratedDensities(strings);
+        defaultConfig.getVectorDrawables().setUseSupportLibrary(false);
     }
 
     /**
@@ -486,7 +487,7 @@ public abstract class BaseExtension implements AndroidConfig {
     }
 
     /**
-     * Configures data binding options
+     * Configures data binding options.
      */
     public void dataBinding(Action<DataBindingOptions> action) {
         checkWritability();

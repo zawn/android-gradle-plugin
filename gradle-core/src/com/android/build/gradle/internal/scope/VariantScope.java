@@ -19,14 +19,15 @@ package com.android.build.gradle.internal.scope;
 import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
 import com.android.build.gradle.internal.core.Abi;
+import com.android.build.gradle.internal.incremental.InstantRunAnchorTask;
 import com.android.build.gradle.internal.incremental.InstantRunBuildContext;
+import com.android.build.gradle.internal.incremental.InstantRunWrapperTask;
 import com.android.build.gradle.internal.pipeline.TransformManager;
 import com.android.build.gradle.internal.pipeline.TransformTask;
 import com.android.build.gradle.internal.tasks.CheckManifest;
 import com.android.build.gradle.internal.tasks.PrepareDependenciesTask;
 import com.android.build.gradle.internal.tasks.databinding.DataBindingExportBuildInfoTask;
 import com.android.build.gradle.internal.tasks.databinding.DataBindingProcessLayoutsTask;
-import com.android.build.gradle.internal.transforms.InstantRunVerifierTransform;
 import com.android.build.gradle.internal.variant.BaseVariantData;
 import com.android.build.gradle.internal.variant.BaseVariantOutputData;
 import com.android.build.gradle.tasks.AidlCompile;
@@ -92,6 +93,12 @@ public interface VariantScope extends BaseScope {
     File getRestartDexOutputFolder();
 
     @NonNull
+    File getInstantRunSplitApkOutputFolder();
+
+    @NonNull
+    File getInstantRunPastIterationsFolder();
+
+    @NonNull
     FileCollection getJavaClasspath();
 
     @NonNull
@@ -99,6 +106,9 @@ public interface VariantScope extends BaseScope {
 
     @NonNull
     File getInstantRunSupportDir();
+
+    @NonNull
+    File getInstantRunSliceSupportDir();
 
     @NonNull
     File getIncrementalRuntimeSupportJar();
@@ -355,4 +365,15 @@ public interface VariantScope extends BaseScope {
 
     @NonNull
     InstantRunBuildContext getInstantRunBuildContext();
+
+    @NonNull
+    AndroidTask<InstantRunAnchorTask> getInstantRunAnchorTask();
+    void setInstantRunAnchorTask(@NonNull AndroidTask<InstantRunAnchorTask> instantRunTask);
+
+    @NonNull
+    AndroidTask<InstantRunWrapperTask> getInstantRunIncrementalTask();
+    void setInstantRunIncrementalTask(@NonNull AndroidTask<InstantRunWrapperTask> instantRunTask);
+
+    AndroidTask<TransformTask> getInstantRunVerifierTask();
+    void setInstantRunVerifierTask(AndroidTask<TransformTask> verifierTask);
 }

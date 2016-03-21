@@ -22,7 +22,6 @@ import com.android.builder.model.AndroidProject;
 import com.google.common.collect.Maps;
 
 import org.gradle.api.Project;
-import org.gradle.api.internal.tasks.options.Option;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -41,10 +40,6 @@ public class AndroidGradleOptions {
     private static final String PROPERTY_THREAD_POOL_SIZE = "android.threadPoolSize";
     private static final String PROPERTY_THREAD_POOL_SIZE_OLD = "com.android.build.threadPoolSize";
 
-    private static final String PROPERTY_NEW_SHRINKER = "android.newShrinker";
-
-    private static final String PROPERTY_NEW_SHRINKER_INCREMENTAL = "android.newShrinker.incremental";
-
     public static final String USE_DEPRECATED_NDK = "android.useDeprecatedNdk";
 
     private static final String PROPERTY_DISABLE_RESOURCE_VALIDATION =
@@ -53,6 +48,15 @@ public class AndroidGradleOptions {
     // TODO: Drop the "com." prefix, for consistency.
     private static final String PROPERTY_BENCHMARK_NAME = "com.android.benchmark.name";
     private static final String PROPERTY_BENCHMARK_MODE = "com.android.benchmark.mode";
+
+    // Enable incremental java compile in all cases, not just for Instant Run.
+    private static final String PROPERTY_INCREMENTAL_JAVA_COMPILE =
+            "android.incrementalJavaCompile";
+    // Disable incremental java compile even for Instant Run.
+    private static final String PROPERTY_INSTANT_RUN_INCREMENTAL_JAVA_COMPILE =
+            "android.instantRunIncrementalJavaCompile";
+
+    private static final String PROPERTY_USE_OLD_PACKAGING = "android.useOldPackaging";
 
     @NonNull
     public static Map<String, String> getExtraInstrumentationTestRunnerArgs(@NonNull Project project) {
@@ -91,6 +95,10 @@ public class AndroidGradleOptions {
         return getBoolean(project, AndroidProject.PROPERTY_BUILD_MODEL_ONLY_ADVANCED);
     }
 
+    public static boolean useOldPackaging(@NonNull Project project) {
+        return getBoolean(project, PROPERTY_USE_OLD_PACKAGING, true);
+    }
+
     @Nullable
     public static String getApkLocation(@NonNull Project project) {
         return getString(project, AndroidProject.PROPERTY_APK_LOCATION);
@@ -99,6 +107,11 @@ public class AndroidGradleOptions {
     @Nullable
     public static String getBuildTargetDensity(@NonNull Project project) {
         return getString(project, AndroidProject.PROPERTY_BUILD_DENSITY);
+    }
+
+    @Nullable
+    public static String getBuildTargetApi(@NonNull Project project) {
+        return getString(project, AndroidProject.PROPERTY_BUILD_API);
     }
 
     public static boolean isIntegrationTest() {
@@ -165,16 +178,8 @@ public class AndroidGradleOptions {
         return EnumSet.noneOf(OptionalCompilationStep.class);
     }
 
-    public static boolean useNewShrinker(@NonNull Project project) {
-        return getBoolean(project, PROPERTY_NEW_SHRINKER);
-    }
-
     public static boolean isResourceValidationEnabled(@NonNull Project project) {
         return !getBoolean(project, PROPERTY_DISABLE_RESOURCE_VALIDATION);
-    }
-
-    public static boolean newShrinkerIncremental(@NonNull Project project) {
-        return getBoolean(project, PROPERTY_NEW_SHRINKER_INCREMENTAL);
     }
 
     @Nullable
@@ -198,6 +203,13 @@ public class AndroidGradleOptions {
     private static boolean getBoolean(
             @NonNull Project project,
             @NonNull String propertyName) {
+        return getBoolean(project, propertyName, false /*defaultValue*/);
+    }
+
+    private static boolean getBoolean(
+            @NonNull Project project,
+            @NonNull String propertyName,
+            boolean defaultValue) {
         if (project.hasProperty(propertyName)) {
             Object value = project.getProperties().get(propertyName);
             if (value instanceof String) {
@@ -207,12 +219,22 @@ public class AndroidGradleOptions {
             }
         }
 
-        return false;
+        return defaultValue;
     }
 
     public static boolean useDexerPool() {
         // TODO: Implement.
         return false;
+    }
+
+    //TODO: Decide before stable release whether should be enabled by default.
+    public static boolean isJavaCompileIncremental(@NonNull Project project) {
+        return getBoolean(project, PROPERTY_INCREMENTAL_JAVA_COMPILE, true /*defaultValue*/);
+    }
+
+    public static boolean isInstantRunJavaCompileIncremental(@NonNull Project project) {
+        return getBoolean(project, PROPERTY_INSTANT_RUN_INCREMENTAL_JAVA_COMPILE,
+                true /*defaultValue*/);
     }
 
     public static class SigningOptions {

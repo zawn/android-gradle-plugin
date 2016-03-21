@@ -1,11 +1,13 @@
 package com.android.build.gradle.tasks;
 
 import com.android.annotations.NonNull;
+import com.android.build.gradle.AndroidGradleOptions;
 import com.android.build.gradle.internal.annotations.ApkFile;
 import com.android.build.gradle.internal.core.GradleVariantConfiguration;
 import com.android.build.gradle.internal.dsl.AbiSplitOptions;
 import com.android.build.gradle.internal.dsl.CoreSigningConfig;
 import com.android.build.gradle.internal.dsl.PackagingOptions;
+import com.android.build.gradle.internal.incremental.InstantRunBuildContext;
 import com.android.build.gradle.internal.pipeline.ExtendedContentType;
 import com.android.build.gradle.internal.pipeline.FilterableStreamCollection;
 import com.android.build.gradle.internal.pipeline.TransformManager;
@@ -41,6 +43,7 @@ import org.gradle.api.tasks.ParallelizableTask;
 import org.gradle.tooling.BuildException;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,6 +52,8 @@ import java.util.concurrent.Callable;
 
 @ParallelizableTask
 public class PackageApplication extends IncrementalTask implements FileSupplier {
+
+    private boolean useOldPackaging;
 
     public static final FilterableStreamCollection.StreamFilter sDexFilter =
             new TransformManager.StreamFilter() {
@@ -146,6 +151,8 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
 
     private ApiVersion minSdkVersion;
 
+    private InstantRunBuildContext instantRunContext;
+
     @Input
     public boolean getJniDebugBuild() {
         return jniDebugBuild;
@@ -187,8 +194,27 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
         this.minSdkVersion = version;
     }
 
+    @InputFile
+    public File getMarkerFile() {
+        return markerFile;
+    }
+
+    private File markerFile;
+
     @Override
     protected void doFullTaskAction() {
+
+        // if the blocker file is there, do not run.
+        if (getMarkerFile().exists()) {
+            try {
+                if (MarkerFile.readMarkerFile(getMarkerFile()) == MarkerFile.Command.BLOCK) {
+                    return;
+                }
+            } catch (IOException e) {
+                getLogger().warn("Cannot read marker file, proceed with execution", e);
+            }
+        }
+
         try {
             Collection<File> javaResourceFiles = getJavaResourceFiles();
             getBuilder().packageApk(
@@ -227,6 +253,10 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
             }
             throw new BuildException(e.getMessage(), e);
         }
+        // mark this APK production, this will eventually be saved when instant-run is enabled.
+        // this might get overriden if the apk is signed/aligned.
+        instantRunContext.addChangedFile(InstantRunBuildContext.FileType.MAIN,
+                getOutputFile());
     }
 
     // ----- FileSupplierTask -----
@@ -247,9 +277,11 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
     public static class ConfigAction implements TaskConfigAction<PackageApplication> {
 
         private final VariantOutputScope scope;
+        private final boolean addDexFilesToApk;
 
-        public ConfigAction(VariantOutputScope scope) {
+        public ConfigAction(VariantOutputScope scope, boolean addDexFilesToApk) {
             this.scope = scope;
+            this.addDexFilesToApk = addDexFilesToApk;
         }
 
         @NonNull
@@ -265,7 +297,7 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
         }
 
         @Override
-        public void execute(@NonNull PackageApplication packageApp) {
+        public void execute(@NonNull final PackageApplication packageApp) {
             final VariantScope variantScope = scope.getVariantScope();
             final ApkVariantData variantData = (ApkVariantData) variantScope.getVariantData();
             final ApkVariantOutputData variantOutputData = (ApkVariantOutputData) scope
@@ -277,9 +309,11 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
             packageApp.setVariantName(
                     variantScope.getVariantConfiguration().getFullName());
             packageApp.setMinSdkVersion(config.getMinSdkVersion());
+            packageApp.instantRunContext = variantScope.getInstantRunBuildContext();
 
-            if (config.isMinifyEnabled() && config.getBuildType().isShrinkResources() && !config
-                    .getUseJack()) {
+            if (config.isMinifyEnabled()
+                    && config.getBuildType().isShrinkResources()
+                    && !config.getUseJack()) {
                 ConventionMappingHelper.map(packageApp, "resourceFile", new Callable<File>() {
                     @Override
                     public File call() {
@@ -302,8 +336,10 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
                         return ImmutableSet.of(variantScope.getJackDestinationDir());
                     }
 
-                    return variantScope.getTransformManager()
-                            .getPipelineOutput(sDexFilter).keySet();
+                    return addDexFilesToApk
+                        ? variantScope.getTransformManager()
+                            .getPipelineOutput(sDexFilter).keySet()
+                        : ImmutableSet.<File>of();
                 }
             });
 
@@ -387,6 +423,11 @@ public class PackageApplication extends IncrementalTask implements FileSupplier 
                     return scope.getPackageApk();
                 }
             });
+
+            packageApp.markerFile =
+                    PrePackageApplication.ConfigAction.getMarkerFile(variantScope);
+            packageApp.useOldPackaging = AndroidGradleOptions.useOldPackaging(
+                    variantScope.getGlobalScope().getProject());
         }
 
         private static File getOptionalDir(File dir) {
