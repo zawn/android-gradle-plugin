@@ -22,6 +22,7 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.ExecSpec;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 @ParallelizableTask
@@ -59,6 +60,10 @@ public class ZipAlign extends DefaultTask implements FileSupplier {
 
     private InstantRunBuildContext instantRunBuildContext;
 
+    public void setInstantRunBuildContext(InstantRunBuildContext instantRunBuildContext) {
+        this.instantRunBuildContext = instantRunBuildContext;
+    }
+
     @InputFile
     public File getZipAlignExe() {
         return zipAlignExe;
@@ -80,8 +85,12 @@ public class ZipAlign extends DefaultTask implements FileSupplier {
             }
         });
         // mark this APK production, this will eventually be saved when instant-run is enabled.
-        instantRunBuildContext.addChangedFile(InstantRunBuildContext.FileType.MAIN,
-                getOutputFile());
+        try {
+            instantRunBuildContext.addChangedFile(InstantRunBuildContext.FileType.MAIN,
+                    getOutputFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // ----- FileSupplierTask -----
