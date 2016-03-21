@@ -154,4 +154,11 @@ public class GradleVariantConfiguration extends VariantConfiguration<CoreBuildTy
             mMergedNdkConfig.append(getBuildType().getNdkConfig());
         }
     }
+
+    public boolean isInstantRunSupported() {
+        return getBuildType().isDebuggable()
+                && (!getBuildType().isMinifyEnabled() || !getBuildType().isUseProguard())
+                && !getType().isForTesting()
+                && !getUseJack();
+    }
 }
