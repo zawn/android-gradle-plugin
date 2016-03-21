@@ -5,6 +5,7 @@ import static com.android.builder.core.VariantType.UNIT_TEST;
 
 import com.android.annotations.NonNull;
 import com.android.build.gradle.AndroidGradleOptions;
+import com.android.build.gradle.OptionalCompilationStep;
 import com.android.build.gradle.internal.CompileOptions;
 import com.android.build.gradle.internal.LoggerWrapper;
 import com.android.build.gradle.internal.scope.ConventionMappingHelper;
@@ -123,14 +124,14 @@ public class JavaCompileConfigAction implements TaskConfigAction<AndroidJavaComp
         if (compileOptions.getIncremental() != null) {
             incremental = compileOptions.getIncremental();
         } else {
-            if (globalScope.getExtension().getDataBinding().isEnabled()
-                    || project.getPlugins().hasPlugin("com.neenbedankt.android-apt")
-                    || project.getPlugins().hasPlugin("me.tatarka.retrolambda")) {
-                incremental = false;
-            } else {
-                // For now, default to true, irrespective of Instant Run.
-                incremental = true;
-            }
+            //if (globalScope.getExtension().getDataBinding().isEnabled()
+            //        || project.getPlugins().hasPlugin("com.neenbedankt.android-apt")
+            //        || project.getPlugins().hasPlugin("me.tatarka.retrolambda")) {
+            //    incremental = false;
+            //} else {
+            // For now, default to false, irrespective of Instant Run.
+            incremental = false;
+            //}
         }
 
         if (AndroidGradleOptions.isJavaCompileIncrementalPropertySet(project)) {
