@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.android.tools.build'
-version = '2.0.0-beta7'
+version = '2.0.0-rc1'
 
 description = """com.android.tools.build.gradle-core"""
 
@@ -16,10 +16,10 @@ repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    runtime group: 'com.android.tools.build', name: 'builder', version:'2.0.0-beta7'
-    runtime group: 'com.android.tools.lint', name: 'lint', version:'25.0.0-beta7'
-    runtime group: 'com.android.tools.build', name: 'gradle-api', version:'2.0.0-beta7'
-    runtime group: 'com.android.databinding', name: 'compilerCommon', version:'2.0.0-beta7'
+    runtime group: 'com.android.tools.build', name: 'builder', version:'2.0.0-rc1'
+    runtime group: 'com.android.tools.lint', name: 'lint', version:'25.0.0-rc1'
+    runtime group: 'com.android.tools.build', name: 'gradle-api', version:'2.0.0-rc1'
+    runtime group: 'com.android.databinding', name: 'compilerCommon', version:'2.0.0-rc1'
     runtime group: 'org.ow2.asm', name: 'asm', version:'5.0.3'
     runtime group: 'org.ow2.asm', name: 'asm-commons', version:'5.0.3'
     runtime group: 'net.sf.proguard', name: 'proguard-gradle', version:'5.2.1'

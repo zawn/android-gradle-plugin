@@ -76,7 +76,7 @@ public class InstantRunBuildContext {
     // new Gradle version and the older version. Whenever we bump this version
     // we should cross check the logic and decide how to handle the isCompatible()
     // method.)
-    static final String CURRENT_FORMAT = "6";
+    static final String CURRENT_FORMAT = "7";
 
     public enum TaskType {
         JAVAC,
@@ -271,7 +271,16 @@ public class InstantRunBuildContext {
             System.nanoTime(), Optional.<InstantRunVerifierStatus>absent());
     private final TreeMap<Long, Build> previousBuilds = new TreeMap<Long, Build>();
     private File tmpBuildInfo = null;
+    private boolean isInstantRunMode = false;
+    private volatile boolean isAborted = false;
 
+    public void setInstantRunMode(boolean instantRunMode) {
+        isInstantRunMode = instantRunMode;
+    }
+
+    public boolean isInInstantRunMode() {
+        return isInstantRunMode;
+    }
 
     public void setTmpBuildInfo(File tmpBuildInfo) {
         this.tmpBuildInfo = tmpBuildInfo;
@@ -296,7 +305,10 @@ public class InstantRunBuildContext {
     }
 
     public void setVerifierResult(@NonNull InstantRunVerifierStatus verifierStatus) {
-        currentBuild.verifierStatus = Optional.of(verifierStatus);
+        if (!currentBuild.verifierStatus.isPresent() ||
+                currentBuild.getVerifierStatus().get() == InstantRunVerifierStatus.COMPATIBLE) {
+            currentBuild.verifierStatus = Optional.of(verifierStatus);
+        }
     }
 
     /**
@@ -414,6 +426,10 @@ public class InstantRunBuildContext {
         } catch (ParserConfigurationException e) {
             throw new IOException(e);
         }
+    }
+
+    public void abort() {
+        isAborted = true;
     }
 
     @Nullable
@@ -583,12 +599,26 @@ public class InstantRunBuildContext {
     /**
      * Close all activities related to InstantRun.
      */
-    public void close() {
+    public void close(PersistenceMode persistenceMode) {
+        if (isAborted) {
+            // check if the failure is a BINARY_MANIFEST_CHANGE and we are in full build mode.
+            if (!(currentBuild.getVerifierStatus().isPresent()
+                    && currentBuild.getVerifierStatus().get()
+                            == InstantRunVerifierStatus.BINARY_MANIFEST_FILE_CHANGE
+                    && persistenceMode == PersistenceMode.FULL_BUILD)) {
+                currentBuild.artifacts.clear();
+            }
+        }
+
         // add the current build to the list of builds to be persisted.
         previousBuilds.put(currentBuild.buildId, currentBuild);
 
         // purge unwanted past iterations.
         purge();
+    }
+
+    public void close() {
+        close(PersistenceMode.FULL_BUILD);
     }
 
     /**
@@ -645,6 +675,13 @@ public class InstantRunBuildContext {
                     String.valueOf(taskDurationInMs[taskType.ordinal()]));
             instantRun.appendChild(taskTypeNode);
         }
+
+        // if we are doing a full APK build which may be incremental, we do not need to worry
+        // about what the incremental change might be since we produced the APK.
+        if (persistenceMode == PersistenceMode.FULL_BUILD) {
+            currentBuild.verifierStatus = Optional.absent();
+        }
+
         currentBuild.toXml(document, instantRun);
         instantRun.setAttribute(ATTR_API_LEVEL, String.valueOf(apiLevel.getApiLevel()));
         if (density != null) {

@@ -1971,6 +1971,8 @@ public abstract class TaskManager {
         AndroidTask<InstantRunWrapperTask> incrementalBuildWrapperTask = null;
         if (getIncrementalMode(variantScope.getVariantConfiguration()) != IncrementalMode.NONE) {
 
+            variantScope.getInstantRunBuildContext().setInstantRunMode(true);
+
             // we are creating two anchor tasks
             // 1. allActionAnchorTask to anchor tasks that should be executed whether a full build or
             //    incremental build is invoked.
@@ -2094,7 +2096,8 @@ public abstract class TaskManager {
         NoChangesVerifierTransform jniLibsVerifierTransform = new NoChangesVerifierTransform(
                 variantScope,
                 ImmutableSet.<ContentType>of(DefaultContentType.RESOURCES, ExtendedContentType.NATIVE_LIBS),
-                getResMergingScopes(variantScope), InstantRunVerifierStatus.JAVA_RESOURCES_CHANGED);
+                getResMergingScopes(variantScope), InstantRunVerifierStatus.JAVA_RESOURCES_CHANGED,
+                true /* abortBuild */);
         AndroidTask<TransformTask> jniLibsVerifierTask =
                 variantScope.getTransformManager().addTransform(
                         tasks,
@@ -2110,7 +2113,8 @@ public abstract class TaskManager {
                                 Scope.PROJECT_LOCAL_DEPS,
                                 Scope.SUB_PROJECTS_LOCAL_DEPS,
                                 Scope.EXTERNAL_LIBRARIES),
-                        InstantRunVerifierStatus.DEPENDENCY_CHANGED);
+                        InstantRunVerifierStatus.DEPENDENCY_CHANGED,
+                        false /* abortBuild */);
         AndroidTask<TransformTask> dependenciesVerifierTask =
                 variantScope.getTransformManager().addTransform(
                         tasks,

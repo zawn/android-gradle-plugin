@@ -67,4 +67,8 @@ public enum InstantRunVerifierStatus {
     JAVA_RESOURCES_CHANGED,
 
     DEPENDENCY_CHANGED,
+
+    // the binary manifest file changed, probably due to references to resources which ID changed
+    // since last build.
+    BINARY_MANIFEST_FILE_CHANGE
 }
