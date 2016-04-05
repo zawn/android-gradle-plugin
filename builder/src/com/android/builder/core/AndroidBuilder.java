@@ -1391,7 +1391,7 @@ public class AndroidBuilder {
     }
 
     private static final Object LOCK_FOR_DEX = new Object();
-    private static final AtomicInteger DEX_PROCESS_COUNT = new AtomicInteger(3);
+    private static final AtomicInteger DEX_PROCESS_COUNT = new AtomicInteger(4);
     private static ExecutorService sDexExecutorService = null;
 
     private void runDexer(
