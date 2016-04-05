@@ -1,4 +1,3 @@
-
 apply plugin: 'java'
 apply from: '../maven.gradle'
 
@@ -14,7 +13,7 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'com.android.tools', name: 'annotations', version:"$BUILD_TOOLS_VERSION"
-    compile group: 'com.google.guava', name: 'guava', version:'17.0'
-    compile gradleApi()
+    compile group: 'com.android.tools', name: 'annotations', version: "$BUILD_TOOLS_VERSION"
+    compile group: 'com.google.guava', name: 'guava', version: '17.0'
+    compile fileTree(dir: "${gradle.gradleHomeDir}/lib", excludes: ['**/core-3.1.1.jar'], include: ['**/*.jar'])
 }
